@@ -19,7 +19,7 @@ ALTER PUBLICATION supabase_realtime ADD TABLE mc_events;
 INSERT INTO mc_events (level, source, agent_id, message, business_unit) VALUES 
   ('info', 'agent', 'atlas', 'Mission Control v2 deployed successfully', 'shared'),
   ('info', 'agent', 'vera', 'New lead: Alora Hess (CBRE) - $18K pipeline', 'lone_star'),
-  ('success', 'system', null, 'Database initialized', 'shared')
+  ('info', 'system', null, 'Database initialized', 'shared')
 ON CONFLICT DO NOTHING;
 
 SELECT '✅ Events table created' as status;
