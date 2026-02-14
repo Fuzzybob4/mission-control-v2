@@ -116,5 +116,3 @@ export function HeroesTab() {
     </div>
   )
 }
-
-import { AlertCircle } from "lucide-react"
