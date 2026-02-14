@@ -1,25 +1,39 @@
 "use client"
 
+import { useState } from "react"
 import { GlassCard } from "@/components/ui/glass-card"
 import { StatusBadge } from "@/components/ui/status-badge"
-import { Gamepad2, PauseCircle, DollarSign, TrendingUp, Target } from "lucide-react"
+import { FileUploadWidget } from "@/components/file-upload-widget"
+import { TimeFilter } from "@/components/time-filter"
+import { Gamepad2, PauseCircle, DollarSign, TrendingUp, Target, AlertCircle } from "lucide-react"
 
 export function HeroesTab() {
+  const [timeRange, setTimeRange] = useState<"today" | "week" | "month" | "quarter" | "year">("month")
+
   return (
     <div className="space-y-6 animate-fade-in-up">
-      {/* Header */}
-      <div className="flex items-center gap-3">
-        <div className="p-2 rounded-lg bg-violet-500/20">
-          <Gamepad2 className="w-5 h-5 text-violet-400" />
+      {/* Header with Time Filter */}
+      <div className="flex justify-between items-center">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-lg bg-violet-500/20">
+            <Gamepad2 className="w-5 h-5 text-violet-400" />
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold text-white">Heroes of the Meta</h2>
+            <p className="text-xs text-gray-400">Trading card marketplace</p>
+          </div>
         </div>
-        <div>
-          <h2 className="text-lg font-semibold text-white">Heroes of the Meta</h2>
-          <p className="text-xs text-gray-400">Trading card marketplace</p>
-        </div>
-        <div className="ml-auto">
+        <div className="flex items-center gap-3">
           <StatusBadge status="paused" label="On Hold" />
+          <TimeFilter value={timeRange} onChange={setTimeRange} />
         </div>
       </div>
+
+      {/* File Upload */}
+      <FileUploadWidget 
+        businessUnit="heroes" 
+        onFilesUploaded={(files) => console.log("Heroes files:", files)}
+      />
 
       {/* Status Banner */}
       <div className="p-4 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-start gap-3">

@@ -1,10 +1,15 @@
 "use client"
 
+import { useState } from "react"
 import { GlassCard } from "@/components/ui/glass-card"
 import { StatusBadge } from "@/components/ui/status-badge"
+import { FileUploadWidget } from "@/components/file-upload-widget"
+import { TimeFilter } from "@/components/time-filter"
 import { Code2, DollarSign, Users, Rocket, CheckCircle, AlertCircle } from "lucide-react"
 
 export function RedFoxTab() {
+  const [timeRange, setTimeRange] = useState<"today" | "week" | "month" | "quarter" | "year">("month")
+
   const pricingTiers = [
     { name: "Starter", price: "$29/mo", contacts: "1,000", features: ["Basic pipeline", "Email integration", "Standard support"] },
     { name: "Professional", price: "$79/mo", contacts: "10,000", features: ["Advanced pipeline", "Calendar sync", "Priority support", "Custom workflows"], popular: true },
@@ -20,19 +25,28 @@ export function RedFoxTab() {
 
   return (
     <div className="space-y-6 animate-fade-in-up">
-      {/* Header */}
-      <div className="flex items-center gap-3">
-        <div className="p-2 rounded-lg bg-blue-500/20">
-          <Code2 className="w-5 h-5 text-blue-400" />
+      {/* Header with Time Filter */}
+      <div className="flex justify-between items-center">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-lg bg-blue-500/20">
+            <Code2 className="w-5 h-5 text-blue-400" />
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold text-white">RedFox CRM</h2>
+            <p className="text-xs text-gray-400">SaaS for Christmas light installers</p>
+          </div>
         </div>
-        <div>
-          <h2 className="text-lg font-semibold text-white">RedFox CRM</h2>
-          <p className="text-xs text-gray-400">SaaS for Christmas light installers</p>
-        </div>
-        <div className="ml-auto">
+        <div className="flex items-center gap-3">
           <StatusBadge status="in-progress" label="In Development" />
+          <TimeFilter value={timeRange} onChange={setTimeRange} />
         </div>
       </div>
+
+      {/* File Upload */}
+      <FileUploadWidget 
+        businessUnit="redfox" 
+        onFilesUploaded={(files) => console.log("RedFox files:", files)}
+      />
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4">

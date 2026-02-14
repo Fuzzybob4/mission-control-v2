@@ -1,49 +1,67 @@
 "use client"
 
+import { useState } from "react"
 import { GlassCard } from "@/components/ui/glass-card"
 import { StatusBadge } from "@/components/ui/status-badge"
+import { KPICard } from "@/components/kpi-card"
+import { TimeFilter } from "@/components/time-filter"
+import { FileUploadWidget } from "@/components/file-upload-widget"
 import { Lightbulb, Code2, Gamepad2, TrendingUp, Activity, Zap, AlertCircle } from "lucide-react"
 
 export function OverviewTab() {
+  const [timeRange, setTimeRange] = useState<"today" | "week" | "month" | "quarter" | "year">("month")
+
+  // Sample sparkline data
+  const revenueSparkline = [15000, 16500, 14200, 18900, 20100, 19800, 20021]
+  const pipelineSparkline = [12000, 13500, 15000, 16500, 18000, 17500, 18000]
+
   return (
     <div className="space-y-6 animate-fade-in-up">
-      {/* Stats */}
+      {/* Time Filter */}
+      <div className="flex justify-end">
+        <TimeFilter value={timeRange} onChange={setTimeRange} />
+      </div>
+
+      {/* File Upload for Assets */}
+      <FileUploadWidget 
+        businessUnit="lone-star" 
+        onFilesUploaded={(files) => console.log("Uploaded:", files)}
+      />
+      {/* KPI Stats with Sparklines */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <GlassCard>
-          <div className="flex items-center gap-2 text-gray-400 mb-2">
-            <TrendingUp className="w-4 h-4" />
-            <span className="text-xs">Total Revenue</span>
-          </div>
-          <p className="text-2xl font-bold text-white">$20,021</p>
-          <p className="text-xs text-gray-500">YTD 2024</p>
-        </GlassCard>
+        <KPICard
+          title="Total Revenue"
+          value="$20,021"
+          change="+12% from last month"
+          changeType="positive"
+          sparklineData={revenueSparkline}
+          icon={<TrendingUp className="w-4 h-4 text-gray-400" />}
+        />
 
-        <GlassCard>
-          <div className="flex items-center gap-2 text-gray-400 mb-2">
-            <Activity className="w-4 h-4" />
-            <span className="text-xs">Active Businesses</span>
-          </div>
-          <p className="text-2xl font-bold text-white">1</p>
-          <p className="text-xs text-gray-500">2 in development</p>
-        </GlassCard>
+        <KPICard
+          title="Active Businesses"
+          value="1"
+          change="2 in development"
+          changeType="neutral"
+          icon={<Activity className="w-4 h-4 text-gray-400" />}
+        />
 
-        <GlassCard>
-          <div className="flex items-center gap-2 text-gray-400 mb-2">
-            <Zap className="w-4 h-4" />
-            <span className="text-xs">Pipeline</span>
-          </div>
-          <p className="text-2xl font-bold text-emerald-400">$18,000</p>
-          <p className="text-xs text-gray-500">Lone Star leads</p>
-        </GlassCard>
+        <KPICard
+          title="Pipeline Value"
+          value="$18,000"
+          change="+8% this week"
+          changeType="positive"
+          sparklineData={pipelineSparkline}
+          icon={<Zap className="w-4 h-4 text-gray-400" />}
+        />
 
-        <GlassCard>
-          <div className="flex items-center gap-2 text-gray-400 mb-2">
-            <TrendingUp className="w-4 h-4" />
-            <span className="text-xs">Goal Progress</span>
-          </div>
-          <p className="text-2xl font-bold text-white">33%</p>
-          <p className="text-xs text-gray-500">To $60K/mo</p>
-        </GlassCard>
+        <KPICard
+          title="Goal Progress"
+          value="33%"
+          change="To $60K/mo target"
+          changeType="neutral"
+          icon={<TrendingUp className="w-4 h-4 text-gray-400" />}
+        />
       </div>
 
       {/* Business Cards */}

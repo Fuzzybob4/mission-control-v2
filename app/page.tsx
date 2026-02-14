@@ -9,6 +9,9 @@ import { HeroesTab } from "@/components/tabs/heroes-tab"
 import { AgentsTab } from "@/components/tabs/agents-tab"
 import { AnalyticsTab } from "@/components/tabs/analytics-tab"
 import { SystemsTab } from "@/components/tabs/systems-tab"
+import { HeartbeatSection } from "@/components/heartbeat-section"
+import { QuickActions } from "@/components/quick-actions"
+import { NotificationCenter } from "@/components/notification-center"
 
 type TabId = "overview" | "lone-star" | "redfox" | "heroes" | "agents" | "analytics" | "systems"
 
@@ -31,13 +34,19 @@ export default function MissionControl() {
       
       <main className="flex-1 overflow-y-auto">
         <div className="p-6">
-          {/* Page Header */}
-          <div className="mb-6">
-            <h1 className="text-2xl font-bold text-white">{TAB_TITLES[activeTab]}</h1>
-            <p className="text-sm text-gray-400 mt-1">
-              Atlas Command Center
-            </p>
+          {/* Page Header with Notifications */}
+          <div className="flex items-start justify-between mb-6">
+            <div>
+              <h1 className="text-2xl font-bold text-white">{TAB_TITLES[activeTab]}</h1>
+              <p className="text-sm text-gray-400 mt-1">
+                Atlas Command Center
+              </p>
+            </div>
+            <NotificationCenter />
           </div>
+
+          {/* Heartbeat Section */}
+          <HeartbeatSection />
 
           {/* Tab Content */}
           {activeTab === "overview" && <OverviewTab />}
@@ -49,6 +58,13 @@ export default function MissionControl() {
           {activeTab === "systems" && <SystemsTab />}
         </div>
       </main>
+
+      {/* Quick Actions Floating Button */}
+      <QuickActions 
+        onNewLead={() => console.log("New lead")}
+        onCheckEmail={() => console.log("Check email")}
+        onNewTask={() => console.log("New task")}
+      />
     </div>
   )
 }

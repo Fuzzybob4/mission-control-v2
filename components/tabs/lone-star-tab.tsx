@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react"
 import { GlassCard } from "@/components/ui/glass-card"
 import { StatusBadge } from "@/components/ui/status-badge"
+import { TimeFilter } from "@/components/time-filter"
+import { FileUploadWidget } from "@/components/file-upload-widget"
+import { KPICard } from "@/components/kpi-card"
 import { Lightbulb, DollarSign, Users, Calendar, TrendingUp, MapPin } from "lucide-react"
 import { supabase } from "@/lib/supabase"
 
@@ -22,6 +25,11 @@ interface Lead {
 export function LoneStarTab() {
   const [leads, setLeads] = useState<Lead[]>([])
   const [loading, setLoading] = useState(true)
+  const [timeRange, setTimeRange] = useState<"today" | "week" | "month" | "quarter" | "year">("month")
+
+  // Sample sparkline data
+  const revenueSparkline = [12000, 14500, 16200, 18900, 20100, 19800, 20021]
+  const pipelineSparkline = [8000, 10500, 12000, 15000, 18000, 17500, 18000]
 
   useEffect(() => {
     fetchLeads()
@@ -58,57 +66,64 @@ export function LoneStarTab() {
 
   return (
     <div className="space-y-6 animate-fade-in-up">
-      {/* Header */}
-      <div className="flex items-center gap-3">
-        <div className="p-2 rounded-lg bg-amber-500/20">
-          <Lightbulb className="w-5 h-5 text-amber-400" />
+      {/* Time Filter */}
+      <div className="flex justify-between items-center">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-lg bg-amber-500/20">
+            <Lightbulb className="w-5 h-5 text-amber-400" />
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold text-white">Lone Star Lighting Displays</h2>
+            <p className="text-xs text-gray-400">Holiday & event lighting installation</p>
+          </div>
         </div>
-        <div>
-          <h2 className="text-lg font-semibold text-white">Lone Star Lighting Displays</h2>
-          <p className="text-xs text-gray-400">Holiday & event lighting installation</p>
-        </div>
-        <div className="ml-auto">
+        <div className="flex items-center gap-3">
           <StatusBadge status="active" label="Active" />
+          <TimeFilter value={timeRange} onChange={setTimeRange} />
         </div>
       </div>
 
-      {/* Stats */}
+      {/* File Upload */}
+      <FileUploadWidget 
+        businessUnit="lone-star" 
+        onFilesUploaded={(files) => console.log("Lone Star files:", files)}
+      />
+
+      {/* KPI Stats with Sparklines */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <GlassCard>
-          <div className="flex items-center gap-2 text-gray-400 mb-2">
-            <DollarSign className="w-4 h-4" />
-            <span className="text-xs">Pipeline</span>
-          </div>
-          <p className="text-2xl font-bold text-white">${pipeline.toLocaleString()}</p>
-          <p className="text-xs text-gray-500">{leads.length} leads</p>
-        </GlassCard>
+        <KPICard
+          title="Pipeline Value"
+          value={`$${pipeline.toLocaleString()}`}
+          change={`${leads.length} leads`}
+          changeType="neutral"
+          sparklineData={pipelineSparkline}
+          icon={<DollarSign className="w-4 h-4 text-gray-400" />}
+        />
 
-        <GlassCard>
-          <div className="flex items-center gap-2 text-gray-400 mb-2">
-            <Users className="w-4 h-4" />
-            <span className="text-xs">Active Leads</span>
-          </div>
-          <p className="text-2xl font-bold text-white">{activeLeads}</p>
-          <p className="text-xs text-gray-500">2,227 contacts</p>
-        </GlassCard>
+        <KPICard
+          title="Active Leads"
+          value={activeLeads.toString()}
+          change="2,227 contacts"
+          changeType="neutral"
+          icon={<Users className="w-4 h-4 text-gray-400" />}
+        />
 
-        <GlassCard>
-          <div className="flex items-center gap-2 text-gray-400 mb-2">
-            <TrendingUp className="w-4 h-4" />
-            <span className="text-xs">2024 Revenue</span>
-          </div>
-          <p className="text-2xl font-bold text-white">$20,021</p>
-          <p className="text-xs text-gray-500">69 invoices</p>
-        </GlassCard>
+        <KPICard
+          title="2024 Revenue"
+          value="$20,021"
+          change="69 invoices"
+          changeType="neutral"
+          sparklineData={revenueSparkline}
+          icon={<TrendingUp className="w-4 h-4 text-gray-400" />}
+        />
 
-        <GlassCard>
-          <div className="flex items-center gap-2 text-gray-400 mb-2">
-            <Calendar className="w-4 h-4" />
-            <span className="text-xs">Season</span>
-          </div>
-          <p className="text-2xl font-bold text-white">Off-Season</p>
-          <p className="text-xs text-gray-500">Install: Nov-Jan</p>
-        </GlassCard>
+        <KPICard
+          title="Season Status"
+          value="Off-Season"
+          change="Install: Nov-Jan"
+          changeType="neutral"
+          icon={<Calendar className="w-4 h-4 text-gray-400" />}
+        />
       </div>
 
       {/* Active Leads */}
