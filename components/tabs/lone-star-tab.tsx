@@ -29,6 +29,14 @@ export function LoneStarTab() {
 
   async function fetchLeads() {
     try {
+      // Check if Supabase is configured
+      if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+        console.log('[v0] Supabase not configured, using empty data')
+        setLeads([])
+        setLoading(false)
+        return
+      }
+
       const { data, error } = await supabase
         .from('mc_leads')
         .select('*')
@@ -40,6 +48,7 @@ export function LoneStarTab() {
       setLeads(data || [])
     } catch (error) {
       console.error('Error:', error)
+      setLeads([])
     } finally {
       setLoading(false)
     }
