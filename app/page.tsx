@@ -32,13 +32,13 @@ export default function MissionControl() {
     <div className="flex h-screen bg-background overflow-hidden">
       <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
       
-      <main className="flex-1 overflow-y-auto">
-        <div className="p-6">
+      <main className="flex-1 overflow-y-auto pt-16 lg:pt-0">
+        <div className="p-4 lg:p-6">
           {/* Page Header with Notifications */}
-          <div className="flex items-start justify-between mb-6">
+          <div className="flex items-start justify-between mb-4 lg:mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-white">{TAB_TITLES[activeTab]}</h1>
-              <p className="text-sm text-gray-400 mt-1">
+              <h1 className="text-xl lg:text-2xl font-bold text-white">{TAB_TITLES[activeTab]}</h1>
+              <p className="text-xs lg:text-sm text-gray-400 mt-1">
                 Atlas Command Center
               </p>
             </div>

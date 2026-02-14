@@ -28,7 +28,7 @@ export function OverviewTab() {
         onFilesUploaded={(files) => console.log("Uploaded:", files)}
       />
       {/* KPI Stats with Sparklines */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
         <KPICard
           title="Total Revenue"
           value="$20,021"
