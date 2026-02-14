@@ -37,6 +37,12 @@ export function LoneStarTab() {
 
   async function fetchLeads() {
     try {
+      if (!supabase) {
+        console.error('[v0] Supabase client is not initialized. Check your environment variables.')
+        setLeads([])
+        return
+      }
+
       const { data, error } = await supabase
         .from('mc_leads')
         .select('*')
