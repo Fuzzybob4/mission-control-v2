@@ -4,7 +4,6 @@ import { useEffect, useState } from "react"
 import { GlassCard } from "@/components/ui/glass-card"
 import { StatusBadge } from "@/components/ui/status-badge"
 import { Lightbulb, DollarSign, Users, Calendar, TrendingUp, MapPin } from "lucide-react"
-import { supabase } from "@/lib/supabase"
 
 interface Lead {
   id: string
@@ -20,47 +19,9 @@ interface Lead {
 }
 
 export function LoneStarTab() {
-  const [leads, setLeads] = useState<Lead[]>([])
-  const [loading, setLoading] = useState(true)
+  const [leads] = useState<Lead[]>([])
 
-  useEffect(() => {
-    fetchLeads()
-  }, [])
-
-  async function fetchLeads() {
-    try {
-      // Check if Supabase is configured
-      if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-        console.log('[v0] Supabase not configured, using empty data')
-        setLeads([])
-        setLoading(false)
-        return
-      }
-
-      const { data, error } = await supabase
-        .from('mc_leads')
-        .select('*')
-        .eq('business_unit', 'lone_star')
-        .neq('status', 'spam')
-        .order('created_at', { ascending: false })
-
-      if (error) throw error
-      setLeads(data || [])
-    } catch (error) {
-      console.error('Error:', error)
-      setLeads([])
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
-      </div>
-    )
-  }
+  // Mock data for demonstration - connect to Supabase to load real leads
 
   const pipeline = leads.reduce((sum, lead) => sum + (lead.estimated_value || 0), 0)
   const activeLeads = leads.filter(l => ['new', 'contacted', 'quoted'].includes(l.status)).length
