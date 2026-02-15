@@ -12,6 +12,8 @@ import { SystemsTab } from "@/components/tabs/systems-tab"
 import { HeartbeatSection } from "@/components/heartbeat-section"
 import { QuickActions } from "@/components/quick-actions"
 import { NotificationCenter } from "@/components/notification-center"
+import { KeyboardShortcutsHelp } from "@/components/keyboard-shortcuts-help"
+import { useKeyboardShortcuts, ShortcutConfig } from "@/hooks/use-keyboard-shortcuts"
 
 type TabId = "overview" | "lone-star" | "redfox" | "heroes" | "agents" | "analytics" | "systems"
 
@@ -25,8 +27,40 @@ const TAB_TITLES: Record<TabId, string> = {
   systems: "Systems",
 }
 
+const TABS: TabId[] = ["overview", "lone-star", "redfox", "heroes", "agents", "analytics", "systems"]
+
 export default function MissionControl() {
   const [activeTab, setActiveTab] = useState<TabId>("overview")
+  const [showShortcutsHelp, setShowShortcutsHelp] = useState(false)
+  const [quickActionOpen, setQuickActionOpen] = useState(false)
+
+  // Keyboard shortcuts configuration
+  const shortcuts: ShortcutConfig[] = [
+    { key: "1", description: "Overview", action: () => setActiveTab("overview") },
+    { key: "2", description: "Lone Star", action: () => setActiveTab("lone-star") },
+    { key: "3", description: "RedFox", action: () => setActiveTab("redfox") },
+    { key: "4", description: "Heroes", action: () => setActiveTab("heroes") },
+    { key: "5", description: "Agents", action: () => setActiveTab("agents") },
+    { key: "6", description: "Analytics", action: () => setActiveTab("analytics") },
+    { key: "7", description: "Systems", action: () => setActiveTab("systems") },
+    { key: "?", description: "Toggle help", action: () => setShowShortcutsHelp(prev => !prev) },
+    { key: "n", description: "New lead", action: () => console.log("New lead shortcut") },
+    { key: "t", description: "New task", action: () => console.log("New task shortcut") },
+    { key: "e", description: "Check email", action: () => console.log("Check email shortcut") },
+    { key: "ArrowRight", description: "Next tab", action: () => {
+      const currentIndex = TABS.indexOf(activeTab)
+      const nextIndex = (currentIndex + 1) % TABS.length
+      setActiveTab(TABS[nextIndex])
+    }},
+    { key: "ArrowLeft", description: "Previous tab", action: () => {
+      const currentIndex = TABS.indexOf(activeTab)
+      const prevIndex = (currentIndex - 1 + TABS.length) % TABS.length
+      setActiveTab(TABS[prevIndex])
+    }},
+  ]
+
+  // Register keyboard shortcuts
+  useKeyboardShortcuts(shortcuts)
 
   return (
     <div className="flex h-screen bg-background overflow-hidden">
@@ -42,7 +76,16 @@ export default function MissionControl() {
                 Atlas Command Center
               </p>
             </div>
-            <NotificationCenter />
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setShowShortcutsHelp(true)}
+                className="hidden lg:flex items-center gap-1.5 px-2 py-1.5 text-xs text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg transition-colors"
+                title="Keyboard shortcuts (?)"
+              >
+                <span>?</span>
+              </button>
+              <NotificationCenter />
+            </div>
           </div>
 
           {/* Heartbeat Section */}
@@ -64,6 +107,12 @@ export default function MissionControl() {
         onNewLead={() => console.log("New lead")}
         onCheckEmail={() => console.log("Check email")}
         onNewTask={() => console.log("New task")}
+      />
+
+      {/* Keyboard Shortcuts Help Modal */}
+      <KeyboardShortcutsHelp 
+        isOpen={showShortcutsHelp} 
+        onClose={() => setShowShortcutsHelp(false)} 
       />
     </div>
   )
