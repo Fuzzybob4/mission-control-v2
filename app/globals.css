@@ -67,6 +67,20 @@
   animation: fade-in-up 0.5s ease-out;
 }
 
+/* Toast Progress Bar Animation */
+@keyframes progress {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+.animate-progress {
+  animation: progress linear;
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

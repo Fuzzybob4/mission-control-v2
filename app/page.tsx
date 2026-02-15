@@ -14,6 +14,7 @@ import { QuickActions } from "@/components/quick-actions"
 import { NotificationCenter } from "@/components/notification-center"
 import { KeyboardShortcutsHelp } from "@/components/keyboard-shortcuts-help"
 import { useKeyboardShortcuts, ShortcutConfig } from "@/hooks/use-keyboard-shortcuts"
+import { useToast } from "@/hooks/use-toast"
 
 type TabId = "overview" | "lone-star" | "redfox" | "heroes" | "agents" | "analytics" | "systems"
 
@@ -33,29 +34,35 @@ export default function MissionControl() {
   const [activeTab, setActiveTab] = useState<TabId>("overview")
   const [showShortcutsHelp, setShowShortcutsHelp] = useState(false)
   const [quickActionOpen, setQuickActionOpen] = useState(false)
+  const { success, info, warning } = useToast()
+
+  // Helper to switch tabs with toast feedback
+  const switchTab = (tab: TabId) => {
+    setActiveTab(tab)
+  }
 
   // Keyboard shortcuts configuration
   const shortcuts: ShortcutConfig[] = [
-    { key: "1", description: "Overview", action: () => setActiveTab("overview") },
-    { key: "2", description: "Lone Star", action: () => setActiveTab("lone-star") },
-    { key: "3", description: "RedFox", action: () => setActiveTab("redfox") },
-    { key: "4", description: "Heroes", action: () => setActiveTab("heroes") },
-    { key: "5", description: "Agents", action: () => setActiveTab("agents") },
-    { key: "6", description: "Analytics", action: () => setActiveTab("analytics") },
-    { key: "7", description: "Systems", action: () => setActiveTab("systems") },
+    { key: "1", description: "Overview", action: () => switchTab("overview") },
+    { key: "2", description: "Lone Star", action: () => switchTab("lone-star") },
+    { key: "3", description: "RedFox", action: () => switchTab("redfox") },
+    { key: "4", description: "Heroes", action: () => switchTab("heroes") },
+    { key: "5", description: "Agents", action: () => switchTab("agents") },
+    { key: "6", description: "Analytics", action: () => switchTab("analytics") },
+    { key: "7", description: "Systems", action: () => switchTab("systems") },
     { key: "?", description: "Toggle help", action: () => setShowShortcutsHelp(prev => !prev) },
-    { key: "n", description: "New lead", action: () => console.log("New lead shortcut") },
-    { key: "t", description: "New task", action: () => console.log("New task shortcut") },
-    { key: "e", description: "Check email", action: () => console.log("Check email shortcut") },
+    { key: "n", description: "New lead", action: () => success("New Lead", "Opening lead creation form...") },
+    { key: "t", description: "New task", action: () => success("New Task", "Opening task creation dialog...") },
+    { key: "e", description: "Check email", action: () => info("Checking Email", "Connecting to Outlook...") },
     { key: "ArrowRight", description: "Next tab", action: () => {
       const currentIndex = TABS.indexOf(activeTab)
       const nextIndex = (currentIndex + 1) % TABS.length
-      setActiveTab(TABS[nextIndex])
+      switchTab(TABS[nextIndex])
     }},
     { key: "ArrowLeft", description: "Previous tab", action: () => {
       const currentIndex = TABS.indexOf(activeTab)
       const prevIndex = (currentIndex - 1 + TABS.length) % TABS.length
-      setActiveTab(TABS[prevIndex])
+      switchTab(TABS[prevIndex])
     }},
   ]
 
