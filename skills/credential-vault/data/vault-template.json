@@ -1,0 +1,37 @@
+{
+  "version": "1.0",
+  "providers": {
+    "google": {
+      "accounts": {}
+    },
+    "gumroad": {
+      "accounts": {}
+    },
+    "hubspot": {
+      "accounts": {}
+    },
+    "facebook": {
+      "accounts": {}
+    },
+    "x": {
+      "accounts": {}
+    },
+    "yahoo": {
+      "accounts": {}
+    },
+    "stripe": {
+      "accounts": {}
+    },
+    "payment_methods": {
+      "cards": {}
+    }
+  },
+  "metadata": {
+    "pin_hash": "",
+    "salt": "",
+    "encryption_key_salt": "",
+    "created_at": "",
+    "updated_at": ""
+  },
+  "audit_log": []
+}
