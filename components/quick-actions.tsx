@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Plus, Mail, FileText, Zap } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
 
 interface QuickActionsProps {
   onNewLead?: () => void
@@ -11,6 +12,27 @@ interface QuickActionsProps {
 
 export function QuickActions({ onNewLead, onCheckEmail, onNewTask }: QuickActionsProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const { success, info } = useToast()
+
+  const handleAction = (actionId: string, handler?: () => void) => {
+    setIsOpen(false)
+    
+    // Show toast feedback
+    switch (actionId) {
+      case "lead":
+        success("New Lead Created", "Lead form opened successfully")
+        break
+      case "email":
+        info("Checking Email", "Connecting to Outlook...")
+        break
+      case "task":
+        success("New Task", "Task creation dialog opened")
+        break
+    }
+    
+    // Call the original handler
+    handler?.()
+  }
 
   const actions = [
     { 
@@ -45,10 +67,7 @@ export function QuickActions({ onNewLead, onCheckEmail, onNewTask }: QuickAction
           return (
             <button
               key={action.id}
-              onClick={() => {
-                action.onClick?.()
-                setIsOpen(false)
-              }}
+              onClick={() => handleAction(action.id, action.onClick)}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-white text-sm font-medium shadow-lg transition-all hover:scale-105 ${action.color}`}
             >
               <Icon className="w-4 h-4" />
