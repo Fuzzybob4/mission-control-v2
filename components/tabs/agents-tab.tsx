@@ -2,7 +2,9 @@
 
 import { GlassCard } from "@/components/ui/glass-card"
 import { StatusBadge } from "@/components/ui/status-badge"
-import { Bot } from "lucide-react"
+import { SkillRegistry } from "@/components/skill-registry"
+import { Bot, Wrench } from "lucide-react"
+import { useState } from "react"
 
 const agents = [
   { id: 'atlas', name: 'Atlas', role: 'Executive Coordinator', tier: 1, status: 'active' },
@@ -19,7 +21,10 @@ const agents = [
   { id: 'otto', name: 'Otto', role: 'Quality Agent', tier: 4, status: 'idle' },
 ]
 
+type AgentsView = "network" | "skills"
+
 export function AgentsTab() {
+  const [activeView, setActiveView] = useState<AgentsView>("network")
   const tier1 = agents.filter(a => a.tier === 1)
   const tier2 = agents.filter(a => a.tier === 2)
   const tier3 = agents.filter(a => a.tier === 3)
@@ -27,16 +32,50 @@ export function AgentsTab() {
 
   return (
     <div className="space-y-6 animate-fade-in-up">
-      {/* Header */}
-      <div className="flex items-center gap-3">
-        <div className="p-2 rounded-lg bg-blue-500/20">
-          <Bot className="w-5 h-5 text-blue-400" />
+      {/* Header with Tabs */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-lg bg-blue-500/20">
+            <Bot className="w-5 h-5 text-blue-400" />
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold text-white">Agent Network</h2>
+            <p className="text-xs text-gray-400">13-agent hierarchy • {agents.length} skills available</p>
+          </div>
         </div>
-        <div>
-          <h2 className="text-lg font-semibold text-white">Agent Network</h2>
-          <p className="text-xs text-gray-400">13-agent hierarchy</p>
+        
+        {/* View Toggle */}
+        <div className="flex bg-white/5 rounded-lg p-1">
+          <button
+            onClick={() => setActiveView("network")}
+            className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 ${
+              activeView === "network"
+                ? "bg-blue-500/20 text-blue-400"
+                : "text-gray-400 hover:text-white"
+            }`}
+          >
+            <Bot className="w-3.5 h-3.5" />
+            Agents
+          </button>
+          <button
+            onClick={() => setActiveView("skills")}
+            className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 ${
+              activeView === "skills"
+                ? "bg-blue-500/20 text-blue-400"
+                : "text-gray-400 hover:text-white"
+            }`}
+          >
+            <Wrench className="w-3.5 h-3.5" />
+            Skill Registry
+          </button>
         </div>
       </div>
+
+      {activeView === "skills" ? (
+        <SkillRegistry />
+      ) : (
+        <>
+          {/* Agent Network Content */}
 
       {/* Stats */}
       <div className="grid grid-cols-4 gap-4">
@@ -114,6 +153,8 @@ export function AgentsTab() {
           ))}
         </div>
       </div>
+        </>
+      )}
     </div>
   )
 }

@@ -1,0 +1,495 @@
+/**
+ * Credential Vault - UI Styles
+ */
+
+/* PIN Entry */
+.vault-pin-entry {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.vault-pin-entry.locked {
+  color: #e74c3c;
+}
+
+.vault-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.vault-pin-entry h2 {
+  margin: 0 0 1.5rem 0;
+  color: #333;
+}
+
+.pin-display {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.pin-dot {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #3498db;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.pin-dot.filled {
+  background: #3498db;
+  color: white;
+}
+
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 200px;
+}
+
+.keypad-btn {
+  padding: 1rem;
+  font-size: 1.25rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.keypad-btn:hover {
+  background: #f0f0f0;
+}
+
+.keypad-btn.clear {
+  color: #e74c3c;
+}
+
+.keypad-btn.backspace {
+  color: #3498db;
+}
+
+.message {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+}
+
+.message.success {
+  background: #d4edda;
+  color: #155724;
+}
+
+.message.error {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.session-info {
+  margin-top: 1rem;
+  color: #666;
+  font-size: 0.875rem;
+}
+
+.countdown {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
+
+/* Credential Browser */
+.credential-browser {
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.vault-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.vault-header h2 {
+  margin: 0;
+  color: #333;
+}
+
+.session-status {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.expiry {
+  color: #666;
+  font-size: 0.875rem;
+}
+
+.btn-lock {
+  padding: 0.5rem 1rem;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-lock:hover {
+  background: #c0392b;
+}
+
+.btn-add-service {
+  padding: 0.75rem 1.5rem;
+  background: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.btn-add-service:hover {
+  background: #219a52;
+}
+
+/* Provider Tabs */
+.provider-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.provider-tab {
+  padding: 0.5rem 1rem;
+  background: white;
+  border: 2px solid #ddd;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.provider-tab:hover {
+  border-color: #3498db;
+}
+
+.provider-tab.active {
+  background: #3498db;
+  color: white;
+  border-color: #3498db;
+}
+
+/* Account Section */
+.account-section {
+  margin-bottom: 1.5rem;
+}
+
+.account-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.account-dropdown {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  min-width: 250px;
+}
+
+.btn-delete-provider {
+  padding: 0.5rem;
+  background: #f8f8f8;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-delete-provider:hover {
+  background: #f0f0f0;
+}
+
+/* Credentials List */
+.credentials-list {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.credentials-list h4 {
+  margin: 0 0 1rem 0;
+  color: #333;
+}
+
+.credential-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  background: white;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.field-label {
+  font-weight: 600;
+  min-width: 120px;
+  color: #555;
+}
+
+.field-value {
+  flex: 1;
+  font-family: monospace;
+  color: #333;
+}
+
+.field-actions {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.field-actions button {
+  padding: 0.25rem 0.5rem;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.field-actions button:hover {
+  background: #f0f0f0;
+}
+
+.btn-delete-account {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-delete-account:hover {
+  background: #c0392b;
+}
+
+/* Credential Form */
+.credential-form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.credential-form.protocol-check {
+  text-align: center;
+}
+
+.credential-form h3 {
+  margin: 0 0 1.5rem 0;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #555;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.field-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.field-row input.field-name {
+  width: 120px;
+  background: #f0f0f0;
+}
+
+.field-row input.field-value {
+  flex: 1;
+}
+
+.btn-remove {
+  padding: 0.25rem 0.5rem;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.add-field {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.add-field input {
+  flex: 1;
+}
+
+.btn-add {
+  padding: 0.5rem 1rem;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.btn-save {
+  padding: 0.75rem 1.5rem;
+  background: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.btn-save:hover {
+  background: #219a52;
+}
+
+.btn-cancel {
+  padding: 0.75rem 1.5rem;
+  background: #95a5a6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.btn-cancel:hover {
+  background: #7f8c8d;
+}
+
+.protocol-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.btn-verify {
+  padding: 0.75rem 1.5rem;
+  background: #9b59b6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.btn-verify:hover {
+  background: #8e44ad;
+}
+
+/* Edit Form */
+.edit-form {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.edit-form h3 {
+  margin: 0 0 1rem 0;
+}
+
+.edit-form input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Vault Footer */
+.vault-footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.link-api-keys {
+  color: #3498db;
+  text-decoration: none;
+}
+
+.link-api-keys:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .vault-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  
+  .provider-tabs {
+    flex-direction: column;
+  }
+  
+  .provider-tab {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .credential-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .field-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
