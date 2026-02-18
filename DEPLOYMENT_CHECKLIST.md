@@ -9,8 +9,8 @@
 In v0 → Settings → Environment Variables, add:
 
 ```
-NEXT_PUBLIC_SUPABASE_URL=https://wnqtfhcuhncikcfxpeol.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_qx0mNwhYkd1z8NwtDtgnGw_xPZ9WyU7
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
 ```
 
 ⚠️ **Important:** Use `.com` not `.co`
