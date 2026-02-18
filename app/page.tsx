@@ -14,6 +14,7 @@ import { QuickActions } from "@/components/quick-actions"
 import { NotificationCenter } from "@/components/notification-center"
 import { KeyboardShortcutsHelp } from "@/components/keyboard-shortcuts-help"
 import { ClockWidget } from "@/components/clock-widget"
+import { ConnectionStatus } from "@/components/connection-status"
 import { ScrollToTop } from "@/components/scroll-to-top"
 import { useKeyboardShortcuts, ShortcutConfig } from "@/hooks/use-keyboard-shortcuts"
 import { useToast } from "@/hooks/use-toast"
@@ -56,6 +57,7 @@ export default function MissionControl() {
     { key: "n", description: "New lead", action: () => success("New Lead", "Opening lead creation form...") },
     { key: "t", description: "New task", action: () => success("New Task", "Opening task creation dialog...") },
     { key: "e", description: "Check email", action: () => info("Checking Email", "Connecting to Outlook...") },
+    { key: "r", description: "Refresh data", action: () => info("Refreshing", "Syncing latest data...") },
     { key: "ArrowRight", description: "Next tab", action: () => {
       const currentIndex = TABS.indexOf(activeTab)
       const nextIndex = (currentIndex + 1) % TABS.length
@@ -87,6 +89,11 @@ export default function MissionControl() {
             </div>
             <div className="flex items-center gap-3">
               <ClockWidget />
+              <ConnectionStatus 
+                onRefresh={() => {
+                  info("Refreshing", "Syncing latest data...")
+                }}
+              />
               <button
                 onClick={() => setShowShortcutsHelp(true)}
                 className="hidden lg:flex items-center gap-1.5 px-2 py-1.5 text-xs text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg transition-colors"

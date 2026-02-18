@@ -58,5 +58,6 @@ export function useKeyboardShortcutHelp() {
     { key: "n", description: "New lead" },
     { key: "t", description: "New task" },
     { key: "e", description: "Check email" },
+    { key: "r", description: "Refresh data" },
   ]
 }
