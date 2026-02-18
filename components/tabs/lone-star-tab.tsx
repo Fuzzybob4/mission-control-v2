@@ -6,7 +6,7 @@ import { StatusBadge } from "@/components/ui/status-badge"
 import { TimeFilter } from "@/components/time-filter"
 import { FileUploadWidget } from "@/components/file-upload-widget"
 import { KPICard } from "@/components/kpi-card"
-import { Lightbulb, DollarSign, Users, Calendar, TrendingUp, MapPin } from "lucide-react"
+import { Lightbulb, DollarSign, Users, Calendar, TrendingUp } from "lucide-react"
 import { supabase } from "@/lib/supabase"
 
 interface Lead {

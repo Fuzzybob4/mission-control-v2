@@ -13,6 +13,8 @@ import { HeartbeatSection } from "@/components/heartbeat-section"
 import { QuickActions } from "@/components/quick-actions"
 import { NotificationCenter } from "@/components/notification-center"
 import { KeyboardShortcutsHelp } from "@/components/keyboard-shortcuts-help"
+import { ClockWidget } from "@/components/clock-widget"
+import { ScrollToTop } from "@/components/scroll-to-top"
 import { useKeyboardShortcuts, ShortcutConfig } from "@/hooks/use-keyboard-shortcuts"
 import { useToast } from "@/hooks/use-toast"
 
@@ -83,7 +85,8 @@ export default function MissionControl() {
                 Atlas Command Center
               </p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
+              <ClockWidget />
               <button
                 onClick={() => setShowShortcutsHelp(true)}
                 className="hidden lg:flex items-center gap-1.5 px-2 py-1.5 text-xs text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg transition-colors"
@@ -121,6 +124,9 @@ export default function MissionControl() {
         isOpen={showShortcutsHelp} 
         onClose={() => setShowShortcutsHelp(false)} 
       />
+
+      {/* Scroll to Top Button */}
+      <ScrollToTop />
     </div>
   )
 }

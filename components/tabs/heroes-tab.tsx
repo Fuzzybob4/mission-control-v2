@@ -5,7 +5,7 @@ import { GlassCard } from "@/components/ui/glass-card"
 import { StatusBadge } from "@/components/ui/status-badge"
 import { FileUploadWidget } from "@/components/file-upload-widget"
 import { TimeFilter } from "@/components/time-filter"
-import { Gamepad2, PauseCircle, DollarSign, TrendingUp, Target, AlertCircle } from "lucide-react"
+import { Gamepad2, DollarSign, TrendingUp, Target, AlertCircle } from "lucide-react"
 
 export function HeroesTab() {
   const [timeRange, setTimeRange] = useState<"today" | "week" | "month" | "quarter" | "year">("month")
@@ -37,7 +37,7 @@ export function HeroesTab() {
 
       {/* Status Banner */}
       <div className="p-4 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-start gap-3">
-        <PauseCircle className="w-5 h-5 text-amber-400 mt-0.5" />
+        <AlertCircle className="w-5 h-5 text-amber-400 mt-0.5" />
         <div>
           <h3 className="text-sm font-semibold text-white">Business On Hold</h3>
           <p className="text-xs text-gray-400 mt-1">

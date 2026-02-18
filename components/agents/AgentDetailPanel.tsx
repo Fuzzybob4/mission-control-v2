@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Clock, Coins, AlertCircle, User, Sparkles, Zap, Brain } from 'lucide-react';
+import { X, Clock, DollarSign, AlertCircle, Users, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -40,9 +40,9 @@ const personalityTraits: Record<string, string[]> = {
 };
 
 const personalityIcons: Record<string, React.ReactNode> = {
-  redfox: <Brain className="w-4 h-4" />,
+  redfox: <Zap className="w-4 h-4" />,
   lonestar: <Zap className="w-4 h-4" />,
-  heroes: <Sparkles className="w-4 h-4" />,
+  heroes: <Zap className="w-4 h-4" />,
 };
 
 function formatDuration(seconds: number): string {
@@ -163,7 +163,7 @@ export function AgentDetailPanel({
                     className="p-4 rounded-xl bg-muted/50 border"
                   >
                     <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground mb-2">
-                      <User className="w-4 h-4" />
+                      <Users className="w-4 h-4" />
                       Current Task
                     </div>
                     <p className="text-sm leading-relaxed">{agent.task}</p>
@@ -179,7 +179,7 @@ export function AgentDetailPanel({
                 >
                   <div className="flex items-center justify-between text-sm">
                     <div className="flex items-center gap-2 text-muted-foreground">
-                      <Coins className="w-4 h-4" />
+                      <DollarSign className="w-4 h-4" />
                       Credits
                     </div>
                     <span className="font-medium">

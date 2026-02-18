@@ -6,7 +6,9 @@ import { StatusBadge } from "@/components/ui/status-badge"
 import { KPICard } from "@/components/kpi-card"
 import { TimeFilter } from "@/components/time-filter"
 import { FileUploadWidget } from "@/components/file-upload-widget"
+import { RecentActivity } from "@/components/recent-activity"
 import { Lightbulb, Code2, Gamepad2, TrendingUp, Activity, Zap, AlertCircle } from "lucide-react"
+import { DailyMotivationWidget } from "@/components/daily-motivation-widget"
 
 export function OverviewTab() {
   const [timeRange, setTimeRange] = useState<"today" | "week" | "month" | "quarter" | "year">("month")
@@ -21,6 +23,9 @@ export function OverviewTab() {
       <div className="flex justify-end">
         <TimeFilter value={timeRange} onChange={setTimeRange} />
       </div>
+
+      {/* Daily Motivation Quote */}
+      <DailyMotivationWidget />
 
       {/* File Upload for Assets */}
       <FileUploadWidget 
@@ -112,22 +117,48 @@ export function OverviewTab() {
         </GlassCard>
       </div>
 
-      {/* Urgent Actions */}
-      <div>
-        <h3 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
-          <AlertCircle className="w-4 h-4 text-amber-400" />
-          Urgent Actions
-        </h3>
-        <div className="space-y-2">
-          <GlassCard className="p-3 border-l-4 border-amber-500">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-white">Alora Hess Follow-up</p>
-                <p className="text-xs text-gray-400">Due: Feb 20, 2026</p>
+      {/* Recent Activity & Urgent Actions Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* Recent Activity Feed */}
+        <RecentActivity maxItems={5} />
+
+        {/* Urgent Actions */}
+        <div>
+          <h3 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 text-amber-400" />
+            Urgent Actions
+          </h3>
+          <div className="space-y-2">
+            <GlassCard className="p-3 border-l-4 border-amber-500">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-white">Alora Hess Follow-up</p>
+                  <p className="text-xs text-gray-400">Due: Feb 20, 2026</p>
+                </div>
+                <span className="text-sm font-semibold text-emerald-400">$17K-$19K</span>
               </div>
-              <span className="text-sm font-semibold text-emerald-400">$17K-$19K</span>
-            </div>
-          </GlassCard>
+            </GlassCard>
+            
+            <GlassCard className="p-3 border-l-4 border-blue-500">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-white">Review RedFox CRM PR</p>
+                  <p className="text-xs text-gray-400">New features ready for review</p>
+                </div>
+                <span className="text-xs text-blue-400">Dev</span>
+              </div>
+            </GlassCard>
+            
+            <GlassCard className="p-3 border-l-4 border-violet-500">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-white">Inventory Update</p>
+                  <p className="text-xs text-gray-400">Heroes of the Meta - 12 new cards</p>
+                </div>
+                <span className="text-xs text-violet-400">Side</span>
+              </div>
+            </GlassCard>
+          </div>
         </div>
       </div>
     </div>

@@ -99,7 +99,7 @@ export function Agent({ agent, onClick, isSelected, size = 'md', className }: Ag
           transition: {
             duration: 1.5,
             repeat: Infinity,
-            ease: 'easeInOut',
+            ease: 'easeInOut' as const,
           },
         };
       case 'type':
@@ -108,7 +108,7 @@ export function Agent({ agent, onClick, isSelected, size = 'md', className }: Ag
           transition: {
             duration: 0.3,
             repeat: Infinity,
-            ease: 'easeInOut',
+            ease: 'easeInOut' as const,
           },
         };
       default:
