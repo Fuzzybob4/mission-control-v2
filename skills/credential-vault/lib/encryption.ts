@@ -12,6 +12,9 @@
 
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import bcrypt from 'bcryptjs';
+import { webcrypto } from 'crypto';
+
+const cryptoApi = (globalThis.crypto ?? webcrypto) as Crypto;
 
 // Configuration
 const PIN = '2846';
@@ -92,7 +95,7 @@ export async function deriveKey(pin: string, salt: Uint8Array): Promise<CryptoKe
   const pinData = encoder.encode(pin);
   
   // Import PIN as raw key material
-  const keyMaterial = await crypto.subtle.importKey(
+  const keyMaterial = await cryptoApi.subtle.importKey(
     'raw',
     pinData,
     'PBKDF2',
@@ -101,7 +104,7 @@ export async function deriveKey(pin: string, salt: Uint8Array): Promise<CryptoKe
   );
   
   // Derive AES-256 key
-  return crypto.subtle.deriveKey(
+  return cryptoApi.subtle.deriveKey(
     {
       name: 'PBKDF2',
       salt: salt,
@@ -119,14 +122,14 @@ export async function deriveKey(pin: string, salt: Uint8Array): Promise<CryptoKe
  * Generate random salt
  */
 export function generateSalt(): Uint8Array {
-  return crypto.getRandomValues(new Uint8Array(16));
+  return cryptoApi.getRandomValues(new Uint8Array(16));
 }
 
 /**
  * Generate random IV
  */
 export function generateIV(): Uint8Array {
-  return crypto.getRandomValues(new Uint8Array(12));
+  return cryptoApi.getRandomValues(new Uint8Array(12));
 }
 
 /**
@@ -140,7 +143,7 @@ export async function encryptCredential(
   const encoder = new TextEncoder();
   const data = encoder.encode(value);
   
-  const encrypted = await crypto.subtle.encrypt(
+  const encrypted = await cryptoApi.subtle.encrypt(
     { name: 'AES-GCM', iv },
     key,
     data
@@ -174,7 +177,7 @@ export async function decryptCredential(
   combined.set(new Uint8Array(ciphertext), 0);
   combined.set(new Uint8Array(tag), ciphertext.byteLength);
   
-  const decrypted = await crypto.subtle.decrypt(
+  const decrypted = await cryptoApi.subtle.decrypt(
     { name: 'AES-GCM', iv },
     key,
     combined
@@ -596,21 +599,11 @@ export function subscribeToChanges(callback: (payload: any) => void): void {
 
 // Helper functions
 function arrayBufferToBase64(buffer: ArrayBuffer): string {
-  const bytes = new Uint8Array(buffer);
-  let binary = '';
-  for (let i = 0; i < bytes.byteLength; i++) {
-    binary += String.fromCharCode(bytes[i]);
-  }
-  return btoa(binary);
+  return Buffer.from(buffer).toString('base64');
 }
 
 function base64ToArrayBuffer(base64: string): Uint8Array {
-  const binary = atob(base64);
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) {
-    bytes[i] = binary.charCodeAt(i);
-  }
-  return bytes;
+  return new Uint8Array(Buffer.from(base64, 'base64'));
 }
 
 function generateSaltBase64(): string {

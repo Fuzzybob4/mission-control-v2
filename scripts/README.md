@@ -11,6 +11,7 @@ Run these SQL scripts in Supabase SQL Editor in order:
 5. **005_create_tasks_table.sql** - Create tasks table
 6. **006_create_api_costs_table.sql** - Create API usage tracking
 7. **007_enable_rls_policies.sql** - Enable security policies
+8. **008_create_vault_tables.sql** - Credential vault metadata, secrets, and audit log
 
 ## How to Run
 
@@ -26,6 +27,9 @@ Run these SQL scripts in Supabase SQL Editor in order:
 - `mc_events` - Activity feed for heartbeat section
 - `mc_tasks` - Task assignments
 - `mc_api_costs` - API usage tracking
+- `vault_metadata` - PIN + salt management for the credential vault
+- `vault_credentials` - AES-encrypted credential storage
+- `vault_audit_log` - Immutable access history
 
 ## Sample Data Included
 
