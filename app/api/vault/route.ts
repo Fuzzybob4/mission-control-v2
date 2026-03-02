@@ -40,23 +40,35 @@ type VaultMetadataRow = {
 
 const cryptoApi = (globalThis.crypto ?? webcrypto) as Crypto
 
-const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-const vaultPin = process.env.VAULT_PIN || "2846"
-const sessionTtlHours = Number(process.env.VAULT_SESSION_TTL_HOURS || "24")
+// Lazy initialization - only check env vars when actually needed
+let supabaseClient: ReturnType<typeof createClient> | null = null
+let vaultPinValue: string | null = null
+let sessionTtlMs: number = 24 * 60 * 60 * 1000 // default 24 hours
 
-if (!supabaseUrl || !supabaseServiceKey) {
-  throw new Error("Missing Supabase configuration. Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.")
+function getSupabaseClient() {
+  if (supabaseClient) return supabaseClient
+
+  const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+  if (!supabaseUrl || !supabaseServiceKey) {
+    throw new Error("Missing Supabase configuration. Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.")
+  }
+
+  vaultPinValue = process.env.VAULT_PIN || "2846"
+  sessionTtlMs = Number(process.env.VAULT_SESSION_TTL_HOURS || "24") * 60 * 60 * 1000
+
+  supabaseClient = createClient(supabaseUrl, supabaseServiceKey, {
+    auth: { persistSession: false },
+  })
+
+  return supabaseClient
 }
 
-const supabase = createClient(supabaseUrl, supabaseServiceKey, {
-  auth: { persistSession: false },
-})
-
 const sessions = new Map<string, SessionRecord>()
-const SESSION_TTL_MS = sessionTtlHours * 60 * 60 * 1000
 
 export async function POST(req: NextRequest) {
+  const supabase = getSupabaseClient()
   const body = await req.json().catch(() => ({}))
   const action = body?.action as string | undefined
   const ip = extractIp(req)
@@ -70,19 +82,19 @@ export async function POST(req: NextRequest) {
       case "unlock": {
         const pin = body?.pin as string | undefined
         if (!pin) throw new Error("PIN is required")
-        const result = await handleUnlock(pin, ip)
+        const result = await handleUnlock(pin, ip, supabase)
         return NextResponse.json(result)
       }
       case "lock": {
         const token = getToken(req, body)
-        await handleLock(token, ip)
+        await handleLock(token, ip, supabase)
         return NextResponse.json({ success: true })
       }
       case "listProviders": {
         const token = getToken(req, body)
         const session = requireSession(token)
-        const providers = await listProviders()
-        await logAudit({ action: "list_providers", success: true, ip })
+        const providers = await listProviders(supabase)
+        await logAudit({ action: "list_providers", success: true, ip }, supabase)
         return NextResponse.json({ providers, expiresAt: session.expiresAt })
       }
       case "listAccounts": {
@@ -90,8 +102,8 @@ export async function POST(req: NextRequest) {
         const { provider } = body
         if (!provider) throw new Error("Provider is required")
         const session = requireSession(token)
-        const accounts = await listAccounts(provider)
-        await logAudit({ action: "list_accounts", provider, success: true, ip })
+        const accounts = await listAccounts(provider, supabase)
+        await logAudit({ action: "list_accounts", provider, success: true, ip }, supabase)
         return NextResponse.json({ accounts, expiresAt: session.expiresAt })
       }
       case "getFields": {
@@ -99,8 +111,8 @@ export async function POST(req: NextRequest) {
         const session = requireSession(token)
         const { provider, account } = body
         if (!provider || !account) throw new Error("Provider and account are required")
-        const fields = await getFields(session, provider, account)
-        await logAudit({ action: "get", provider, account, success: true, ip })
+        const fields = await getFields(session, provider, account, supabase)
+        await logAudit({ action: "get", provider, account, success: true, ip }, supabase)
         return NextResponse.json({ fields, expiresAt: session.expiresAt })
       }
       case "saveCredentials": {
@@ -110,8 +122,8 @@ export async function POST(req: NextRequest) {
         if (!provider || !account || !fields || Object.keys(fields).length === 0) {
           throw new Error("Provider, account, and at least one field are required")
         }
-        await saveCredentials(session, provider, account, fields)
-        await logAudit({ action: "add", provider, account, success: true, ip })
+        await saveCredentials(session, provider, account, fields, supabase)
+        await logAudit({ action: "add", provider, account, success: true, ip }, supabase)
         return NextResponse.json({ success: true, expiresAt: session.expiresAt })
       }
       case "delete": {
@@ -119,14 +131,14 @@ export async function POST(req: NextRequest) {
         const session = requireSession(token)
         const { provider, account, field } = body as { provider: string; account?: string; field?: string }
         if (!provider) throw new Error("Provider is required")
-        await deleteCredential(provider, account, field)
-        await logAudit({ action: "delete", provider, account, field, success: true, ip })
+        await deleteCredential(provider, account, field, supabase)
+        await logAudit({ action: "delete", provider, account, field, success: true, ip }, supabase)
         return NextResponse.json({ success: true, expiresAt: session.expiresAt })
       }
       case "auditLog": {
         const token = getToken(req, body)
         const session = requireSession(token)
-        const entries = await getAuditLog()
+        const entries = await getAuditLog(supabase)
         return NextResponse.json({ entries, expiresAt: session.expiresAt })
       }
       default:
@@ -138,20 +150,22 @@ export async function POST(req: NextRequest) {
   }
 }
 
-async function handleUnlock(pin: string, ip?: string) {
-  await ensureMetadata()
+async function handleUnlock(pin: string, ip: string | undefined, supabase: ReturnType<typeof createClient>) {
+  await ensureMetadata(supabase)
 
-  if (pin !== vaultPin) {
-    await logAudit({ action: "unlock_attempt", success: false, ip })
+  const pinToCheck = vaultPinValue || process.env.VAULT_PIN || "2846"
+  if (pin !== pinToCheck) {
+    await logAudit({ action: "unlock_attempt", success: false, ip }, supabase)
     throw new Error("Invalid PIN")
   }
 
-  const encryptionKey = await deriveEncryptionKey(pin)
+  const encryptionKey = await deriveEncryptionKey(pin, supabase)
   const token = randomUUID()
-  const expiresAt = Date.now() + SESSION_TTL_MS
+  const ttl = sessionTtlMs || Number(process.env.VAULT_SESSION_TTL_HOURS || "24") * 60 * 60 * 1000
+  const expiresAt = Date.now() + ttl
 
   sessions.set(token, { key: encryptionKey, expiresAt })
-  await logAudit({ action: "unlock", success: true, ip })
+  await logAudit({ action: "unlock", success: true, ip }, supabase)
 
   return {
     token,
@@ -159,9 +173,9 @@ async function handleUnlock(pin: string, ip?: string) {
   }
 }
 
-async function handleLock(token: string, ip?: string) {
+async function handleLock(token: string, ip: string | undefined, supabase: ReturnType<typeof createClient>) {
   sessions.delete(token)
-  await logAudit({ action: "lock", success: true, ip })
+  await logAudit({ action: "lock", success: true, ip }, supabase)
 }
 
 function getToken(req: NextRequest, body: any): string {
@@ -185,7 +199,7 @@ function requireSession(token: string): SessionRecord {
   return session
 }
 
-async function listProviders(): Promise<string[]> {
+async function listProviders(supabase: ReturnType<typeof createClient>): Promise<string[]> {
   const { data, error } = await supabase
     .from("vault_credentials")
     .select("provider")
@@ -195,7 +209,7 @@ async function listProviders(): Promise<string[]> {
   return Array.from(new Set((data as { provider: string }[] | null)?.map(row => row.provider) || []))
 }
 
-async function listAccounts(provider: string): Promise<string[]> {
+async function listAccounts(provider: string, supabase: ReturnType<typeof createClient>): Promise<string[]> {
   const { data, error } = await supabase
     .from("vault_credentials")
     .select("account")
@@ -206,7 +220,7 @@ async function listAccounts(provider: string): Promise<string[]> {
   return Array.from(new Set((data as { account: string }[] | null)?.map(row => row.account) || []))
 }
 
-async function getFields(session: SessionRecord, provider: string, account: string) {
+async function getFields(session: SessionRecord, provider: string, account: string, supabase: ReturnType<typeof createClient>) {
   const { data, error } = await supabase
     .from("vault_credentials")
     .select("id, field_name, encrypted_value, iv, tag, updated_at")
@@ -239,7 +253,7 @@ async function getFields(session: SessionRecord, provider: string, account: stri
   return fields
 }
 
-async function saveCredentials(session: SessionRecord, provider: string, account: string, fields: Record<string, string>) {
+async function saveCredentials(session: SessionRecord, provider: string, account: string, fields: Record<string, string>, supabase: ReturnType<typeof createClient>) {
   const entries = Object.entries(fields)
   for (const [fieldName, value] of entries) {
     const encrypted = await encryptCredential(value, session.key)
@@ -252,14 +266,14 @@ async function saveCredentials(session: SessionRecord, provider: string, account
         iv: encrypted.iv,
         tag: encrypted.tag,
         updated_at: new Date().toISOString(),
-      },
+      } as any,
       { onConflict: "provider,account,field_name" }
     )
     if (error) throw error
   }
 }
 
-async function deleteCredential(provider: string, account?: string, field?: string) {
+async function deleteCredential(provider: string, account: string | undefined, field: string | undefined, supabase: ReturnType<typeof createClient>) {
   let query = supabase.from("vault_credentials").delete().eq("provider", provider)
   if (account) query = query.eq("account", account)
   if (field) query = query.eq("field_name", field)
@@ -267,7 +281,7 @@ async function deleteCredential(provider: string, account?: string, field?: stri
   if (error) throw error
 }
 
-async function getAuditLog(limit: number = 50) {
+async function getAuditLog(supabase: ReturnType<typeof createClient>, limit: number = 50) {
   const { data, error } = await supabase
     .from("vault_audit_log")
     .select("*")
@@ -277,21 +291,21 @@ async function getAuditLog(limit: number = 50) {
   return data
 }
 
-async function ensureMetadata() {
-  const metadata = await fetchMetadata()
+async function ensureMetadata(supabase: ReturnType<typeof createClient>) {
+  const metadata = await fetchMetadata(supabase)
   if (metadata) return metadata
 
   const salt = generateSalt()
   const encryptionSalt = generateSalt()
-  const pinHash = await hashPin(vaultPin)
+  const pinHash = await hashPin(vaultPinValue || process.env.VAULT_PIN || "2846")
 
   const { data, error } = await supabase
     .from("vault_metadata")
     .insert({
       pin_hash: pinHash,
-      salt: bufferToBase64(salt),
-      encryption_key_salt: bufferToBase64(encryptionSalt),
-    })
+      salt: bufferToBase64(salt.buffer as ArrayBuffer),
+      encryption_key_salt: bufferToBase64(encryptionSalt.buffer as ArrayBuffer),
+    } as any)
     .select()
     .single()
 
@@ -299,7 +313,7 @@ async function ensureMetadata() {
   return data as VaultMetadataRow
 }
 
-async function fetchMetadata(): Promise<VaultMetadataRow | null> {
+async function fetchMetadata(supabase: ReturnType<typeof createClient>): Promise<VaultMetadataRow | null> {
   const { data, error } = await supabase
     .from("vault_metadata")
     .select("id, pin_hash, salt, encryption_key_salt, created_at, updated_at")
@@ -313,13 +327,13 @@ async function fetchMetadata(): Promise<VaultMetadataRow | null> {
   return (data as VaultMetadataRow | null) || null
 }
 
-async function deriveEncryptionKey(pin: string): Promise<CryptoKey> {
-  const metadata = await ensureMetadata()
+async function deriveEncryptionKey(pin: string, supabase: ReturnType<typeof createClient>): Promise<CryptoKey> {
+  const metadata = await ensureMetadata(supabase)
   const saltArray = base64ToUint8Array(metadata.encryption_key_salt)
   return deriveKey(pin, saltArray)
 }
 
-async function logAudit(entry: { action: string; provider?: string; account?: string; field?: string; success: boolean; ip?: string }) {
+async function logAudit(entry: { action: string; provider?: string; account?: string; field?: string; success: boolean; ip?: string }, supabase: ReturnType<typeof createClient>) {
   try {
     await supabase.from("vault_audit_log").insert({
       action: entry.action,
@@ -329,7 +343,7 @@ async function logAudit(entry: { action: string; provider?: string; account?: st
       success: entry.success,
       ip_address: entry.ip,
       timestamp: new Date().toISOString(),
-    })
+    } as any)
   } catch (error) {
     console.error("[vault-audit]", error)
   }

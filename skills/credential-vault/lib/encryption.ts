@@ -107,7 +107,7 @@ export async function deriveKey(pin: string, salt: Uint8Array): Promise<CryptoKe
   return cryptoApi.subtle.deriveKey(
     {
       name: 'PBKDF2',
-      salt: salt,
+      salt: new Uint8Array(salt).buffer as ArrayBuffer,
       iterations: PBKDF2_ITERATIONS,
       hash: 'SHA-256'
     },
@@ -144,7 +144,7 @@ export async function encryptCredential(
   const data = encoder.encode(value);
   
   const encrypted = await cryptoApi.subtle.encrypt(
-    { name: 'AES-GCM', iv },
+    { name: 'AES-GCM', iv: new Uint8Array(iv).buffer as ArrayBuffer },
     key,
     data
   );
@@ -155,9 +155,9 @@ export async function encryptCredential(
   const ciphertext = encryptedArray.slice(0, -16);
   
   return {
-    encrypted_value: arrayBufferToBase64(ciphertext),
-    iv: arrayBufferToBase64(iv),
-    tag: arrayBufferToBase64(tag)
+    encrypted_value: arrayBufferToBase64(ciphertext.buffer as ArrayBuffer),
+    iv: arrayBufferToBase64(iv.buffer as ArrayBuffer),
+    tag: arrayBufferToBase64(tag.buffer as ArrayBuffer)
   };
 }
 
@@ -178,7 +178,7 @@ export async function decryptCredential(
   combined.set(new Uint8Array(tag), ciphertext.byteLength);
   
   const decrypted = await cryptoApi.subtle.decrypt(
-    { name: 'AES-GCM', iv },
+    { name: 'AES-GCM', iv: new Uint8Array(iv).buffer as ArrayBuffer },
     key,
     combined
   );
@@ -313,7 +313,7 @@ async function getOrCreateSalt(): Promise<Uint8Array> {
   
   // Create new salt
   const salt = generateSalt();
-  const saltB64 = arrayBufferToBase64(salt);
+  const saltB64 = arrayBufferToBase64(salt.buffer as ArrayBuffer);
   
   // Store in Supabase
   const { error: insertError } = await supabase
@@ -607,7 +607,7 @@ function base64ToArrayBuffer(base64: string): Uint8Array {
 }
 
 function generateSaltBase64(): string {
-  return arrayBufferToBase64(generateSalt());
+  return arrayBufferToBase64(generateSalt().buffer as ArrayBuffer);
 }
 
 // Export vault object for convenience

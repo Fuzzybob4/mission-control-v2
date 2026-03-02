@@ -280,7 +280,7 @@ export function AgentMap({
                 {/* Windows grid */}
                 {[0, 1, 2].map((row) =>
                   [0, 1].map((col) => (
-                    <rect
+                    <motion.rect
                       key={`${row}-${col}`}
                       x={building.x - 20 + col * 22}
                       y={building.y - 50 + row * 20}
@@ -304,7 +304,7 @@ export function AgentMap({
                   stroke={isNight ? '#475569' : '#64748b'}
                   strokeWidth={2}
                 />
-                <circle
+                <motion.circle
                   cx={building.x}
                   cy={building.y - 75}
                   r={3}

@@ -53,13 +53,13 @@ export function subscribeToVaultChanges(
   return supabase
     .channel('vault_changes')
     .on(
-      'postgres_changes',
+      'postgres_changes' as any,
       {
         event: '*',
         schema: 'public',
         table: 'vault_credentials'
       },
-      callback
+      callback as any
     )
     .subscribe();
 }

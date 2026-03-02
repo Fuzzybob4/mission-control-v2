@@ -92,16 +92,6 @@ export async function getCredentialForAutomation(
     }
     
     const value = await vault.get(provider, account, field);
-    
-    // Log automation access
-    await vault.logAudit({
-      action: 'automation_get',
-      provider,
-      account,
-      field,
-      success: true
-    });
-    
     return value;
   } catch (err) {
     console.error('Failed to get credential:', err);

@@ -166,9 +166,6 @@ export const PinEntry: React.FC<PinEntryProps> = ({ onUnlock, onError }) => {
 };
 
 // Add/Edit Credential Form
-};
-
-// Add/Edit Credential Form
 export const CredentialForm: React.FC<AddCredentialFormProps> = ({
   onSave,
   onCancel,
@@ -347,7 +344,7 @@ export const CredentialBrowser: React.FC = () => {
     const unsubscribe = vaultClient.subscribe(() => {
       setSessionExpiry(vaultClient.getSessionExpiry());
     });
-    return () => unsubscribe();
+    return () => { unsubscribe(); };
   }, []);
 
   // Load providers on mount
@@ -640,7 +637,7 @@ export const VaultUI: React.FC = () => {
   useEffect(() => {
     const update = () => setUnlocked(vaultClient.isUnlocked());
     const unsubscribe = vaultClient.subscribe(update);
-    return () => unsubscribe();
+    return () => { unsubscribe(); };
   }, []);
 
   if (!unlocked) {
