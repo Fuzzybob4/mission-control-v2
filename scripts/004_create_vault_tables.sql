@@ -1,52 +1,52 @@
 -- 004_create_vault_tables.sql
--- Step 4: Credential Vault schema & policies
-create extension if not exists "uuid-ossp";
+-- Secure credential vault with AES-256-GCM encryption support
 
-create table if not exists public.vault_metadata (
-  id uuid primary key default uuid_generate_v4(),
-  pin_hash text not null,
-  salt text not null,
-  encryption_key_salt text not null,
-  created_at timestamptz default now(),
-  updated_at timestamptz default now()
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- Vault metadata (PIN hash, salts)
+CREATE TABLE IF NOT EXISTS vault_metadata (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  pin_hash TEXT NOT NULL,
+  salt TEXT NOT NULL,
+  encryption_key_salt TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-create table if not exists public.vault_credentials (
-  id uuid primary key default uuid_generate_v4(),
-  provider text not null,
-  account text not null,
-  field_name text not null,
-  encrypted_value text not null,
-  iv text not null,
-  tag text not null,
-  created_at timestamptz default now(),
-  updated_at timestamptz default now(),
-  unique(provider, account, field_name)
+-- Encrypted credentials storage
+CREATE TABLE IF NOT EXISTS vault_credentials (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  provider TEXT NOT NULL,
+  account TEXT NOT NULL,
+  field_name TEXT NOT NULL,
+  encrypted_value TEXT NOT NULL,
+  iv TEXT NOT NULL,
+  tag TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  UNIQUE(provider, account, field_name)
 );
 
-create table if not exists public.vault_audit_log (
-  id uuid primary key default uuid_generate_v4(),
-  action text not null,
-  provider text,
-  account text,
-  field text,
-  success boolean not null default false,
-  ip_address text,
-  timestamp timestamptz default now()
+-- Audit log for all vault access
+CREATE TABLE IF NOT EXISTS vault_audit_log (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  action TEXT NOT NULL,
+  provider TEXT,
+  account TEXT,
+  field TEXT,
+  success BOOLEAN NOT NULL DEFAULT FALSE,
+  ip_address TEXT,
+  timestamp TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-alter table public.vault_credentials enable row level security;
-alter table public.vault_metadata enable row level security;
-alter table public.vault_audit_log enable row level security;
+-- Enable RLS
+ALTER TABLE vault_metadata ENABLE ROW LEVEL SECURITY;
+ALTER TABLE vault_credentials ENABLE ROW LEVEL SECURITY;
+ALTER TABLE vault_audit_log ENABLE ROW LEVEL SECURITY;
 
-drop policy if exists "service-role-full-access" on public.vault_credentials;
-create policy "service-role-full-access" on public.vault_credentials
-  for all to service_role using (true);
+-- Service role policies (vault API uses this)
+CREATE POLICY "service_role_vault_credentials" ON vault_credentials FOR ALL TO service_role USING (true);
+CREATE POLICY "service_role_vault_metadata" ON vault_metadata FOR ALL TO service_role USING (true);
+CREATE POLICY "service_role_vault_audit" ON vault_audit_log FOR ALL TO service_role USING (true);
 
-drop policy if exists "service-role-full-access" on public.vault_metadata;
-create policy "service-role-full-access" on public.vault_metadata
-  for all to service_role using (true);
-
-drop policy if exists "service-role-full-access" on public.vault_audit_log;
-create policy "service-role-full-access" on public.vault_audit_log
-  for all to service_role using (true);
+SELECT '✅ Vault tables ready (secure credential storage)' AS status;
