@@ -1,4 +1,5 @@
--- Credential Vault schema
+-- 004_create_vault_tables.sql
+-- Step 4: Credential Vault schema & policies
 create extension if not exists "uuid-ossp";
 
 create table if not exists public.vault_metadata (

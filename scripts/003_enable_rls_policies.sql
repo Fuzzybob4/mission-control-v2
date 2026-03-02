@@ -1,5 +1,5 @@
--- 007_enable_rls_policies.sql
--- Step 7: Enable Row Level Security
+-- 003_enable_rls_policies.sql
+-- Step 3: Enable Row Level Security
 
 -- Enable RLS on all tables
 ALTER TABLE mc_agents ENABLE ROW LEVEL SECURITY;
