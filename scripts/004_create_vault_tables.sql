@@ -39,11 +39,14 @@ alter table public.vault_credentials enable row level security;
 alter table public.vault_metadata enable row level security;
 alter table public.vault_audit_log enable row level security;
 
-create policy if not exists "service-role-full-access" on public.vault_credentials
+drop policy if exists "service-role-full-access" on public.vault_credentials;
+create policy "service-role-full-access" on public.vault_credentials
   for all to service_role using (true);
 
-create policy if not exists "service-role-full-access" on public.vault_metadata
+drop policy if exists "service-role-full-access" on public.vault_metadata;
+create policy "service-role-full-access" on public.vault_metadata
   for all to service_role using (true);
 
-create policy if not exists "service-role-full-access" on public.vault_audit_log
+drop policy if exists "service-role-full-access" on public.vault_audit_log;
+create policy "service-role-full-access" on public.vault_audit_log
   for all to service_role using (true);
