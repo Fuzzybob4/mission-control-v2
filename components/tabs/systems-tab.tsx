@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { GlassCard } from "@/components/ui/glass-card"
 import { StatusBadge } from "@/components/ui/status-badge"
-import { APIKeyVault } from "@/components/api-key-vault"
+import { VaultUI } from "@/skills/credential-vault/components/vault-ui"
 import { Cpu, Wifi, Clock, HardDrive, Key, Activity } from "lucide-react"
 
 type SystemsView = "status" | "vault"
@@ -53,7 +53,9 @@ export function SystemsTab() {
       </div>
 
       {activeView === "vault" ? (
-        <APIKeyVault />
+        <div className="space-y-4">
+          <VaultUI />
+        </div>
       ) : (
         <>
           {/* System Stats */}

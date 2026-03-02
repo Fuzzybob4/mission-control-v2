@@ -10,8 +10,15 @@ Run these SQL scripts in Supabase SQL Editor in order:
 4. **004_create_events_table.sql** - Create events/heartbeat table
 5. **005_create_tasks_table.sql** - Create tasks table
 6. **006_create_api_costs_table.sql** - Create API usage tracking
-7. **007_enable_rls_policies.sql** - Enable security policies
+7. **007_enable_rls_policies.sql** - Enable security policies for core mc_* tables
 8. **008_create_vault_tables.sql** - Credential vault metadata, secrets, and audit log
+9. **009_create_updated_at_function.sql** - Shared trigger helper for new realtime tables
+10. **010_create_agent_tasks_table.sql** - Mission Control–style agent task history + metadata
+11. **011_create_agent_status_table.sql** - Realtime heartbeat grid w/ seed data & policies
+12. **012_create_agent_discussions_table.sql** - Threaded agent chat, views, and helper functions
+13. **013_create_analytics_table.sql** - Business KPI warehouse for Lone Star / RedFox / Heroes
+
+> **Tip:** If you ever need a clean slate, run `000_reset_database.sql` first to drop everything safely.
 
 ## How to Run
 
@@ -30,13 +37,18 @@ Run these SQL scripts in Supabase SQL Editor in order:
 - `vault_metadata` - PIN + salt management for the credential vault
 - `vault_credentials` - AES-encrypted credential storage
 - `vault_audit_log` - Immutable access history
+- `agent_tasks` - High-fidelity session/task history with credits + runtime stats
+- `agent_status` - Live heartbeat snapshot (one row per agent, realtime policies)
+- `agent_discussions` - Threaded discussions + mention-aware helper views
+- `analytics` - Centralized KPI warehouse (revenue, costs, leads, usage metrics)
 
 ## Sample Data Included
 
-- 13 agents with proper hierarchy
+- 13 agents with proper hierarchy + seeded status rows
 - Alora Hess lead ($18K, follow-up Feb 20)
-- Sample events and tasks
+- Sample events, tasks, and analytics metrics
+- Canonical Otis → Atlas discussion thread
 
 ## After Setup
 
-The Mission Control dashboard will show live data from these tables!
+The Mission Control dashboard (and future Ops views) will show live data from these tables!

@@ -44,3 +44,22 @@ Flow:
 3. Send `/done` to encrypt + store the credential bundle in Supabase
 
 Scripts for setting up the Supabase tables live in `scripts/008_create_vault_tables.sql`.
+
+## Environment Variables
+
+Copy `.env.example` to `.env.local` and set the following secrets before running Mission Control:
+
+- `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` – public client for telemetry/realtime
+- `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` – server-side admin key used by the vault API
+- `VAULT_PIN` – 4+ digit PIN for unlocking the vault (defaults to 2846)
+- `VAULT_SESSION_TTL_HOURS` – optional session lifetime override (default 24h)
+
+## Web Credential Vault Flow
+
+1. Visit the **Systems → API Vault** view.
+2. Enter the vault PIN to start a 24-hour encrypted session.
+3. Add providers/accounts/fields; values are AES-256-GCM encrypted before storing in Supabase.
+4. Use the reveal/copy/edit actions to retrieve credentials securely – everything is audited.
+5. Click **Lock** to end the session immediately.
+
+The new `/api/vault` route keeps the Supabase service role key on the server and never exposes decrypted values over the network without a valid session token.
