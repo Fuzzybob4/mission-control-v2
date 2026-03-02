@@ -1,6 +1,6 @@
 # Mission Control v2
 
-Atlas AI Operations Center - Business focused dashboard for managing Lone Star Lighting, RedFox CRM, and Heroes of the Meta.
+kal AI Operations Center - Business focused dashboard for managing Lone Star Lighting, RedFox CRM, and Heroes of the Meta.
 
 ## Features
 
@@ -51,7 +51,7 @@ Copy `.env.example` to `.env.local` and set the following secrets before running
 
 - `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` – public client for telemetry/realtime
 - `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` – server-side admin key used by the vault API
-- `VAULT_PIN` – 4+ digit PIN for unlocking the vault (defaults to 2846)
+- `VAULT_PIN` – 4+ digit PIN for unlocking the vault (default hidden)
 - `VAULT_SESSION_TTL_HOURS` – optional session lifetime override (default 24h)
 
 ## Web Credential Vault Flow
