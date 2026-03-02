@@ -10,11 +10,12 @@ import {
   Cpu, 
   BarChart3, 
   Settings,
+  ShieldCheck,
   MoreHorizontal,
   X
 } from "lucide-react"
 
-type TabId = "overview" | "lone-star" | "redfox" | "heroes" | "agents" | "analytics" | "systems"
+type TabId = "overview" | "lone-star" | "redfox" | "heroes" | "agents" | "analytics" | "systems" | "vault"
 
 const tabs: { id: TabId; label: string; icon: React.ElementType }[] = [
   { id: "overview", label: "Overview", icon: LayoutDashboard },
@@ -24,12 +25,15 @@ const tabs: { id: TabId; label: string; icon: React.ElementType }[] = [
   { id: "agents", label: "Agent Network", icon: Cpu },
   { id: "analytics", label: "Analytics", icon: BarChart3 },
   { id: "systems", label: "Systems", icon: Settings },
+  { id: "vault", label: "Credential Vault", icon: ShieldCheck },
 ]
 
 interface SidebarProps {
   activeTab: TabId
   onTabChange: (tab: TabId) => void
 }
+
+export type { TabId }
 
 export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)

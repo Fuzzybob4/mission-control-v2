@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import dynamic from "next/dynamic"
 import { Sidebar } from "@/components/sidebar"
 import { OverviewTab } from "@/components/tabs/overview-tab"
 import { LoneStarTab } from "@/components/tabs/lone-star-tab"
@@ -19,7 +20,12 @@ import { ScrollToTop } from "@/components/scroll-to-top"
 import { useKeyboardShortcuts, ShortcutConfig } from "@/hooks/use-keyboard-shortcuts"
 import { useToast } from "@/hooks/use-toast"
 
-type TabId = "overview" | "lone-star" | "redfox" | "heroes" | "agents" | "analytics" | "systems"
+const VaultUI = dynamic(
+  () => import("@/skills/credential-vault/components/vault-ui").then(m => m.VaultUI),
+  { ssr: false }
+)
+
+type TabId = "overview" | "lone-star" | "redfox" | "heroes" | "agents" | "analytics" | "systems" | "vault"
 
 const TAB_TITLES: Record<TabId, string> = {
   overview: "Overview",
@@ -29,9 +35,10 @@ const TAB_TITLES: Record<TabId, string> = {
   agents: "Agent Network",
   analytics: "Analytics",
   systems: "Systems",
+  vault: "Credential Vault",
 }
 
-const TABS: TabId[] = ["overview", "lone-star", "redfox", "heroes", "agents", "analytics", "systems"]
+const TABS: TabId[] = ["overview", "lone-star", "redfox", "heroes", "agents", "analytics", "systems", "vault"]
 
 export default function MissionControl() {
   const [activeTab, setActiveTab] = useState<TabId>("overview")
@@ -53,6 +60,7 @@ export default function MissionControl() {
     { key: "5", description: "Agents", action: () => switchTab("agents") },
     { key: "6", description: "Analytics", action: () => switchTab("analytics") },
     { key: "7", description: "Systems", action: () => switchTab("systems") },
+    { key: "8", description: "Vault", action: () => switchTab("vault") },
     { key: "?", description: "Toggle help", action: () => setShowShortcutsHelp(prev => !prev) },
     { key: "n", description: "New lead", action: () => success("New Lead", "Opening lead creation form...") },
     { key: "t", description: "New task", action: () => success("New Task", "Opening task creation dialog...") },
@@ -116,6 +124,7 @@ export default function MissionControl() {
           {activeTab === "agents" && <AgentsTab />}
           {activeTab === "analytics" && <AnalyticsTab />}
           {activeTab === "systems" && <SystemsTab />}
+          {activeTab === "vault" && <VaultUI />}
         </div>
       </main>
 
