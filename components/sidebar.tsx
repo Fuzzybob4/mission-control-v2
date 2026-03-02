@@ -44,8 +44,8 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
               <Cpu className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h1 className="text-base font-bold text-white">Atlas</h1>
-              <p className="text-[10px] text-gray-400">Mission Control</p>
+              <h1 className="text-base font-bold text-white">Kal Mission Control</h1>
+              <p className="text-[10px] text-gray-400">Operations Hub</p>
             </div>
           </div>
           <button
@@ -79,8 +79,8 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
               <Cpu className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-white">Atlas</h1>
-              <p className="text-xs text-gray-400">Mission Control</p>
+              <h1 className="text-lg font-bold text-white">Kal Mission Control</h1>
+              <p className="text-xs text-gray-400">Operations Hub</p>
             </div>
           </div>
         </div>

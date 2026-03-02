@@ -84,7 +84,7 @@ export default function MissionControl() {
             <div>
               <h1 className="text-xl lg:text-2xl font-bold text-white">{TAB_TITLES[activeTab]}</h1>
               <p className="text-xs lg:text-sm text-gray-400 mt-1">
-                Atlas Command Center
+                Kal Mission Control
               </p>
             </div>
             <div className="flex items-center gap-3">
