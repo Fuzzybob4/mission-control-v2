@@ -174,147 +174,69 @@ export const CredentialForm: React.FC<AddCredentialFormProps> = ({
   initialData = {},
   isEdit = false
 }) => {
-  const [provider, setProvider] = useState(initialProvider);
-  const [account, setAccount] = useState(initialAccount);
-  const [fields, setFields] = useState<{ name: string; value: string }[]>(
-    Object.entries(initialData).map(([name, value]) => ({ name, value }))
+  const [name, setName] = useState(initialProvider || initialAccount);
+  const [keyValue, setKeyValue] = useState(
+    Object.values(initialData)[0] ?? ''
   );
-  const [newFieldName, setNewFieldName] = useState('');
-  const [protocolVerified, setProtocolVerified] = useState(isEdit);
-
-  const addField = () => {
-    if (newFieldName && !fields.find(f => f.name === newFieldName)) {
-      setFields([...fields, { name: newFieldName, value: '' }]);
-      setNewFieldName('');
-    }
-  };
-
-  const updateField = (index: number, value: string) => {
-    const newFields = [...fields];
-    newFields[index].value = value;
-    setFields(newFields);
-  };
-
-  const removeField = (index: number) => {
-    setFields(fields.filter((_, i) => i !== index));
-  };
+  const [fieldLabel, setFieldLabel] = useState(
+    Object.keys(initialData)[0] ?? 'api_key'
+  );
+  const [error, setError] = useState('');
 
   const handleSave = () => {
-    if (!provider || !account) {
-      alert('Please enter provider and account name');
+    if (!name.trim()) {
+      setError('Please enter a name for this credential.');
       return;
     }
-
-    const data: CredentialData = {};
-    fields.forEach(f => {
-      if (f.name && f.value) {
-        data[f.name] = f.value;
-      }
-    });
-
-    onSave(provider, account, data);
+    if (!keyValue.trim()) {
+      setError('Please enter a key value.');
+      return;
+    }
+    setError('');
+    const provider = name.trim().toLowerCase().replace(/\s+/g, '_');
+    onSave(provider, name.trim(), { [fieldLabel || 'api_key']: keyValue.trim() });
   };
-
-  const verifyProtocol26 = () => {
-    // In production, this would verify Protocol 26
-    setProtocolVerified(true);
-  };
-
-  if (!protocolVerified) {
-    return (
-      <div className="credential-form protocol-check">
-        <h3>🔒 Security Verification Required</h3>
-        <p>Adding new credentials requires Protocol 26 verification.</p>
-        <div className="protocol-actions">
-          <button className="btn-verify" onClick={verifyProtocol26}>
-            Verify Protocol 26
-          </button>
-          <button className="btn-cancel" onClick={onCancel}>
-            Cancel
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="credential-form">
       <h3>{isEdit ? 'Edit Credential' : 'Add New Credential'}</h3>
-      
-      <div className="form-group">
-        <label>Provider</label>
-        {!isEdit ? (
-          <select value={provider} onChange={e => setProvider(e.target.value)}>
-            <option value="">Select provider...</option>
-            {PROVIDERS.map(p => (
-              <option key={p.name} value={p.name}>
-                {p.icon} {p.name}
-              </option>
-            ))}
-            <option value="other">➕ Other...</option>
-          </select>
-        ) : (
-          <input type="text" value={provider} disabled />
-        )}
-        {provider === 'other' && (
-          <input
-            type="text"
-            placeholder="Enter provider name"
-            onChange={e => setProvider(e.target.value)}
-          />
-        )}
-      </div>
 
       <div className="form-group">
-        <label>Account Name</label>
+        <label htmlFor="cred-name">Name</label>
         <input
+          id="cred-name"
           type="text"
-          value={account}
-          onChange={e => setAccount(e.target.value)}
-          placeholder="e.g., Lone Star Lighting Displays"
+          value={name}
+          onChange={e => setName(e.target.value)}
+          placeholder="e.g., Stripe, GitHub, Supabase"
           disabled={isEdit}
+          autoFocus
         />
       </div>
 
-      <div className="form-group fields">
-        <label>Fields</label>
-        {fields.map((field, index) => (
-          <div key={index} className="field-row">
-            <input
-              type="text"
-              value={field.name}
-              disabled
-              className="field-name"
-            />
-            <input
-              type={field.name.includes('password') || field.name.includes('key') || field.name.includes('token') ? 'password' : 'text'}
-              value={field.value}
-              onChange={e => updateField(index, e.target.value)}
-              placeholder={`Enter ${field.name}`}
-              className="field-value"
-            />
-            <button
-              className="btn-remove"
-              onClick={() => removeField(index)}
-              title="Remove field"
-            >
-              ✕
-            </button>
-          </div>
-        ))}
-      </div>
-
-      <div className="form-group add-field">
+      <div className="form-group">
+        <label htmlFor="cred-field-label">Field</label>
         <input
+          id="cred-field-label"
           type="text"
-          value={newFieldName}
-          onChange={e => setNewFieldName(e.target.value)}
-          placeholder="New field name (e.g., api_key)"
+          value={fieldLabel}
+          onChange={e => setFieldLabel(e.target.value)}
+          placeholder="e.g., api_key, token, password"
         />
-        <button className="btn-add" onClick={addField}>
-          Add Field
-        </button>
       </div>
+
+      <div className="form-group">
+        <label htmlFor="cred-key">Key / Value</label>
+        <input
+          id="cred-key"
+          type="password"
+          value={keyValue}
+          onChange={e => setKeyValue(e.target.value)}
+          placeholder="Paste your key or secret here"
+        />
+      </div>
+
+      {error && <div className="message error">{error}</div>}
 
       <div className="form-actions">
         <button className="btn-save" onClick={handleSave}>
@@ -412,8 +334,11 @@ export const CredentialBrowser: React.FC = () => {
     }
   };
 
+  const [editValue, setEditValue] = useState('');
+
   const handleEdit = (field: string, value: string) => {
     setEditMode({ field, value });
+    setEditValue(value);
   };
 
   const handleSaveEdit = async (newValue: string) => {
@@ -486,16 +411,14 @@ export const CredentialBrowser: React.FC = () => {
         <h3>Edit {editMode.field}</h3>
         <input
           type="text"
-          defaultValue={editMode.value}
-          id="edit-value"
+          value={editValue}
+          onChange={e => setEditValue(e.target.value)}
+          autoFocus
         />
         <div className="form-actions">
           <button
             className="btn-save"
-            onClick={() => {
-              const input = document.getElementById('edit-value') as HTMLInputElement;
-              handleSaveEdit(input.value);
-            }}
+            onClick={() => handleSaveEdit(editValue)}
           >
             Save
           </button>
