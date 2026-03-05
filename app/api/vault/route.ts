@@ -90,6 +90,14 @@ export async function POST(req: NextRequest) {
         await handleLock(token, ip, supabase)
         return NextResponse.json({ success: true })
       }
+      case "listByBusiness": {
+        const token = getToken(req, body)
+        const session = requireSession(token)
+        const { business_unit } = body as { business_unit: string }
+        if (!business_unit) throw new Error("business_unit is required")
+        const services = await listServicesByBusiness(business_unit, supabase)
+        return NextResponse.json({ services, expiresAt: session.expiresAt })
+      }
       case "listProviders": {
         const token = getToken(req, body)
         const session = requireSession(token)
@@ -197,6 +205,28 @@ function requireSession(token: string): SessionRecord {
     throw new Error("Vault session expired. Please unlock again.")
   }
   return session
+}
+
+async function listServicesByBusiness(businessUnit: string, supabase: ReturnType<typeof createClient>) {
+  const { data, error } = await supabase
+    .from("vault_credentials")
+    .select("provider, account")
+    .eq("business_unit", businessUnit)
+    .order("account")
+
+  if (error) throw error
+
+  // Deduplicate by provider+account
+  const seen = new Set<string>()
+  const services: { provider: string; account: string }[] = []
+  for (const row of (data || []) as { provider: string; account: string }[]) {
+    const key = `${row.provider}::${row.account}`
+    if (!seen.has(key)) {
+      seen.add(key)
+      services.push({ provider: row.provider, account: row.account })
+    }
+  }
+  return services
 }
 
 async function listProviders(supabase: ReturnType<typeof createClient>): Promise<string[]> {

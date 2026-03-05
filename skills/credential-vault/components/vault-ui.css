@@ -1,21 +1,22 @@
 /**
- * Credential Vault - UI Styles (dark theme, matches Mission Control)
+ * Credential Vault - Card-based UI styles
  */
 
-/* PIN Entry */
+/* ── PIN Entry ───────────────────────────────────────────── */
+
 .vault-pin-entry {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.25rem;
   padding: 3rem 2rem;
-  max-width: 340px;
+  max-width: 320px;
   margin: 2rem auto;
 }
 
-.vault-icon {
-  font-size: 3.5rem;
-  line-height: 1;
+.vault-shield-icon {
+  color: #60a5fa;
+  opacity: 0.9;
 }
 
 .vault-pin-entry h2 {
@@ -25,75 +26,73 @@
   color: #f1f5f9;
 }
 
+.pin-subtitle {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: #475569;
+}
+
 .pin-display {
   display: flex;
-  gap: 1rem;
+  gap: 0.875rem;
 }
 
 .pin-dot {
-  width: 2.75rem;
-  height: 2.75rem;
-  border: 2px solid rgba(96, 165, 250, 0.3);
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 2px solid rgba(96, 165, 250, 0.25);
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  color: #60a5fa;
   transition: background 0.15s, border-color 0.15s;
 }
 
 .pin-dot.filled {
-  background: rgba(96, 165, 250, 0.2);
+  background: rgba(96, 165, 250, 0.3);
   border-color: #60a5fa;
 }
 
 .keypad {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 0.625rem;
+  gap: 0.5rem;
 }
 
 .keypad-btn {
-  width: 4.25rem;
-  height: 4.25rem;
+  width: 4rem;
+  height: 4rem;
   border-radius: 0.75rem;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.09);
   color: #f1f5f9;
   font-size: 1.125rem;
   font-weight: 500;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: background 0.15s, transform 0.1s;
-  min-height: 44px;
-  min-width: 44px;
 }
 
 .keypad-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .keypad-btn:active:not(:disabled) {
-  transform: scale(0.93);
+  transform: scale(0.91);
 }
 
 .keypad-btn:disabled {
-  opacity: 0.4;
+  opacity: 0.35;
   cursor: not-allowed;
 }
 
-.keypad-btn.clear {
-  color: #f87171;
-}
-
-.keypad-btn.backspace {
-  color: #94a3b8;
-}
+.keypad-btn.clear { color: #f87171; }
+.keypad-btn.backspace { color: #94a3b8; }
 
 .message {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   padding: 0.5rem 1.25rem;
   border-radius: 0.5rem;
+  text-align: center;
 }
 
 .message.success {
@@ -108,263 +107,516 @@
 
 .session-info {
   font-size: 0.75rem;
-  color: #475569;
+  color: #334155;
 }
 
-.countdown {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #60a5fa;
-}
+/* ── Browser Chrome ─────────────────────────────────────── */
 
-/* Credential Browser */
 .credential-browser {
-  padding: 0;
-  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-.vault-header {
+.vault-topbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.25rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 }
 
-.vault-header h2 {
-  margin: 0;
-  font-size: 1.125rem;
+.vault-topbar-title {
+  font-size: 0.9375rem;
   font-weight: 600;
   color: #f1f5f9;
+  letter-spacing: 0.01em;
 }
 
-.session-status {
+.vault-topbar-right {
   display: flex;
   align-items: center;
   gap: 0.875rem;
 }
 
 .expiry {
-  color: #475569;
   font-size: 0.75rem;
+  color: #334155;
 }
 
 .btn-lock {
   padding: 0.375rem 0.875rem;
-  background: rgba(248, 113, 113, 0.1);
-  border: 1px solid rgba(248, 113, 113, 0.2);
+  background: rgba(248, 113, 113, 0.08);
+  border: 1px solid rgba(248, 113, 113, 0.18);
   color: #f87171;
   border-radius: 0.5rem;
   font-size: 0.8125rem;
   cursor: pointer;
-  min-height: 44px;
+  min-height: 36px;
   transition: background 0.15s;
 }
 
 .btn-lock:hover {
-  background: rgba(248, 113, 113, 0.2);
+  background: rgba(248, 113, 113, 0.18);
 }
 
-.btn-add-service {
-  display: inline-flex;
+/* ── Business Grid ──────────────────────────────────────── */
+
+.biz-grid-header {
+  margin-bottom: 0.25rem;
+}
+
+.biz-grid-header h2 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.biz-grid-header p {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: #475569;
+}
+
+.biz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.biz-card {
+  display: flex;
   align-items: center;
-  gap: 0.375rem;
-  padding: 0.5rem 1rem;
-  background: rgba(96, 165, 250, 0.1);
-  border: 1px solid rgba(96, 165, 250, 0.2);
-  color: #60a5fa;
+  gap: 0.875rem;
+  padding: 1rem 1.125rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 0.875rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+  position: relative;
+  overflow: hidden;
+}
+
+.biz-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--biz-color, #60a5fa);
+  border-radius: 3px 0 0 3px;
+  opacity: 0.7;
+}
+
+.biz-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.13);
+  transform: translateY(-1px);
+}
+
+.biz-avatar {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.625rem;
+  border: 1px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+.biz-avatar-sm {
+  width: 2.25rem;
+  height: 2.25rem;
   border-radius: 0.5rem;
+  border: 1px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+.biz-label {
+  flex: 1;
   font-size: 0.875rem;
   font-weight: 500;
-  cursor: pointer;
-  min-height: 44px;
-  margin-bottom: 1.25rem;
-  transition: background 0.15s;
+  color: #e2e8f0;
+  line-height: 1.3;
 }
 
-.btn-add-service:hover {
-  background: rgba(96, 165, 250, 0.2);
+.biz-chevron {
+  color: #334155;
+  flex-shrink: 0;
+  transition: color 0.15s;
 }
 
-/* Provider Tabs */
-.provider-tabs {
+.biz-card:hover .biz-chevron {
+  color: #64748b;
+}
+
+/* ── Business Vault / Service Grid ──────────────────────── */
+
+.business-vault {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1.25rem;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.detail-header {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.provider-tab {
-  padding: 0.375rem 0.875rem;
+.btn-back {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 2rem;
+  border-radius: 0.5rem;
   color: #94a3b8;
   font-size: 0.8125rem;
   cursor: pointer;
-  min-height: 44px;
+  min-height: 36px;
   transition: all 0.15s;
+  flex-shrink: 0;
 }
 
-.provider-tab:hover {
+.btn-back:hover {
   background: rgba(255, 255, 255, 0.09);
   color: #f1f5f9;
 }
 
-.provider-tab.active {
-  background: rgba(96, 165, 250, 0.15);
-  border-color: rgba(96, 165, 250, 0.35);
-  color: #60a5fa;
-}
-
-/* Account Section */
-.account-section {
-  margin-bottom: 1.25rem;
-}
-
-.account-header {
-  display: flex;
-  align-items: center;
-  gap: 0.625rem;
-}
-
-.account-dropdown {
+.detail-title {
   flex: 1;
-  padding: 0.5rem 0.75rem;
-  font-size: 0.875rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 0.5rem;
-  color: #f1f5f9;
-  min-height: 44px;
-}
-
-.btn-delete-provider {
-  padding: 0.375rem 0.625rem;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 0.5rem;
-  color: #64748b;
-  cursor: pointer;
-  min-height: 44px;
-  transition: all 0.15s;
-}
-
-.btn-delete-provider:hover {
-  background: rgba(248, 113, 113, 0.1);
-  color: #f87171;
-  border-color: rgba(248, 113, 113, 0.2);
-}
-
-/* Credentials List */
-.credentials-list {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  padding: 1.25rem;
-  border-radius: 0.75rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.375rem;
-}
-
-.credentials-list h4 {
-  margin: 0 0 0.625rem 0;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.credential-row {
   display: flex;
   align-items: center;
-  gap: 0.875rem;
-  padding: 0.625rem 0.75rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 0.5rem;
+  gap: 0.75rem;
 }
 
-.field-label {
+.detail-title h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.detail-subtitle {
+  font-size: 0.75rem;
+  color: #475569;
+}
+
+.btn-add-service-sm {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.875rem;
+  background: rgba(96, 165, 250, 0.08);
+  border: 1px solid rgba(96, 165, 250, 0.18);
+  color: #60a5fa;
+  border-radius: 0.5rem;
   font-size: 0.8125rem;
-  font-weight: 500;
-  min-width: 110px;
-  color: #64748b;
+  cursor: pointer;
+  min-height: 36px;
+  white-space: nowrap;
+  transition: background 0.15s;
   flex-shrink: 0;
 }
 
-.field-value {
-  flex: 1;
-  font-family: monospace;
-  font-size: 0.875rem;
-  color: #e2e8f0;
-  word-break: break-all;
+.btn-add-service-sm:hover {
+  background: rgba(96, 165, 250, 0.16);
 }
 
-.field-actions {
+.btn-danger-sm {
+  display: flex;
+  align-items: center;
+  padding: 0.375rem 0.625rem;
+  background: transparent;
+  border: 1px solid rgba(248, 113, 113, 0.12);
+  border-radius: 0.5rem;
+  color: #64748b;
+  cursor: pointer;
+  min-height: 36px;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.btn-danger-sm:hover {
+  background: rgba(248, 113, 113, 0.1);
+  color: #f87171;
+  border-color: rgba(248, 113, 113, 0.25);
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.625rem;
+}
+
+.service-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 0.75rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+}
+
+.service-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.13);
+  transform: translateY(-1px);
+}
+
+.service-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  background: rgba(96, 165, 250, 0.1);
+  border: 1px solid rgba(96, 165, 250, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: #60a5fa;
+  letter-spacing: 0.03em;
+  flex-shrink: 0;
+}
+
+.service-avatar.sm {
+  width: 2.125rem;
+  height: 2.125rem;
+  font-size: 0.5625rem;
+}
+
+.service-name {
+  flex: 1;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #e2e8f0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.service-chevron {
+  color: #334155;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.service-card:hover .service-chevron {
+  color: #64748b;
+}
+
+/* ── Service Detail ─────────────────────────────────────── */
+
+.service-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.fields-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.field-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 0.75rem;
+  padding: 0.875rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: border-color 0.15s;
+}
+
+.field-card:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.field-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.field-name-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #60a5fa;
+  background: rgba(96, 165, 250, 0.1);
+  border: 1px solid rgba(96, 165, 250, 0.18);
+  border-radius: 0.375rem;
+  padding: 0.125rem 0.5rem;
+  letter-spacing: 0.03em;
+  text-transform: lowercase;
+}
+
+.field-value-row {
+  padding-top: 0.125rem;
+}
+
+.field-value-mono {
+  font-family: ui-monospace, "SF Mono", "Fira Code", monospace;
+  font-size: 0.8125rem;
+  color: #94a3b8;
+  letter-spacing: 0.03em;
+  word-break: break-all;
+  line-height: 1.5;
+}
+
+.field-action-btns {
   display: flex;
   gap: 0.25rem;
   flex-shrink: 0;
 }
 
-.field-actions button {
-  padding: 0.25rem 0.4rem;
+.icon-btn {
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 0.375rem;
+  color: #64748b;
   cursor: pointer;
-  font-size: 0.875rem;
-  min-height: 32px;
-  min-width: 32px;
-  transition: background 0.15s;
+  transition: all 0.15s;
 }
 
-.field-actions button:hover {
+.icon-btn:hover {
   background: rgba(255, 255, 255, 0.1);
+  color: #f1f5f9;
 }
 
-.btn-delete-account {
-  margin-top: 0.625rem;
-  padding: 0.375rem 0.875rem;
-  background: rgba(248, 113, 113, 0.07);
-  border: 1px solid rgba(248, 113, 113, 0.15);
+.icon-btn.danger:hover {
+  background: rgba(248, 113, 113, 0.1);
   color: #f87171;
-  border-radius: 0.5rem;
+  border-color: rgba(248, 113, 113, 0.2);
+}
+
+.icon-btn.copied {
+  background: rgba(52, 211, 153, 0.1);
+  border-color: rgba(52, 211, 153, 0.2);
+  color: #34d399;
+}
+
+/* inline edit row */
+.field-edit-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.field-edit-input {
+  flex: 1;
+  min-width: 140px;
+  padding: 0.375rem 0.625rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0.375rem;
+  color: #f1f5f9;
+  font-size: 0.875rem;
+  font-family: ui-monospace, monospace;
+  min-height: 36px;
+}
+
+.field-edit-actions {
+  display: flex;
+  gap: 0.375rem;
+}
+
+.btn-save-sm {
+  padding: 0.25rem 0.75rem;
+  background: rgba(96, 165, 250, 0.15);
+  border: 1px solid rgba(96, 165, 250, 0.3);
+  color: #60a5fa;
+  border-radius: 0.375rem;
   font-size: 0.8125rem;
   cursor: pointer;
-  min-height: 44px;
+  min-height: 32px;
   transition: background 0.15s;
-  align-self: flex-start;
 }
 
-.btn-delete-account:hover {
-  background: rgba(248, 113, 113, 0.17);
+.btn-save-sm:hover { background: rgba(96, 165, 250, 0.25); }
+
+.btn-cancel-sm {
+  padding: 0.25rem 0.75rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #64748b;
+  border-radius: 0.375rem;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  min-height: 32px;
+  transition: background 0.15s;
 }
 
-/* Credential Form */
-.credential-form {
-  max-width: 520px;
+.btn-cancel-sm:hover { background: rgba(255, 255, 255, 0.09); }
+
+.btn-add-key {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  color: #475569;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  justify-content: center;
+  width: 100%;
+}
+
+.btn-add-key:hover {
+  background: rgba(96, 165, 250, 0.05);
+  border-color: rgba(96, 165, 250, 0.2);
+  color: #60a5fa;
+}
+
+/* ── Add Key / Service Form ─────────────────────────────── */
+
+.add-key-form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  padding: 1.5rem;
+  gap: 0.875rem;
+  padding: 1.25rem;
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.875rem;
 }
 
-.credential-form.protocol-check {
-  text-align: center;
-  align-items: center;
-}
-
-.credential-form h3 {
+.add-key-form h4 {
   margin: 0;
-  font-size: 1rem;
+  font-size: 0.9375rem;
   font-weight: 600;
   color: #f1f5f9;
 }
@@ -378,7 +630,7 @@
 .form-group label {
   font-size: 0.8125rem;
   font-weight: 500;
-  color: #94a3b8;
+  color: #64748b;
 }
 
 .form-group input,
@@ -392,8 +644,12 @@
   min-height: 44px;
 }
 
-.form-group input:disabled {
-  opacity: 0.45;
+.form-group input::placeholder { color: #334155; }
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: rgba(96, 165, 250, 0.4);
 }
 
 .form-group select option {
@@ -401,52 +657,65 @@
   color: #f1f5f9;
 }
 
-.field-row {
+.form-actions {
   display: flex;
-  gap: 0.5rem;
-  margin-bottom: 0.375rem;
-  align-items: center;
+  gap: 0.625rem;
+  margin-top: 0.25rem;
 }
 
-.field-row input.field-name {
-  width: 130px;
-  flex-shrink: 0;
-  opacity: 0.6;
-}
-
-.field-row input.field-value {
-  flex: 1;
-  font-family: monospace;
-}
-
-.btn-remove {
-  padding: 0.25rem 0.5rem;
-  background: rgba(248, 113, 113, 0.08);
-  border: 1px solid rgba(248, 113, 113, 0.15);
-  color: #f87171;
-  border-radius: 0.375rem;
-  cursor: pointer;
+.btn-save {
+  padding: 0.5rem 1.25rem;
+  background: rgba(96, 165, 250, 0.15);
+  border: 1px solid rgba(96, 165, 250, 0.3);
+  color: #60a5fa;
+  border-radius: 0.5rem;
   font-size: 0.875rem;
-  min-height: 36px;
+  font-weight: 500;
+  cursor: pointer;
+  min-height: 44px;
   transition: background 0.15s;
 }
 
-.btn-remove:hover {
-  background: rgba(248, 113, 113, 0.18);
+.btn-save:hover:not(:disabled) { background: rgba(96, 165, 250, 0.25); }
+.btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-cancel {
+  padding: 0.5rem 1.25rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: #64748b;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  min-height: 44px;
+  transition: background 0.15s;
 }
 
-.add-field {
-  flex-direction: row !important;
+.btn-cancel:hover { background: rgba(255, 255, 255, 0.09); }
+
+/* ── Empty state ────────────────────────────────────────── */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
+  padding: 3rem 2rem;
+  text-align: center;
 }
 
-.add-field input {
-  flex: 1;
+.empty-icon {
+  color: #1e293b;
 }
 
-.btn-add {
-  padding: 0.5rem 1rem;
+.empty-state p {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: #334155;
+}
+
+.btn-add-service-empty {
+  padding: 0.5rem 1.25rem;
   background: rgba(96, 165, 250, 0.1);
   border: 1px solid rgba(96, 165, 250, 0.2);
   color: #60a5fa;
@@ -454,145 +723,36 @@
   font-size: 0.875rem;
   cursor: pointer;
   min-height: 44px;
-  white-space: nowrap;
   transition: background 0.15s;
 }
 
-.btn-add:hover {
-  background: rgba(96, 165, 250, 0.2);
-}
+.btn-add-service-empty:hover { background: rgba(96, 165, 250, 0.2); }
 
-.form-actions {
-  display: flex;
-  gap: 0.75rem;
-  margin-top: 0.25rem;
-}
+/* ── Loading ────────────────────────────────────────────── */
 
-.btn-save {
-  padding: 0.5rem 1.25rem;
-  background: rgba(96, 165, 250, 0.18);
-  border: 1px solid rgba(96, 165, 250, 0.35);
-  color: #60a5fa;
-  border-radius: 0.5rem;
+.loading-row {
+  padding: 2rem;
+  text-align: center;
   font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  min-height: 44px;
-  transition: background 0.15s;
+  color: #334155;
 }
 
-.btn-save:hover {
-  background: rgba(96, 165, 250, 0.28);
-}
+/* ── Responsive ─────────────────────────────────────────── */
 
-.btn-cancel {
-  padding: 0.5rem 1.25rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #94a3b8;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-  cursor: pointer;
-  min-height: 44px;
-  transition: background 0.15s;
-}
-
-.btn-cancel:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.protocol-actions {
-  display: flex;
-  justify-content: center;
-  gap: 0.75rem;
-  margin-top: 0.5rem;
-}
-
-.credential-form.protocol-check p {
-  color: #94a3b8;
-  font-size: 0.875rem;
-}
-
-.btn-verify {
-  padding: 0.5rem 1.25rem;
-  background: rgba(52, 211, 153, 0.1);
-  border: 1px solid rgba(52, 211, 153, 0.2);
-  color: #34d399;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  min-height: 44px;
-  transition: background 0.15s;
-}
-
-.btn-verify:hover {
-  background: rgba(52, 211, 153, 0.2);
-}
-
-/* Edit Form */
-.edit-form {
-  max-width: 480px;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 0.75rem;
-}
-
-.edit-form h3 {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #f1f5f9;
-}
-
-.edit-form input {
-  padding: 0.5rem 0.75rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 0.5rem;
-  color: #f1f5f9;
-  font-size: 0.875rem;
-  min-height: 44px;
-}
-
-/* Vault Footer */
-.vault-footer {
-  margin-top: 1.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.link-api-keys {
-  color: #475569;
-  font-size: 0.8125rem;
-  text-decoration: none;
-  transition: color 0.15s;
-}
-
-.link-api-keys:hover {
-  color: #94a3b8;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .vault-header {
-    flex-direction: column;
-    gap: 0.75rem;
-    align-items: flex-start;
+@media (max-width: 640px) {
+  .biz-grid {
+    grid-template-columns: 1fr;
   }
 
-  .credential-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
+  .services-grid {
+    grid-template-columns: 1fr 1fr;
   }
 
-  .field-actions {
-    width: 100%;
-    justify-content: flex-end;
+  .detail-header {
+    flex-wrap: wrap;
+  }
+
+  .field-top-row {
+    flex-wrap: wrap;
   }
 }
