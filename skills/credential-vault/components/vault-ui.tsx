@@ -644,7 +644,6 @@ const CredentialBrowser: React.FC = () => {
 
   const handleLock = async () => {
     await vaultClient.lock()
-    window.location.reload()
   }
 
   if (selectedBusiness) {
