@@ -113,15 +113,15 @@ export default function MissionControl() {
               >
                 <span>?</span>
               </button>
-              <NotificationCenter />
+              {activeTab !== "vault" && <NotificationCenter />}
             </div>
           </div>
 
           {/* Daily Motivation Quote */}
-          <DailyMotivationWidget />
+          {activeTab !== "vault" && <DailyMotivationWidget />}
 
           {/* Heartbeat Section */}
-          <HeartbeatSection />
+          {activeTab !== "vault" && <HeartbeatSection />}
 
           {/* Tab Content */}
           {activeTab === "overview" && <OverviewTab />}
