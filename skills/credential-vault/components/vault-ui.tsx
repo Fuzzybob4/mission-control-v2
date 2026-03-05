@@ -490,23 +490,8 @@ const BusinessVault: React.FC<{
   const loadServices = useCallback(async () => {
     try {
       setLoading(true)
-      // List all providers, filter by business_unit via the account name heuristic
-      // We use listProviders + listAccounts to build the list
-      const providers = await vaultClient.listProviders()
-      const entries: ServiceEntry[] = []
-      for (const prov of providers) {
-        const accounts = await vaultClient.listAccounts(prov)
-        for (const acc of accounts) {
-          // We store business_unit in the DB — for now we tag by matching what we can
-          // The real filter will happen once listByBusiness is wired up in a future migration
-          entries.push({ provider: prov, account: acc })
-        }
-      }
-      // Filter: keep only entries whose business_unit matches
-      // Since we can't filter server-side yet, we do a lightweight filter:
-      // business_unit is stored per row — we'll use a dedicated API call
-      const filtered = await fetchServicesByBusiness(business.id)
-      setServices(filtered)
+      const services = await vaultClient.listByBusiness(business.id)
+      setServices(services)
     } catch (err) {
       console.error("[vault] loadServices error:", err)
     } finally {

@@ -151,6 +151,11 @@ export const vaultClient = {
     clearSession()
   },
 
+  async listByBusiness(businessUnit: string): Promise<{ provider: string; account: string }[]> {
+    const { services } = await request<{ services: { provider: string; account: string }[] }>("listByBusiness", { business_unit: businessUnit })
+    return services
+  },
+
   async listProviders(): Promise<string[]> {
     const { providers } = await request<{ providers: string[] }>("listProviders")
     return providers
