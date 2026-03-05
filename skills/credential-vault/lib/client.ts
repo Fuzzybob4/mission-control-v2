@@ -166,8 +166,8 @@ export const vaultClient = {
     return fields
   },
 
-  async add(provider: string, account: string, data: Record<string, string>) {
-    await request("saveCredentials", { provider, account, fields: data })
+  async add(provider: string, account: string, data: Record<string, string>, businessUnit?: string) {
+    await request("saveCredentials", { provider, account, fields: data, business_unit: businessUnit || "general" })
   },
 
   async edit(provider: string, account: string, field: string, value: string) {

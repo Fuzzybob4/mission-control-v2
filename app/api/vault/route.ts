@@ -118,11 +118,11 @@ export async function POST(req: NextRequest) {
       case "saveCredentials": {
         const token = getToken(req, body)
         const session = requireSession(token)
-        const { provider, account, fields } = body as { provider: string; account: string; fields: Record<string, string> }
+        const { provider, account, fields, business_unit } = body as { provider: string; account: string; fields: Record<string, string>; business_unit?: string }
         if (!provider || !account || !fields || Object.keys(fields).length === 0) {
           throw new Error("Provider, account, and at least one field are required")
         }
-        await saveCredentials(session, provider, account, fields, supabase)
+        await saveCredentials(session, provider, account, fields, supabase, business_unit)
         await logAudit({ action: "add", provider, account, success: true, ip }, supabase)
         return NextResponse.json({ success: true, expiresAt: session.expiresAt })
       }
@@ -253,7 +253,7 @@ async function getFields(session: SessionRecord, provider: string, account: stri
   return fields
 }
 
-async function saveCredentials(session: SessionRecord, provider: string, account: string, fields: Record<string, string>, supabase: ReturnType<typeof createClient>) {
+async function saveCredentials(session: SessionRecord, provider: string, account: string, fields: Record<string, string>, supabase: ReturnType<typeof createClient>, businessUnit?: string) {
   const entries = Object.entries(fields)
   for (const [fieldName, value] of entries) {
     const encrypted = await encryptCredential(value, session.key)
@@ -265,6 +265,7 @@ async function saveCredentials(session: SessionRecord, provider: string, account
         encrypted_value: encrypted.encrypted_value,
         iv: encrypted.iv,
         tag: encrypted.tag,
+        business_unit: businessUnit || "general",
         updated_at: new Date().toISOString(),
       } as any,
       { onConflict: "provider,account,field_name" }

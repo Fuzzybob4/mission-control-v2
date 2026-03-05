@@ -51,7 +51,7 @@ interface CredentialBrowserProps {
 }
 
 interface AddCredentialFormProps {
-  onSave: (provider: string, account: string, data: CredentialData) => void;
+  onSave: (provider: string, account: string, data: CredentialData, businessUnit: string) => void;
   onCancel: () => void;
   initialProvider?: string;
   initialAccount?: string;
@@ -165,6 +165,16 @@ export const PinEntry: React.FC<PinEntryProps> = ({ onUnlock, onError }) => {
   );
 };
 
+// Business units available in Mission Control
+const BUSINESS_UNITS = [
+  { id: "general",        label: "General / Shared" },
+  { id: "lone-star",      label: "Lone Star Lighting" },
+  { id: "redfox",         label: "RedFox CRM" },
+  { id: "heroes",         label: "Heroes of the Meta" },
+  { id: "from-inception", label: "From Inception" },
+  { id: "agents",         label: "Agent Network" },
+]
+
 // Add/Edit Credential Form
 export const CredentialForm: React.FC<AddCredentialFormProps> = ({
   onSave,
@@ -175,6 +185,7 @@ export const CredentialForm: React.FC<AddCredentialFormProps> = ({
   isEdit = false
 }) => {
   const [name, setName] = useState(initialProvider || initialAccount);
+  const [businessUnit, setBusinessUnit] = useState('general');
   const [keyValue, setKeyValue] = useState(
     Object.values(initialData)[0] ?? ''
   );
@@ -194,7 +205,7 @@ export const CredentialForm: React.FC<AddCredentialFormProps> = ({
     }
     setError('');
     const provider = name.trim().toLowerCase().replace(/\s+/g, '_');
-    onSave(provider, name.trim(), { [fieldLabel || 'api_key']: keyValue.trim() });
+    onSave(provider, name.trim(), { [fieldLabel || 'api_key']: keyValue.trim() }, businessUnit);
   };
 
   return (
@@ -212,6 +223,19 @@ export const CredentialForm: React.FC<AddCredentialFormProps> = ({
           disabled={isEdit}
           autoFocus
         />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="cred-business">Business</label>
+        <select
+          id="cred-business"
+          value={businessUnit}
+          onChange={e => setBusinessUnit(e.target.value)}
+        >
+          {BUSINESS_UNITS.map(b => (
+            <option key={b.id} value={b.id}>{b.label}</option>
+          ))}
+        </select>
       </div>
 
       <div className="form-group">
@@ -353,9 +377,9 @@ export const CredentialBrowser: React.FC = () => {
     }
   };
 
-  const handleAddCredential = async (provider: string, account: string, data: CredentialData) => {
+  const handleAddCredential = async (provider: string, account: string, data: CredentialData, businessUnit: string) => {
     try {
-      await vaultClient.add(provider, account, data);
+      await vaultClient.add(provider, account, data, businessUnit);
       setShowAddForm(false);
       loadProviders();
       setSelectedProvider(provider);
