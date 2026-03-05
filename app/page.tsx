@@ -18,13 +18,13 @@ import { NotificationCenter } from "@/components/notification-center"
 import { KeyboardShortcutsHelp } from "@/components/keyboard-shortcuts-help"
 import { ConnectionStatus } from "@/components/connection-status"
 import { ScrollToTop } from "@/components/scroll-to-top"
+import { useKeyboardShortcuts, ShortcutConfig } from "@/hooks/use-keyboard-shortcuts"
+import { useToast } from "@/hooks/use-toast"
 
 const ClockWidget = dynamic(
   () => import("@/components/clock-widget").then(m => m.ClockWidget),
   { ssr: false }
 )
-import { useKeyboardShortcuts, ShortcutConfig } from "@/hooks/use-keyboard-shortcuts"
-import { useToast } from "@/hooks/use-toast"
 
 const VaultUI = dynamic(
   () => import("@/skills/credential-vault/components/vault-ui").then(m => m.VaultUI),

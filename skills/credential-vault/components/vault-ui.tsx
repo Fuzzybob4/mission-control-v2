@@ -490,10 +490,12 @@ const BusinessVault: React.FC<{
   const loadServices = useCallback(async () => {
     try {
       setLoading(true)
-      const services = await vaultClient.listByBusiness(business.id)
-      setServices(services)
-    } catch (err) {
-      console.error("[vault] loadServices error:", err)
+      const result = await vaultClient.listByBusiness(business.id)
+      setServices(result)
+    } catch (err: any) {
+      // Session expired — vaultClient.request() already called clearSession() + notify()
+      // which will bubble up to VaultUI and show the PIN screen automatically
+      console.error("[vault] loadServices error:", err?.message)
     } finally {
       setLoading(false)
     }
@@ -590,29 +592,6 @@ const BusinessVault: React.FC<{
       )}
     </div>
   )
-}
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-async function fetchServicesByBusiness(businessId: string): Promise<ServiceEntry[]> {
-  try {
-    const res = await fetch("/api/vault", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...getAuthHeader() },
-      body: JSON.stringify({ action: "listByBusiness", business_unit: businessId }),
-    })
-    if (!res.ok) return []
-    const data = await res.json()
-    return (data.services || []) as ServiceEntry[]
-  } catch {
-    return []
-  }
-}
-
-function getAuthHeader(): Record<string, string> {
-  if (typeof window === "undefined") return {}
-  const token = window.sessionStorage.getItem("mission-control.vault.token")
-  return token ? { Authorization: `Bearer ${token}` } : {}
 }
 
 // ─── Main Browser ──────────────────────────────────────────────────────────────

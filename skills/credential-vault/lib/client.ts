@@ -1,6 +1,6 @@
 "use client"
 
-import { createClient } from "@supabase/supabase-js"
+import { supabase } from "@/lib/supabase"
 
 export type VaultField = {
   name: string
@@ -35,12 +35,8 @@ if (typeof window !== "undefined") {
   sessionExpiry = expiryRaw ? Number(expiryRaw) : null
 }
 
-const supabaseRealtimeUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-const realtimeClient = supabaseRealtimeUrl && supabaseAnonKey
-  ? createClient(supabaseRealtimeUrl, supabaseAnonKey, { auth: { persistSession: false } })
-  : null
+// Reuse the shared singleton — never call createClient again here
+const realtimeClient = supabase
 
 export type VaultChangeHandler = (payload: {
   eventType: "INSERT" | "UPDATE" | "DELETE"
