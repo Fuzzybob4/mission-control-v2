@@ -16,9 +16,13 @@ import { DailyMotivationWidget } from "@/components/daily-motivation-widget"
 import { QuickActions } from "@/components/quick-actions"
 import { NotificationCenter } from "@/components/notification-center"
 import { KeyboardShortcutsHelp } from "@/components/keyboard-shortcuts-help"
-import { ClockWidget } from "@/components/clock-widget"
 import { ConnectionStatus } from "@/components/connection-status"
 import { ScrollToTop } from "@/components/scroll-to-top"
+
+const ClockWidget = dynamic(
+  () => import("@/components/clock-widget").then(m => m.ClockWidget),
+  { ssr: false }
+)
 import { useKeyboardShortcuts, ShortcutConfig } from "@/hooks/use-keyboard-shortcuts"
 import { useToast } from "@/hooks/use-toast"
 

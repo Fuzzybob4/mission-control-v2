@@ -294,37 +294,32 @@ async function saveCredentials(session: SessionRecord, provider: string, account
   for (const [fieldName, value] of entries) {
     const encrypted = await encryptCredential(value, session.key)
 
-    const rowWithBusiness = {
+    // Always upsert core fields first (guaranteed to work regardless of schema cache)
+    const coreRow = {
       provider,
       account,
       field_name: fieldName,
       encrypted_value: encrypted.encrypted_value,
       iv: encrypted.iv,
       tag: encrypted.tag,
-      business_unit: businessUnit || "general",
       updated_at: new Date().toISOString(),
     }
 
     const { error } = await supabase
       .from("vault_credentials")
-      .upsert(rowWithBusiness as any, { onConflict: "provider,account,field_name" })
+      .upsert(coreRow as any, { onConflict: "provider,account,field_name" })
 
-    if (error) {
-      // Fallback if business_unit column doesn't exist yet (PGRST204 = schema cache miss, 42703 = unknown column)
-      const isMissingColumn = (error.code === "PGRST204" || error.code === "42703") && 
-        (error.message?.includes("business_unit") || error.details?.includes("business_unit"))
-      if (isMissingColumn) {
-        const { provider: p, account: a, field_name, encrypted_value, iv, tag, updated_at } = rowWithBusiness
-        const { error: fallbackError } = await supabase
-          .from("vault_credentials")
-          .upsert(
-            { provider: p, account: a, field_name, encrypted_value, iv, tag, updated_at } as any,
-            { onConflict: "provider,account,field_name" }
-          )
-        if (fallbackError) throw fallbackError
-      } else {
-        throw error
-      }
+    if (error) throw error
+
+    // Attempt to set business_unit separately — silently ignore if column not in cache yet
+    if (businessUnit) {
+      await supabase
+        .from("vault_credentials")
+        .update({ business_unit: businessUnit } as any)
+        .eq("provider", provider)
+        .eq("account", account)
+        .eq("field_name", fieldName)
+      // Intentionally ignore error — column may not be in schema cache yet
     }
   }
 }
