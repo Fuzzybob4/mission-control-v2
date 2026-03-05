@@ -23,11 +23,11 @@ const tabs: { id: TabId; label: string; icon: React.ElementType }[] = [
   { id: "lone-star", label: "Lone Star Lighting", icon: Lightbulb },
   { id: "redfox", label: "RedFox CRM", icon: Code2 },
   { id: "heroes", label: "Heroes of the Meta", icon: Gamepad2 },
+  { id: "from-inception", label: "From Inception", icon: Monitor },
   { id: "agents", label: "Agent Network", icon: Cpu },
   { id: "analytics", label: "Analytics", icon: BarChart3 },
   { id: "systems", label: "Systems", icon: Settings },
   { id: "vault", label: "Credential Vault", icon: ShieldCheck },
-  { id: "from-inception", label: "From Inception", icon: Monitor },
 ]
 
 interface SidebarProps {
