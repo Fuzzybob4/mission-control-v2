@@ -27,11 +27,6 @@ export function OverviewTab() {
       {/* Daily Motivation Quote */}
       <DailyMotivationWidget />
 
-      {/* File Upload for Assets */}
-      <FileUploadWidget 
-        businessUnit="lone-star" 
-        onFilesUploaded={(files) => console.log("Uploaded:", files)}
-      />
       {/* KPI Stats with Sparklines */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
         <KPICard
