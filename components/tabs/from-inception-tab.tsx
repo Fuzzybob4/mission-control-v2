@@ -36,9 +36,9 @@ const services = [
 ]
 
 const projects = [
-  { name: "Lone Star Lighting Displays", status: "Live", url: "#", tech: "Next.js · Supabase" },
-  { name: "RedFox CRM", status: "In Dev", url: "#", tech: "Next.js · PostgreSQL" },
-  { name: "Heroes of the Meta", status: "On Hold", url: "#", tech: "React · Node.js" },
+  { name: "From Inception — Studio Site", status: "In Dev", url: "#", tech: "Next.js · Vercel" },
+  { name: "Lone Star Lighting (client build)", status: "Live", url: "#", tech: "Next.js · Supabase" },
+  { name: "RedFox CRM (client build)", status: "In Dev", url: "#", tech: "Next.js · PostgreSQL" },
 ]
 
 const statusColor: Record<string, string> = {

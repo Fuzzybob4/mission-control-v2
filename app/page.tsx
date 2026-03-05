@@ -47,6 +47,9 @@ const TAB_TITLES: Record<TabId, string> = {
 
 const TABS: TabId[] = ["overview", "lone-star", "redfox", "heroes", "agents", "analytics", "systems", "vault", "from-inception"]
 
+// Only show the quote, heartbeat, and notifications on top-level dashboard tabs
+const DASHBOARD_TABS: TabId[] = ["overview", "agents", "analytics", "systems"]
+
 export default function MissionControl() {
   const [activeTab, setActiveTab] = useState<TabId>("overview")
   const [showShortcutsHelp, setShowShortcutsHelp] = useState(false)
@@ -117,15 +120,15 @@ export default function MissionControl() {
               >
                 <span>?</span>
               </button>
-              {activeTab !== "vault" && <NotificationCenter />}
+              {DASHBOARD_TABS.includes(activeTab) && <NotificationCenter />}
             </div>
           </div>
 
           {/* Daily Motivation Quote */}
-          {activeTab !== "vault" && <DailyMotivationWidget />}
+          {DASHBOARD_TABS.includes(activeTab) && <DailyMotivationWidget />}
 
           {/* Heartbeat Section */}
-          {activeTab !== "vault" && <HeartbeatSection />}
+          {DASHBOARD_TABS.includes(activeTab) && <HeartbeatSection />}
 
           {/* Tab Content */}
           {activeTab === "overview" && <OverviewTab />}

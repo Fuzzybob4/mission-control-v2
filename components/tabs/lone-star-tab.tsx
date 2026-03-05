@@ -179,6 +179,30 @@ export function LoneStarTab() {
           </div>
         )}
       </div>
+      {/* Active Projects */}
+      <div>
+        <h3 className="text-sm font-semibold text-white mb-3">Active Projects</h3>
+        <div className="rounded-xl border border-white/10 bg-white/[0.03] divide-y divide-white/[0.06]">
+          <div className="flex items-center justify-between px-5 py-4">
+            <div>
+              <p className="text-sm font-medium text-white">Lone Star Lighting Displays</p>
+              <p className="text-xs text-gray-500 mt-0.5">Next.js · Supabase · RedFox CRM</p>
+            </div>
+            <span className="text-xs font-medium px-2.5 py-1 rounded-full border text-emerald-400 bg-emerald-400/10 border-emerald-400/20">
+              Live
+            </span>
+          </div>
+          <div className="flex items-center justify-between px-5 py-4">
+            <div>
+              <p className="text-sm font-medium text-white">2025 Install Season</p>
+              <p className="text-xs text-gray-500 mt-0.5">Nov 2025 — Jan 2026</p>
+            </div>
+            <span className="text-xs font-medium px-2.5 py-1 rounded-full border text-gray-400 bg-gray-400/10 border-gray-400/20">
+              Off-Season
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

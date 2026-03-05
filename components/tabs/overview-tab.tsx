@@ -8,7 +8,6 @@ import { TimeFilter } from "@/components/time-filter"
 import { FileUploadWidget } from "@/components/file-upload-widget"
 import { RecentActivity } from "@/components/recent-activity"
 import { Lightbulb, Code2, Gamepad2, TrendingUp, Activity, Zap, AlertCircle } from "lucide-react"
-import { DailyMotivationWidget } from "@/components/daily-motivation-widget"
 
 export function OverviewTab() {
   const [timeRange, setTimeRange] = useState<"today" | "week" | "month" | "quarter" | "year">("month")
