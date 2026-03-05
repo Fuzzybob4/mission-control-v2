@@ -216,7 +216,9 @@ async function listServicesByBusiness(businessUnit: string, supabase: ReturnType
 
   // Column doesn't exist yet — return empty until migration is run
   if (error) {
-    if (error.code === "PGRST204" && error.message?.includes("business_unit")) return []
+    const isMissingColumn = (error.code === "PGRST204" || error.code === "42703") &&
+      (error.message?.includes("business_unit") || error.details?.includes("business_unit"))
+    if (isMissingColumn) return []
     throw error
   }
 
@@ -308,8 +310,10 @@ async function saveCredentials(session: SessionRecord, provider: string, account
       .upsert(rowWithBusiness as any, { onConflict: "provider,account,field_name" })
 
     if (error) {
-      // If business_unit column doesn't exist yet, fall back gracefully
-      if (error.code === "PGRST204" && error.message?.includes("business_unit")) {
+      // Fallback if business_unit column doesn't exist yet (PGRST204 = schema cache miss, 42703 = unknown column)
+      const isMissingColumn = (error.code === "PGRST204" || error.code === "42703") && 
+        (error.message?.includes("business_unit") || error.details?.includes("business_unit"))
+      if (isMissingColumn) {
         const { provider: p, account: a, field_name, encrypted_value, iv, tag, updated_at } = rowWithBusiness
         const { error: fallbackError } = await supabase
           .from("vault_credentials")
