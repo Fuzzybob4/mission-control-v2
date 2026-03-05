@@ -11,11 +11,12 @@ import {
   BarChart3, 
   Settings,
   ShieldCheck,
+  Monitor,
   MoreHorizontal,
   X
 } from "lucide-react"
 
-type TabId = "overview" | "lone-star" | "redfox" | "heroes" | "agents" | "analytics" | "systems" | "vault"
+type TabId = "overview" | "lone-star" | "redfox" | "heroes" | "agents" | "analytics" | "systems" | "vault" | "from-inception"
 
 const tabs: { id: TabId; label: string; icon: React.ElementType }[] = [
   { id: "overview", label: "Overview", icon: LayoutDashboard },
@@ -26,6 +27,7 @@ const tabs: { id: TabId; label: string; icon: React.ElementType }[] = [
   { id: "analytics", label: "Analytics", icon: BarChart3 },
   { id: "systems", label: "Systems", icon: Settings },
   { id: "vault", label: "Credential Vault", icon: ShieldCheck },
+  { id: "from-inception", label: "From Inception", icon: Monitor },
 ]
 
 interface SidebarProps {

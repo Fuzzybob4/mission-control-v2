@@ -10,6 +10,7 @@ import { HeroesTab } from "@/components/tabs/heroes-tab"
 import { AgentsTab } from "@/components/tabs/agents-tab"
 import { AnalyticsTab } from "@/components/tabs/analytics-tab"
 import { SystemsTab } from "@/components/tabs/systems-tab"
+import { FromInceptionTab } from "@/components/tabs/from-inception-tab"
 import { HeartbeatSection } from "@/components/heartbeat-section"
 import { DailyMotivationWidget } from "@/components/daily-motivation-widget"
 import { QuickActions } from "@/components/quick-actions"
@@ -26,7 +27,7 @@ const VaultUI = dynamic(
   { ssr: false }
 )
 
-type TabId = "overview" | "lone-star" | "redfox" | "heroes" | "agents" | "analytics" | "systems" | "vault"
+type TabId = "overview" | "lone-star" | "redfox" | "heroes" | "agents" | "analytics" | "systems" | "vault" | "from-inception"
 
 const TAB_TITLES: Record<TabId, string> = {
   overview: "Overview",
@@ -37,9 +38,10 @@ const TAB_TITLES: Record<TabId, string> = {
   analytics: "Analytics",
   systems: "Systems",
   vault: "Credential Vault",
+  "from-inception": "From Inception",
 }
 
-const TABS: TabId[] = ["overview", "lone-star", "redfox", "heroes", "agents", "analytics", "systems", "vault"]
+const TABS: TabId[] = ["overview", "lone-star", "redfox", "heroes", "agents", "analytics", "systems", "vault", "from-inception"]
 
 export default function MissionControl() {
   const [activeTab, setActiveTab] = useState<TabId>("overview")
@@ -62,6 +64,7 @@ export default function MissionControl() {
     { key: "6", description: "Analytics", action: () => switchTab("analytics") },
     { key: "7", description: "Systems", action: () => switchTab("systems") },
     { key: "8", description: "Vault", action: () => switchTab("vault") },
+    { key: "9", description: "From Inception", action: () => switchTab("from-inception") },
     { key: "?", description: "Toggle help", action: () => setShowShortcutsHelp(prev => !prev) },
     { key: "n", description: "New lead", action: () => success("New Lead", "Opening lead creation form...") },
     { key: "t", description: "New task", action: () => success("New Task", "Opening task creation dialog...") },
@@ -129,6 +132,7 @@ export default function MissionControl() {
           {activeTab === "analytics" && <AnalyticsTab />}
           {activeTab === "systems" && <SystemsTab />}
           {activeTab === "vault" && <VaultUI />}
+          {activeTab === "from-inception" && <FromInceptionTab />}
         </div>
       </main>
 
