@@ -11,6 +11,7 @@ import { AgentsTab } from "@/components/tabs/agents-tab"
 import { AnalyticsTab } from "@/components/tabs/analytics-tab"
 import { SystemsTab } from "@/components/tabs/systems-tab"
 import { HeartbeatSection } from "@/components/heartbeat-section"
+import { DailyMotivationWidget } from "@/components/daily-motivation-widget"
 import { QuickActions } from "@/components/quick-actions"
 import { NotificationCenter } from "@/components/notification-center"
 import { KeyboardShortcutsHelp } from "@/components/keyboard-shortcuts-help"
@@ -112,6 +113,9 @@ export default function MissionControl() {
               <NotificationCenter />
             </div>
           </div>
+
+          {/* Daily Motivation Quote */}
+          <DailyMotivationWidget />
 
           {/* Heartbeat Section */}
           <HeartbeatSection />
