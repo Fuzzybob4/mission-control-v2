@@ -214,7 +214,11 @@ async function listServicesByBusiness(businessUnit: string, supabase: ReturnType
     .eq("business_unit", businessUnit)
     .order("account")
 
-  if (error) throw error
+  // Column doesn't exist yet — return empty until migration is run
+  if (error) {
+    if (error.code === "PGRST204" && error.message?.includes("business_unit")) return []
+    throw error
+  }
 
   // Deduplicate by provider+account
   const seen = new Set<string>()
@@ -287,20 +291,37 @@ async function saveCredentials(session: SessionRecord, provider: string, account
   const entries = Object.entries(fields)
   for (const [fieldName, value] of entries) {
     const encrypted = await encryptCredential(value, session.key)
-    const { error } = await supabase.from("vault_credentials").upsert(
-      {
-        provider,
-        account,
-        field_name: fieldName,
-        encrypted_value: encrypted.encrypted_value,
-        iv: encrypted.iv,
-        tag: encrypted.tag,
-        business_unit: businessUnit || "general",
-        updated_at: new Date().toISOString(),
-      } as any,
-      { onConflict: "provider,account,field_name" }
-    )
-    if (error) throw error
+
+    const rowWithBusiness = {
+      provider,
+      account,
+      field_name: fieldName,
+      encrypted_value: encrypted.encrypted_value,
+      iv: encrypted.iv,
+      tag: encrypted.tag,
+      business_unit: businessUnit || "general",
+      updated_at: new Date().toISOString(),
+    }
+
+    const { error } = await supabase
+      .from("vault_credentials")
+      .upsert(rowWithBusiness as any, { onConflict: "provider,account,field_name" })
+
+    if (error) {
+      // If business_unit column doesn't exist yet, fall back gracefully
+      if (error.code === "PGRST204" && error.message?.includes("business_unit")) {
+        const { provider: p, account: a, field_name, encrypted_value, iv, tag, updated_at } = rowWithBusiness
+        const { error: fallbackError } = await supabase
+          .from("vault_credentials")
+          .upsert(
+            { provider: p, account: a, field_name, encrypted_value, iv, tag, updated_at } as any,
+            { onConflict: "provider,account,field_name" }
+          )
+        if (fallbackError) throw fallbackError
+      } else {
+        throw error
+      }
+    }
   }
 }
 
