@@ -90,6 +90,14 @@ export async function POST(req: NextRequest) {
         await handleLock(token, ip, supabase)
         return NextResponse.json({ success: true })
       }
+      case "listByBusiness": {
+        const token = getToken(req, body)
+        const session = requireSession(token)
+        const { business_unit } = body as { business_unit: string }
+        if (!business_unit) throw new Error("business_unit is required")
+        const services = await listServicesByBusiness(business_unit, supabase)
+        return NextResponse.json({ services, expiresAt: session.expiresAt })
+      }
       case "listProviders": {
         const token = getToken(req, body)
         const session = requireSession(token)
@@ -118,11 +126,11 @@ export async function POST(req: NextRequest) {
       case "saveCredentials": {
         const token = getToken(req, body)
         const session = requireSession(token)
-        const { provider, account, fields } = body as { provider: string; account: string; fields: Record<string, string> }
+        const { provider, account, fields, business_unit } = body as { provider: string; account: string; fields: Record<string, string>; business_unit?: string }
         if (!provider || !account || !fields || Object.keys(fields).length === 0) {
           throw new Error("Provider, account, and at least one field are required")
         }
-        await saveCredentials(session, provider, account, fields, supabase)
+        await saveCredentials(session, provider, account, fields, supabase, business_unit)
         await logAudit({ action: "add", provider, account, success: true, ip }, supabase)
         return NextResponse.json({ success: true, expiresAt: session.expiresAt })
       }
@@ -199,6 +207,34 @@ function requireSession(token: string): SessionRecord {
   return session
 }
 
+async function listServicesByBusiness(businessUnit: string, supabase: ReturnType<typeof createClient>) {
+  const { data, error } = await supabase
+    .from("vault_credentials")
+    .select("provider, account")
+    .eq("business_unit", businessUnit)
+    .order("account")
+
+  // Column doesn't exist yet — return empty until migration is run
+  if (error) {
+    const isMissingColumn = (error.code === "PGRST204" || error.code === "42703") &&
+      (error.message?.includes("business_unit") || error.details?.includes("business_unit"))
+    if (isMissingColumn) return []
+    throw error
+  }
+
+  // Deduplicate by provider+account
+  const seen = new Set<string>()
+  const services: { provider: string; account: string }[] = []
+  for (const row of (data || []) as { provider: string; account: string }[]) {
+    const key = `${row.provider}::${row.account}`
+    if (!seen.has(key)) {
+      seen.add(key)
+      services.push({ provider: row.provider, account: row.account })
+    }
+  }
+  return services
+}
+
 async function listProviders(supabase: ReturnType<typeof createClient>): Promise<string[]> {
   const { data, error } = await supabase
     .from("vault_credentials")
@@ -253,23 +289,37 @@ async function getFields(session: SessionRecord, provider: string, account: stri
   return fields
 }
 
-async function saveCredentials(session: SessionRecord, provider: string, account: string, fields: Record<string, string>, supabase: ReturnType<typeof createClient>) {
+async function saveCredentials(session: SessionRecord, provider: string, account: string, fields: Record<string, string>, supabase: ReturnType<typeof createClient>, businessUnit?: string) {
   const entries = Object.entries(fields)
   for (const [fieldName, value] of entries) {
     const encrypted = await encryptCredential(value, session.key)
-    const { error } = await supabase.from("vault_credentials").upsert(
-      {
-        provider,
-        account,
-        field_name: fieldName,
-        encrypted_value: encrypted.encrypted_value,
-        iv: encrypted.iv,
-        tag: encrypted.tag,
-        updated_at: new Date().toISOString(),
-      } as any,
-      { onConflict: "provider,account,field_name" }
-    )
+
+    // Always upsert core fields first (guaranteed to work regardless of schema cache)
+    const coreRow = {
+      provider,
+      account,
+      field_name: fieldName,
+      encrypted_value: encrypted.encrypted_value,
+      iv: encrypted.iv,
+      tag: encrypted.tag,
+      updated_at: new Date().toISOString(),
+    }
+
+    const { error } = await supabase
+      .from("vault_credentials")
+      .upsert(coreRow as any, { onConflict: "provider,account,field_name" })
+
     if (error) throw error
+
+    // Attempt to set business_unit separately — silently ignore if column not in cache yet
+    if (businessUnit) {
+      const q = supabase.from("vault_credentials") as any
+      await q
+        .update({ business_unit: businessUnit })
+        .eq("provider", provider)
+        .eq("account", account)
+        .eq("field_name", fieldName)
+    }
   }
 }
 

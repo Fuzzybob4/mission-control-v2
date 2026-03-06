@@ -137,6 +137,30 @@ export function RedFoxTab() {
           ))}
         </div>
       </div>
+      {/* Active Projects */}
+      <div>
+        <h3 className="text-sm font-semibold text-white mb-3">Active Projects</h3>
+        <div className="rounded-xl border border-white/10 bg-white/[0.03] divide-y divide-white/[0.06]">
+          <div className="flex items-center justify-between px-5 py-4">
+            <div>
+              <p className="text-sm font-medium text-white">RedFox CRM — Core Build</p>
+              <p className="text-xs text-gray-500 mt-0.5">Next.js · PostgreSQL · Supabase</p>
+            </div>
+            <span className="text-xs font-medium px-2.5 py-1 rounded-full border text-amber-400 bg-amber-400/10 border-amber-400/20">
+              In Dev
+            </span>
+          </div>
+          <div className="flex items-center justify-between px-5 py-4">
+            <div>
+              <p className="text-sm font-medium text-white">Beta Onboarding (Lone Star)</p>
+              <p className="text-xs text-gray-500 mt-0.5">First live customer integration</p>
+            </div>
+            <span className="text-xs font-medium px-2.5 py-1 rounded-full border text-blue-400 bg-blue-400/10 border-blue-400/20">
+              Pending
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

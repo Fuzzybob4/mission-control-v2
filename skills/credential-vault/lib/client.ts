@@ -1,6 +1,6 @@
 "use client"
 
-import { createClient } from "@supabase/supabase-js"
+import { supabase } from "@/lib/supabase"
 
 export type VaultField = {
   name: string
@@ -35,12 +35,8 @@ if (typeof window !== "undefined") {
   sessionExpiry = expiryRaw ? Number(expiryRaw) : null
 }
 
-const supabaseRealtimeUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-const realtimeClient = supabaseRealtimeUrl && supabaseAnonKey
-  ? createClient(supabaseRealtimeUrl, supabaseAnonKey, { auth: { persistSession: false } })
-  : null
+// Reuse the shared singleton — never call createClient again here
+const realtimeClient = supabase
 
 export type VaultChangeHandler = (payload: {
   eventType: "INSERT" | "UPDATE" | "DELETE"
@@ -151,6 +147,11 @@ export const vaultClient = {
     clearSession()
   },
 
+  async listByBusiness(businessUnit: string): Promise<{ provider: string; account: string }[]> {
+    const { services } = await request<{ services: { provider: string; account: string }[] }>("listByBusiness", { business_unit: businessUnit })
+    return services
+  },
+
   async listProviders(): Promise<string[]> {
     const { providers } = await request<{ providers: string[] }>("listProviders")
     return providers
@@ -166,8 +167,8 @@ export const vaultClient = {
     return fields
   },
 
-  async add(provider: string, account: string, data: Record<string, string>) {
-    await request("saveCredentials", { provider, account, fields: data })
+  async add(provider: string, account: string, data: Record<string, string>, businessUnit?: string) {
+    await request("saveCredentials", { provider, account, fields: data, business_unit: businessUnit || "general" })
   },
 
   async edit(provider: string, account: string, field: string, value: string) {
