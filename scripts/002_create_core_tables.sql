@@ -1,5 +1,5 @@
 -- 002_create_core_tables.sql
--- Create all Mission Control core tables with seed data
+-- Step 2: Create all Mission Control core tables plus seed data
 
 -- === Agents ===============================================================
 CREATE TABLE IF NOT EXISTS mc_agents (
@@ -33,6 +33,7 @@ ON CONFLICT (id) DO NOTHING;
 ALTER TABLE mc_agents REPLICA IDENTITY FULL;
 ALTER PUBLICATION supabase_realtime ADD TABLE mc_agents;
 
+
 -- === Leads ================================================================
 CREATE TABLE IF NOT EXISTS mc_leads (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -59,6 +60,7 @@ ON CONFLICT DO NOTHING;
 ALTER TABLE mc_leads REPLICA IDENTITY FULL;
 ALTER PUBLICATION supabase_realtime ADD TABLE mc_leads;
 
+
 -- === Events ===============================================================
 CREATE TABLE IF NOT EXISTS mc_events (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -71,13 +73,14 @@ CREATE TABLE IF NOT EXISTS mc_events (
 );
 
 INSERT INTO mc_events (level, source, agent_id, message, business_unit) VALUES 
-  ('info', 'agent', 'atlas', 'Mission Control deployed successfully', 'shared'),
+  ('info', 'agent', 'atlas', 'Mission Control v2 deployed successfully', 'shared'),
   ('info', 'agent', 'vera', 'New lead: Alora Hess (CBRE) - $18K pipeline', 'lone_star'),
   ('info', 'system', null, 'Database initialized', 'shared')
 ON CONFLICT DO NOTHING;
 
 ALTER TABLE mc_events REPLICA IDENTITY FULL;
 ALTER PUBLICATION supabase_realtime ADD TABLE mc_events;
+
 
 -- === Tasks ================================================================
 CREATE TABLE IF NOT EXISTS mc_tasks (
@@ -93,11 +96,13 @@ CREATE TABLE IF NOT EXISTS mc_tasks (
 );
 
 INSERT INTO mc_tasks (title, status, priority, assigned_agent_id, due_date, business_unit) VALUES 
-  ('Follow up with Alora Hess', 'queued', 'high', 'vera', '2026-02-20', 'lone_star')
+  ('Follow up with Alora Hess', 'queued', 'high', 'vera', '2026-02-20', 'lone_star'),
+  ('Fix v0 deployment', 'completed', 'high', 'maverick', null, 'shared')
 ON CONFLICT DO NOTHING;
 
 ALTER TABLE mc_tasks REPLICA IDENTITY FULL;
 ALTER PUBLICATION supabase_realtime ADD TABLE mc_tasks;
+
 
 -- === API Costs ============================================================
 CREATE TABLE IF NOT EXISTS mc_api_costs (
@@ -114,4 +119,5 @@ CREATE TABLE IF NOT EXISTS mc_api_costs (
 ALTER TABLE mc_api_costs REPLICA IDENTITY FULL;
 ALTER PUBLICATION supabase_realtime ADD TABLE mc_api_costs;
 
-SELECT '✅ Core tables ready (agents, leads, events, tasks, api_costs)' AS status;
+
+SELECT '✅ Core tables ready' AS status;
