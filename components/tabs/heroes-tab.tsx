@@ -5,7 +5,7 @@ import { GlassCard } from "@/components/ui/glass-card"
 import { StatusBadge } from "@/components/ui/status-badge"
 import { FileUploadWidget } from "@/components/file-upload-widget"
 import { TimeFilter } from "@/components/time-filter"
-import { Gamepad2, DollarSign, TrendingUp, Target, AlertCircle } from "lucide-react"
+import { Gamepad2, DollarSign, TrendingUp, Target } from "lucide-react"
 
 export function HeroesTab() {
   const [timeRange, setTimeRange] = useState<"today" | "week" | "month" | "quarter" | "year">("month")
@@ -86,33 +86,7 @@ export function HeroesTab() {
         </GlassCard>
       </div>
 
-      {/* Activation Criteria */}
-      <GlassCard>
-        <h3 className="text-sm font-semibold text-white mb-3">Reactivation Criteria</h3>
-        <div className="space-y-3">
-          <div className="flex items-start gap-2">
-            <AlertCircle className="w-4 h-4 text-amber-400 mt-0.5" />
-            <div>
-              <p className="text-sm font-medium text-white">Lone Star Stable</p>
-              <p className="text-xs text-gray-400">$20K/mo consistent revenue</p>
-            </div>
-          </div>
-          <div className="flex items-start gap-2">
-            <AlertCircle className="w-4 h-4 text-amber-400 mt-0.5" />
-            <div>
-              <p className="text-sm font-medium text-white">RedFox Launched</p>
-              <p className="text-xs text-gray-400">First paying customers</p>
-            </div>
-          </div>
-          <div className="flex items-start gap-2">
-            <AlertCircle className="w-4 h-4 text-amber-400 mt-0.5" />
-            <div>
-              <p className="text-sm font-medium text-white">Time Available</p>
-              <p className="text-xs text-gray-400">10+ hours/week</p>
-            </div>
-          </div>
-        </div>
-      </GlassCard>
+
       {/* Active Projects */}
       <div>
         <h3 className="text-sm font-semibold text-white mb-3">Active Projects</h3>
