@@ -21,6 +21,7 @@ export function AnalyticsTab() {
     async function load() {
       try {
         // Last 24 hours
+        if (!supabase) return
         const since = new Date(Date.now() - 86_400_000).toISOString()
         const { data, error } = await supabase
           .from("analytics_events")

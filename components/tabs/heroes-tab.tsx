@@ -5,7 +5,7 @@ import { GlassCard } from "@/components/ui/glass-card"
 import { StatusBadge } from "@/components/ui/status-badge"
 import { FileUploadWidget } from "@/components/file-upload-widget"
 import { TimeFilter } from "@/components/time-filter"
-import { Gamepad2, DollarSign, TrendingUp, Target } from "lucide-react"
+import { Gamepad2, DollarSign, TrendingUp, Target, AlertCircle } from "lucide-react"
 
 export function HeroesTab() {
   const [timeRange, setTimeRange] = useState<"today" | "week" | "month" | "quarter" | "year">("month")

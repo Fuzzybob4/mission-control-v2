@@ -40,6 +40,7 @@ export function AgentsTab() {
   const [agents, setAgents] = useState<Agent[]>(STATIC_AGENTS)
 
   useEffect(() => {
+    if (!supabase) return
     supabase
       .from("agents")
       .select("*")
