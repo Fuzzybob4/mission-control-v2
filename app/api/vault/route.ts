@@ -313,13 +313,12 @@ async function saveCredentials(session: SessionRecord, provider: string, account
 
     // Attempt to set business_unit separately — silently ignore if column not in cache yet
     if (businessUnit) {
-      await supabase
-        .from("vault_credentials")
-        .update({ business_unit: businessUnit } as any)
+      const q = supabase.from("vault_credentials") as any
+      await q
+        .update({ business_unit: businessUnit })
         .eq("provider", provider)
         .eq("account", account)
         .eq("field_name", fieldName)
-      // Intentionally ignore error — column may not be in schema cache yet
     }
   }
 }
