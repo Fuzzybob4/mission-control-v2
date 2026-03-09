@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import dynamic from "next/dynamic"
 import { Sidebar } from "@/components/sidebar"
 import { OverviewTab } from "@/components/tabs/overview-tab"
@@ -113,6 +114,12 @@ export default function MissionControl() {
                   info("Refreshing", "Syncing latest data...")
                 }}
               />
+              <Link
+                href="/skills"
+                className="hidden lg:inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-white/10 text-xs text-gray-300 hover:text-white hover:border-white/30 transition-colors"
+              >
+                Skill Inventory
+              </Link>
               <button
                 onClick={() => setShowShortcutsHelp(true)}
                 className="hidden lg:flex items-center gap-1.5 px-2 py-1.5 text-xs text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg transition-colors"
