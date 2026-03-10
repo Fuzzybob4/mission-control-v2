@@ -76,7 +76,8 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
 
       {/* Sidebar - Desktop: always visible, Mobile: slide over */}
       <aside className={cn(
-        "fixed lg:static inset-y-0 left-0 z-50 w-64 h-full glass border-r border-white/10 flex flex-col transition-transform duration-300",
+        "fixed lg:static inset-y-0 left-0 z-50 w-64 h-full border-r border-white/10 flex flex-col transition-transform duration-300",
+        "bg-[#0a0a0a] lg:glass",
         "lg:translate-x-0",
         isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
       )}>
