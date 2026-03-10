@@ -124,7 +124,16 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
               )
             })}
           </div>
-          <div className="mt-6">
+          <div className="mt-6 space-y-2">
+            <Link
+              href="/agents"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-sm font-medium border border-white/10 text-gray-200 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <Cpu className="w-5 h-5 text-blue-300" />
+              <span className="truncate">Agent Network</span>
+              <span className="text-[11px] uppercase tracking-wide text-gray-400 ml-auto">/agents</span>
+            </Link>
             <Link
               href="/skills"
               onClick={() => setIsMobileMenuOpen(false)}
@@ -132,7 +141,7 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
             >
               <Sparkles className="w-5 h-5 text-blue-300" />
               <span className="truncate">Skills Inventory</span>
-              <span className="text-[11px] uppercase tracking-wide text-gray-400">/skills</span>
+              <span className="text-[11px] uppercase tracking-wide text-gray-400 ml-auto">/skills</span>
             </Link>
           </div>
         </nav>
