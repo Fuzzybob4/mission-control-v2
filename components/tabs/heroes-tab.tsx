@@ -13,7 +13,7 @@ export function HeroesTab() {
   return (
     <div className="space-y-6 animate-fade-in-up">
       {/* Header with Time Filter */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-lg bg-violet-500/20">
             <Gamepad2 className="w-5 h-5 text-violet-400" />
@@ -48,7 +48,7 @@ export function HeroesTab() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <GlassCard className="opacity-60">
           <div className="flex items-center gap-2 text-gray-400 mb-2">
             <Gamepad2 className="w-4 h-4" />

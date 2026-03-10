@@ -26,7 +26,7 @@ export function RedFoxTab() {
   return (
     <div className="space-y-6 animate-fade-in-up">
       {/* Header with Time Filter */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-lg bg-blue-500/20">
             <Code2 className="w-5 h-5 text-blue-400" />
@@ -49,7 +49,7 @@ export function RedFoxTab() {
       />
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <GlassCard>
           <div className="flex items-center gap-2 text-gray-400 mb-2">
             <DollarSign className="w-4 h-4" />

@@ -8,28 +8,28 @@ import {
   Lightbulb, 
   Code2, 
   Gamepad2,
-  Cpu, 
   BarChart3, 
   Settings,
   ShieldCheck,
   Monitor,
+  Cpu,
+  Clock,
   MoreHorizontal,
   X,
   Sparkles
 } from "lucide-react"
 
-type TabId = "overview" | "lone-star" | "redfox" | "heroes" | "agents" | "analytics" | "systems" | "vault" | "from-inception"
+type TabId = "overview" | "lone-star" | "redfox" | "heroes" | "analytics" | "systems" | "vault" | "from-inception"
 
 const tabs: { id: TabId; label: string; icon: React.ElementType }[] = [
-  { id: "overview", label: "Overview", icon: LayoutDashboard },
-  { id: "lone-star", label: "Lone Star Lighting", icon: Lightbulb },
-  { id: "redfox", label: "RedFox CRM", icon: Code2 },
-  { id: "heroes", label: "Heroes of the Meta", icon: Gamepad2 },
-  { id: "from-inception", label: "From Inception", icon: Monitor },
-  { id: "agents", label: "Agent Network", icon: Cpu },
-  { id: "analytics", label: "Analytics", icon: BarChart3 },
-  { id: "systems", label: "Systems", icon: Settings },
-  { id: "vault", label: "Credential Vault", icon: ShieldCheck },
+  { id: "overview",        label: "Overview",          icon: LayoutDashboard },
+  { id: "lone-star",       label: "Lone Star Lighting", icon: Lightbulb },
+  { id: "redfox",          label: "RedFox CRM",         icon: Code2 },
+  { id: "heroes",          label: "Heroes of the Meta", icon: Gamepad2 },
+  { id: "from-inception",  label: "From Inception",     icon: Monitor },
+  { id: "analytics",       label: "Analytics",          icon: BarChart3 },
+  { id: "systems",         label: "Systems",            icon: Settings },
+  { id: "vault",           label: "Credential Vault",   icon: ShieldCheck },
 ]
 
 interface SidebarProps {
@@ -124,7 +124,25 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
               )
             })}
           </div>
-          <div className="mt-6">
+          <div className="mt-6 space-y-2">
+            <Link
+              href="/cron-jobs"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-sm font-medium border border-white/10 text-gray-200 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <Clock className="w-5 h-5 text-violet-300" />
+              <span className="truncate">Cron Jobs</span>
+              <span className="text-[11px] uppercase tracking-wide text-gray-400 ml-auto">/cron-jobs</span>
+            </Link>
+            <Link
+              href="/agents"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-sm font-medium border border-white/10 text-gray-200 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <Cpu className="w-5 h-5 text-blue-300" />
+              <span className="truncate">Agent Network</span>
+              <span className="text-[11px] uppercase tracking-wide text-gray-400 ml-auto">/agents</span>
+            </Link>
             <Link
               href="/skills"
               onClick={() => setIsMobileMenuOpen(false)}
@@ -132,7 +150,7 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
             >
               <Sparkles className="w-5 h-5 text-blue-300" />
               <span className="truncate">Skills Inventory</span>
-              <span className="text-[11px] uppercase tracking-wide text-gray-400">/skills</span>
+              <span className="text-[11px] uppercase tracking-wide text-gray-400 ml-auto">/skills</span>
             </Link>
           </div>
         </nav>

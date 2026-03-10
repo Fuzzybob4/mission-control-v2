@@ -8,7 +8,6 @@ import { OverviewTab } from "@/components/tabs/overview-tab"
 import { LoneStarTab } from "@/components/tabs/lone-star-tab"
 import { RedFoxTab } from "@/components/tabs/redfox-tab"
 import { HeroesTab } from "@/components/tabs/heroes-tab"
-import { AgentsTab } from "@/components/tabs/agents-tab"
 import { AnalyticsTab } from "@/components/tabs/analytics-tab"
 import { SystemsTab } from "@/components/tabs/systems-tab"
 import { FromInceptionTab } from "@/components/tabs/from-inception-tab"
@@ -32,24 +31,23 @@ const VaultUI = dynamic(
   { ssr: false }
 )
 
-type TabId = "overview" | "lone-star" | "redfox" | "heroes" | "agents" | "analytics" | "systems" | "vault" | "from-inception"
+type TabId = "overview" | "lone-star" | "redfox" | "heroes" | "analytics" | "systems" | "vault" | "from-inception"
 
 const TAB_TITLES: Record<TabId, string> = {
   overview: "Overview",
   "lone-star": "Lone Star Lighting",
   redfox: "RedFox CRM",
   heroes: "Heroes of the Meta",
-  agents: "Agent Network",
   analytics: "Analytics",
   systems: "Systems",
   vault: "Credential Vault",
   "from-inception": "From Inception",
 }
 
-const TABS: TabId[] = ["overview", "lone-star", "redfox", "heroes", "agents", "analytics", "systems", "vault", "from-inception"]
+const TABS: TabId[] = ["overview", "lone-star", "redfox", "heroes", "analytics", "systems", "vault", "from-inception"]
 
 // Only show the quote, heartbeat, and notifications on top-level dashboard tabs
-const DASHBOARD_TABS: TabId[] = ["overview", "agents", "analytics", "systems"]
+const DASHBOARD_TABS: TabId[] = ["overview", "analytics", "systems"]
 
 export default function MissionControl() {
   const [activeTab, setActiveTab] = useState<TabId>("overview")
@@ -67,12 +65,11 @@ export default function MissionControl() {
     { key: "1", description: "Overview", action: () => switchTab("overview") },
     { key: "2", description: "Lone Star", action: () => switchTab("lone-star") },
     { key: "3", description: "RedFox", action: () => switchTab("redfox") },
-    { key: "4", description: "Heroes", action: () => switchTab("heroes") },
-    { key: "5", description: "Agents", action: () => switchTab("agents") },
-    { key: "6", description: "Analytics", action: () => switchTab("analytics") },
-    { key: "7", description: "Systems", action: () => switchTab("systems") },
-    { key: "8", description: "Vault", action: () => switchTab("vault") },
-    { key: "9", description: "From Inception", action: () => switchTab("from-inception") },
+    { key: "4", description: "Heroes",    action: () => switchTab("heroes") },
+    { key: "5", description: "Analytics", action: () => switchTab("analytics") },
+    { key: "6", description: "Systems",   action: () => switchTab("systems") },
+    { key: "7", description: "Vault",     action: () => switchTab("vault") },
+    { key: "8", description: "From Inception", action: () => switchTab("from-inception") },
     { key: "?", description: "Toggle help", action: () => setShowShortcutsHelp(prev => !prev) },
     { key: "n", description: "New lead", action: () => success("New Lead", "Opening lead creation form...") },
     { key: "t", description: "New task", action: () => success("New Task", "Opening task creation dialog...") },
@@ -103,17 +100,11 @@ export default function MissionControl() {
           <div className="flex items-start justify-between mb-4 lg:mb-6">
             <div>
               <h1 className="text-xl lg:text-2xl font-bold text-white">{TAB_TITLES[activeTab]}</h1>
-              <p className="text-xs lg:text-sm text-gray-400 mt-1">
-                Kal Mission Control
-              </p>
+              <p className="text-xs lg:text-sm text-gray-400 mt-1">Kal Mission Control</p>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 lg:gap-3 flex-shrink-0">
               <ClockWidget />
-              <ConnectionStatus 
-                onRefresh={() => {
-                  info("Refreshing", "Syncing latest data...")
-                }}
-              />
+              <ConnectionStatus onRefresh={() => info("Refreshing", "Syncing latest data...")} />
               <Link
                 href="/skills"
                 className="hidden lg:inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-white/10 text-xs text-gray-300 hover:text-white hover:border-white/30 transition-colors"
@@ -138,11 +129,10 @@ export default function MissionControl() {
           {DASHBOARD_TABS.includes(activeTab) && <HeartbeatSection />}
 
           {/* Tab Content */}
-          {activeTab === "overview" && <OverviewTab />}
+          {activeTab === "overview" && <OverviewTab onNavigate={(tab) => setActiveTab(tab as TabId)} />}
           {activeTab === "lone-star" && <LoneStarTab />}
           {activeTab === "redfox" && <RedFoxTab />}
           {activeTab === "heroes" && <HeroesTab />}
-          {activeTab === "agents" && <AgentsTab />}
           {activeTab === "analytics" && <AnalyticsTab />}
           {activeTab === "systems" && <SystemsTab />}
           {activeTab === "vault" && <VaultUI />}

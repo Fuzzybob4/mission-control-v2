@@ -52,7 +52,7 @@ export function FromInceptionTab() {
     <div className="space-y-8">
 
       {/* Hero */}
-      <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-8 flex flex-col gap-3">
+      <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-8 flex flex-col gap-3">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-blue-500/15 border border-blue-500/20 flex items-center justify-center">
             <Monitor className="w-5 h-5 text-blue-400" />

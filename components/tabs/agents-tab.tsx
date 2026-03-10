@@ -42,7 +42,7 @@ export function AgentsTab() {
   useEffect(() => {
     if (!supabase) return
     supabase
-      .from("agents")
+      .from("mc_agents")
       .select("*")
       .order("tier")
       .then(({ data, error }) => {
