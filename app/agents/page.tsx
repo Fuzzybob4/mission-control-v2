@@ -67,7 +67,16 @@ export default function AgentsPage() {
       .select("*")
       .order("tier")
       .then(({ data, error }) => {
-        if (!error && data && data.length > 0) setAgents(data as Agent[])
+        if (error) {
+          console.log("[v0] mc_agents error:", error.message, error.code)
+          return
+        }
+        if (data && data.length > 0) {
+          console.log("[v0] mc_agents loaded:", data.length, "agents", data.map((a: any) => a.name))
+          setAgents(data as Agent[])
+        } else {
+          console.log("[v0] mc_agents returned empty — using static fallback")
+        }
       })
   }, [])
 
