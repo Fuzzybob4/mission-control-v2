@@ -206,9 +206,6 @@ export default function AgentsPage() {
             {/* Roster */}
             <div className="flex-1 min-w-0 space-y-8">
 
-              {/* Weekly Task Calendar */}
-              <WeeklyTasksCalendar />
-
               {/* Stats */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
@@ -226,6 +223,9 @@ export default function AgentsPage() {
                   </GlassCard>
                 ))}
               </div>
+
+              {/* Weekly Task Calendar */}
+              <WeeklyTasksCalendar />
 
               {/* Tiered roster */}
               {tiers.map(tier => {
