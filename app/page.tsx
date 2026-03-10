@@ -131,7 +131,7 @@ export default function MissionControl() {
           {DASHBOARD_TABS.includes(activeTab) && <HeartbeatSection />}
 
           {/* Tab Content */}
-          {activeTab === "overview" && <OverviewTab />}
+          {activeTab === "overview" && <OverviewTab onNavigate={(tab) => setActiveTab(tab as TabId)} />}
           {activeTab === "lone-star" && <LoneStarTab />}
           {activeTab === "redfox" && <RedFoxTab />}
           {activeTab === "heroes" && <HeroesTab />}
