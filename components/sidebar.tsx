@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { 
   LayoutDashboard, 
@@ -13,7 +14,8 @@ import {
   ShieldCheck,
   Monitor,
   MoreHorizontal,
-  X
+  X,
+  Sparkles
 } from "lucide-react"
 
 type TabId = "overview" | "lone-star" | "redfox" | "heroes" | "agents" | "analytics" | "systems" | "vault" | "from-inception"
@@ -121,6 +123,17 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
                 </button>
               )
             })}
+          </div>
+          <div className="mt-6">
+            <Link
+              href="/skills"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-sm font-medium border border-white/10 text-gray-200 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <Sparkles className="w-5 h-5 text-blue-300" />
+              <span className="truncate">Skills Inventory</span>
+              <span className="text-[11px] uppercase tracking-wide text-gray-400">/skills</span>
+            </Link>
           </div>
         </nav>
 

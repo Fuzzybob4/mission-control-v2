@@ -23,6 +23,12 @@ const statusColors: Record<string, string> = {
   new: "bg-blue-500/20 text-blue-400 border-blue-500/30",
   contacted: "bg-amber-500/20 text-amber-400 border-amber-500/30",
   quoted: "bg-violet-500/20 text-violet-400 border-violet-500/30",
+  healthy: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+  warning: "bg-amber-500/20 text-amber-400 border-amber-500/30",
+  error: "bg-red-500/20 text-red-400 border-red-500/30",
+  pending: "bg-amber-500/20 text-amber-200 border-amber-500/30",
+  approved: "bg-emerald-500/20 text-emerald-200 border-emerald-500/30",
+  denied: "bg-rose-500/20 text-rose-200 border-rose-500/30",
 }
 
 export function StatusBadge({ status, label, className }: StatusBadgeProps) {

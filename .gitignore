@@ -17,3 +17,7 @@ pnpm-debug.log*
 
 # OS
 .DS_Store
+.vercel
+tsconfig.tsbuildinfo
+pnpm-lock.yaml
+.env*.local
