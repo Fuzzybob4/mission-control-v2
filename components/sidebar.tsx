@@ -13,6 +13,7 @@ import {
   ShieldCheck,
   Monitor,
   Cpu,
+  Clock,
   MoreHorizontal,
   X,
   Sparkles
@@ -124,6 +125,15 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
             })}
           </div>
           <div className="mt-6 space-y-2">
+            <Link
+              href="/cron-jobs"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-sm font-medium border border-white/10 text-gray-200 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <Clock className="w-5 h-5 text-violet-300" />
+              <span className="truncate">Cron Jobs</span>
+              <span className="text-[11px] uppercase tracking-wide text-gray-400 ml-auto">/cron-jobs</span>
+            </Link>
             <Link
               href="/agents"
               onClick={() => setIsMobileMenuOpen(false)}
