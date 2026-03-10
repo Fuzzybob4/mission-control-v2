@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase"
 import { GlassCard } from "@/components/ui/glass-card"
 import { StatusBadge } from "@/components/ui/status-badge"
 import { SkillRegistry } from "@/components/skill-registry"
+import { WeeklyTasksCalendar } from "@/components/weekly-tasks-calendar"
 import { cn } from "@/lib/utils"
 import {
   Bot, Wrench, Network, ArrowLeft,
@@ -204,6 +205,9 @@ export default function AgentsPage() {
 
             {/* Roster */}
             <div className="flex-1 min-w-0 space-y-8">
+
+              {/* Weekly Task Calendar */}
+              <WeeklyTasksCalendar />
 
               {/* Stats */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
