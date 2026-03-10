@@ -26,18 +26,19 @@ interface Agent {
 }
 
 const STATIC_AGENTS: Agent[] = [
-  { id: "1",  slug: "atlas",    name: "Atlas",    role: "Executive Coordinator",  tier: 1, status: "active", business_unit: null,         tasks_completed: 142 },
-  { id: "2",  slug: "vera",     name: "Vera",     role: "Lone Star Lead",         tier: 2, status: "active", business_unit: "lone-star",   tasks_completed: 87  },
-  { id: "3",  slug: "iris",     name: "Iris",     role: "RedFox Lead",            tier: 2, status: "active", business_unit: "redfox",      tasks_completed: 64  },
-  { id: "4",  slug: "scarlett", name: "Scarlett", role: "Heroes Lead",            tier: 2, status: "active", business_unit: "heroes",      tasks_completed: 31  },
-  { id: "5",  slug: "ruby",     name: "Ruby",     role: "Sales Specialist",       tier: 3, status: "idle",   business_unit: null,         tasks_completed: 55  },
-  { id: "6",  slug: "sierra",   name: "Sierra",   role: "Marketing Specialist",   tier: 3, status: "idle",   business_unit: null,         tasks_completed: 48  },
-  { id: "7",  slug: "scout",    name: "Scout",    role: "Research Specialist",    tier: 3, status: "idle",   business_unit: null,         tasks_completed: 72  },
-  { id: "8",  slug: "maverick", name: "Maverick", role: "DevOps Specialist",      tier: 3, status: "idle",   business_unit: null,         tasks_completed: 29  },
-  { id: "9",  slug: "barnes",   name: "Barnes",   role: "Documentation Agent",    tier: 4, status: "idle",   business_unit: null,         tasks_completed: 18  },
-  { id: "10", slug: "pax",      name: "Pax",      role: "Communications Agent",   tier: 4, status: "idle",   business_unit: null,         tasks_completed: 22  },
-  { id: "11", slug: "otis",     name: "Otis",     role: "Data Agent",             tier: 4, status: "idle",   business_unit: null,         tasks_completed: 41  },
-  { id: "12", slug: "otto",     name: "Otto",     role: "Quality Agent",          tier: 4, status: "idle",   business_unit: null,         tasks_completed: 37  },
+  { id: "1",  slug: "atlas",    name: "Atlas",    role: "Executive Coordinator",  tier: 1, status: "active", business_unit: null,              tasks_completed: 142 },
+  { id: "2",  slug: "nova",     name: "Nova",     role: "From Inception Lead",    tier: 2, status: "active", business_unit: "from-inception",  tasks_completed: 53  },
+  { id: "3",  slug: "vera",     name: "Vera",     role: "Lone Star Lead",         tier: 2, status: "active", business_unit: "lone-star",       tasks_completed: 87  },
+  { id: "4",  slug: "iris",     name: "Iris",     role: "RedFox Lead",            tier: 2, status: "active", business_unit: "redfox",          tasks_completed: 64  },
+  { id: "5",  slug: "scarlett", name: "Scarlett", role: "Heroes Lead",            tier: 2, status: "active", business_unit: "heroes",          tasks_completed: 31  },
+  { id: "6",  slug: "ruby",     name: "Ruby",     role: "Sales Specialist",       tier: 3, status: "idle",   business_unit: null,              tasks_completed: 55  },
+  { id: "7",  slug: "sierra",   name: "Sierra",   role: "Marketing Specialist",   tier: 3, status: "idle",   business_unit: null,              tasks_completed: 48  },
+  { id: "8",  slug: "scout",    name: "Scout",    role: "Research Specialist",    tier: 3, status: "idle",   business_unit: null,              tasks_completed: 72  },
+  { id: "9",  slug: "maverick", name: "Maverick", role: "DevOps Specialist",      tier: 3, status: "idle",   business_unit: null,              tasks_completed: 29  },
+  { id: "10", slug: "barnes",   name: "Barnes",   role: "Documentation Agent",    tier: 4, status: "idle",   business_unit: null,              tasks_completed: 18  },
+  { id: "11", slug: "pax",      name: "Pax",      role: "Communications Agent",   tier: 4, status: "idle",   business_unit: null,              tasks_completed: 22  },
+  { id: "12", slug: "otis",     name: "Otis",     role: "Data Agent",             tier: 4, status: "idle",   business_unit: null,              tasks_completed: 41  },
+  { id: "13", slug: "otto",     name: "Otto",     role: "Quality Agent",          tier: 4, status: "idle",   business_unit: null,              tasks_completed: 37  },
 ]
 
 const TIER_CONFIG: Record<number, { label: string; color: string; accent: string }> = {
@@ -48,9 +49,10 @@ const TIER_CONFIG: Record<number, { label: string; color: string; accent: string
 }
 
 const BIZ_LABELS: Record<string, string> = {
-  "lone-star": "Lone Star",
-  "redfox":    "RedFox",
-  "heroes":    "Heroes",
+  "lone-star":      "Lone Star",
+  "redfox":         "RedFox",
+  "heroes":         "Heroes",
+  "from-inception": "From Inception",
 }
 
 type View = "roster" | "map" | "skills"
@@ -61,21 +63,17 @@ export default function AgentsPage() {
   const [selected, setSelected] = useState<Agent | null>(null)
 
   useEffect(() => {
-    if (!supabase) return
+    if (!supabase) { console.log("[v0] supabase client is null"); return }
+    console.log("[v0] fetching mc_agents...")
     supabase
       .from("mc_agents")
-      .select("*")
-      .order("tier")
-      .then(({ data, error }) => {
-        if (error) {
-          console.log("[v0] mc_agents error:", error.message, error.code)
-          return
-        }
+      .select("id, slug, name, role, tier, status, business_unit, last_active, tasks_completed")
+      .then(({ data, error, status: httpStatus }) => {
+        console.log("[v0] mc_agents response — http:", httpStatus, "error:", error?.message ?? "none", "rows:", data?.length ?? 0)
+        if (error) return
         if (data && data.length > 0) {
-          console.log("[v0] mc_agents loaded:", data.length, "agents", data.map((a: any) => a.name))
-          setAgents(data as Agent[])
-        } else {
-          console.log("[v0] mc_agents returned empty — using static fallback")
+          const sorted = [...data].sort((a: any, b: any) => (a.tier ?? 99) - (b.tier ?? 99))
+          setAgents(sorted as Agent[])
         }
       })
   }, [])
