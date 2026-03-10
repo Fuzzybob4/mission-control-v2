@@ -100,17 +100,11 @@ export default function MissionControl() {
           <div className="flex items-start justify-between mb-4 lg:mb-6">
             <div>
               <h1 className="text-xl lg:text-2xl font-bold text-white">{TAB_TITLES[activeTab]}</h1>
-              <p className="text-xs lg:text-sm text-gray-400 mt-1">
-                Kal Mission Control
-              </p>
+              <p className="text-xs lg:text-sm text-gray-400 mt-1">Kal Mission Control</p>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 lg:gap-3 flex-shrink-0">
               <ClockWidget />
-              <ConnectionStatus 
-                onRefresh={() => {
-                  info("Refreshing", "Syncing latest data...")
-                }}
-              />
+              <ConnectionStatus onRefresh={() => info("Refreshing", "Syncing latest data...")} />
               <Link
                 href="/skills"
                 className="hidden lg:inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-white/10 text-xs text-gray-300 hover:text-white hover:border-white/30 transition-colors"

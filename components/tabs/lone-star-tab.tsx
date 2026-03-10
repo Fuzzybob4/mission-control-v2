@@ -73,7 +73,7 @@ export function LoneStarTab() {
   return (
     <div className="space-y-6 animate-fade-in-up">
       {/* Time Filter */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-lg bg-amber-500/20">
             <Lightbulb className="w-5 h-5 text-amber-400" />

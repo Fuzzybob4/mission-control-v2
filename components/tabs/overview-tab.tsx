@@ -130,39 +130,41 @@ export function OverviewTab({ onNavigate }: { onNavigate?: (tab: string) => void
     <div className="space-y-5 animate-fade-in-up">
 
       {/* ── Row 1: Hero Stat Chips ──────────────────────────────────────────── */}
-      <div className="flex flex-wrap items-end gap-x-8 gap-y-4 pb-2 border-b border-white/[0.06]">
-        <StatChip
-          label="Total Revenue"
-          value="$20,021"
-          color="bg-amber-500/20 border-amber-500/30 text-amber-300"
-          barPct={33}
-        />
-        <StatChip
-          label="Goal Progress — $60,000"
-          value={`${GOAL_PCT}%`}
-          color="bg-white/[0.06] border-white/10 text-white"
-          barPct={GOAL_PCT}
-        />
-        <StatChip
-          label="Pipeline Value"
-          value="$18,000"
-          color="bg-blue-500/15 border-blue-500/25 text-blue-300"
-        />
-        <StatChip
-          label="Businesses Active"
-          value="1 of 4"
-          color="bg-white/[0.06] border-white/10 text-gray-300"
-        />
+      <div className="flex flex-col gap-4 pb-2 border-b border-white/[0.06] sm:flex-row sm:flex-wrap sm:items-end sm:gap-x-8 sm:gap-y-4">
+        <div className="grid grid-cols-2 gap-3 sm:contents">
+          <StatChip
+            label="Total Revenue"
+            value="$20,021"
+            color="bg-amber-500/20 border-amber-500/30 text-amber-300"
+            barPct={33}
+          />
+          <StatChip
+            label="Goal Progress — $60,000"
+            value={`${GOAL_PCT}%`}
+            color="bg-white/[0.06] border-white/10 text-white"
+            barPct={GOAL_PCT}
+          />
+          <StatChip
+            label="Pipeline Value"
+            value="$18,000"
+            color="bg-blue-500/15 border-blue-500/25 text-blue-300"
+          />
+          <StatChip
+            label="Businesses Active"
+            value="1 of 4"
+            color="bg-white/[0.06] border-white/10 text-gray-300"
+          />
+        </div>
 
-        {/* Big numbers — far right */}
-        <div className="ml-auto flex items-end gap-8">
+        {/* Big numbers */}
+        <div className="flex items-end gap-6 sm:gap-8 sm:ml-auto">
           {[
             { n: "1", label: "Active Biz" },
             { n: "4",  label: "Total Agents" },
             { n: "3",  label: "Projects" },
           ].map(({ n, label }) => (
             <div key={label} className="text-right">
-              <p className="text-4xl font-bold text-white leading-none">{n}</p>
+              <p className="text-3xl sm:text-4xl font-bold text-white leading-none">{n}</p>
               <p className="text-[11px] text-gray-500 mt-1">{label}</p>
             </div>
           ))}
