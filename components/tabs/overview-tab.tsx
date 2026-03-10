@@ -138,7 +138,7 @@ export function OverviewTab({ onNavigate }: { onNavigate?: (tab: string) => void
           barPct={33}
         />
         <StatChip
-          label="Goal Progress"
+          label="Goal Progress — $60,000"
           value={`${GOAL_PCT}%`}
           color="bg-white/[0.06] border-white/10 text-white"
           barPct={GOAL_PCT}
