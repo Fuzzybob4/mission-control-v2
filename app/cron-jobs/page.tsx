@@ -163,14 +163,18 @@ export default function CronJobsPage() {
 
   useEffect(() => {
     if (!supabase) { setLoading(false); return }
-    supabase
-      .from("cron_jobs")
-      .select("*")
-      .order("name")
-      .then(({ data, error }) => {
+    const load = async () => {
+      try {
+        const { data, error } = await supabase!
+          .from("cron_jobs")
+          .select("*")
+          .order("name")
         if (!error && data && data.length > 0) setJobs(data as CronJob[])
-      })
-      .finally(() => setLoading(false))
+      } finally {
+        setLoading(false)
+      }
+    }
+    load()
   }, [])
 
   const bizOptions = ["all", "lone-star", "redfox", "heroes", "from-inception", "shared"]
