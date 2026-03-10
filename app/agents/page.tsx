@@ -6,11 +6,21 @@ import { supabase } from "@/lib/supabase"
 import { GlassCard } from "@/components/ui/glass-card"
 import { StatusBadge } from "@/components/ui/status-badge"
 import { SkillRegistry } from "@/components/skill-registry"
-import { AgentNetwork } from "@/components/agents"
 import {
   Bot, Wrench, Network, ArrowLeft,
   Cpu, ChevronRight, Activity, Zap, CheckCircle2, X, Clock
 } from "lucide-react"
+
+function AgentNetworkPlaceholder() {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.03] h-96 flex items-center justify-center">
+      <div className="text-center space-y-2">
+        <Network className="w-8 h-8 text-gray-600 mx-auto" />
+        <p className="text-sm text-gray-400">Live Map coming soon</p>
+      </div>
+    </div>
+  )
+}
 import { cn } from "@/lib/utils"
 
 interface Agent {
@@ -179,7 +189,7 @@ export default function AgentsPage() {
         {view === "skills" ? (
           <SkillRegistry />
         ) : view === "map" ? (
-          <AgentNetwork />
+          <AgentNetworkPlaceholder />
         ) : (
           <div className={cn("flex gap-6", selected ? "items-start" : "")}>
 
