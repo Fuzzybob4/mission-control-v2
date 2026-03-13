@@ -17,7 +17,7 @@ Run these SQL scripts in the Supabase SQL Editor in order (skip 000 unless you n
 
 ## Tables Created
 
-- `mc_agents` – 13-agent hierarchy (Atlas, Vera, Iris, etc.)
+- `mc_agents` – 13-agent hierarchy (Atlas, Nova, Vera, Iris, Scarlett, and specialists)
 - `mc_leads` – Customer leads with the Alora Hess sample
 - `mc_events` – Activity feed for heartbeat logging
 - `mc_tasks` – Task assignments with priorities and due dates

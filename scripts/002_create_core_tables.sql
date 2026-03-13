@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS mc_agents (
 
 INSERT INTO mc_agents (id, name, role, tier, status, description) VALUES 
   ('atlas', 'Atlas', 'Executive Coordinator', 1, 'active', 'Executive coordinator managing all business operations'),
+  ('nova', 'Nova', 'From Inception Lead', 2, 'active', 'Web agency pipeline and client delivery'),
   ('vera', 'Vera', 'Lone Star Lead', 2, 'active', 'Holiday lighting business operations'),
   ('iris', 'Iris', 'RedFox Lead', 2, 'active', 'CRM SaaS development'),
   ('scarlett', 'Scarlett', 'Heroes Lead', 2, 'active', 'Trading card marketplace'),

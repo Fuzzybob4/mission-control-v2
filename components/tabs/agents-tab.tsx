@@ -20,17 +20,18 @@ interface Agent {
 
 const STATIC_AGENTS: Agent[] = [
   { id: '1', slug: 'atlas',    name: 'Atlas',    role: 'Executive Coordinator', tier: 1, status: 'active', business_unit: null },
-  { id: '2', slug: 'vera',     name: 'Vera',     role: 'Lone Star Lead',        tier: 2, status: 'active', business_unit: 'lone-star' },
-  { id: '3', slug: 'iris',     name: 'Iris',     role: 'RedFox Lead',           tier: 2, status: 'active', business_unit: 'redfox' },
-  { id: '4', slug: 'scarlett', name: 'Scarlett', role: 'Heroes Lead',           tier: 2, status: 'active', business_unit: 'heroes' },
-  { id: '5', slug: 'ruby',     name: 'Ruby',     role: 'Sales Specialist',      tier: 3, status: 'idle',   business_unit: null },
-  { id: '6', slug: 'sierra',   name: 'Sierra',   role: 'Marketing Specialist',  tier: 3, status: 'idle',   business_unit: null },
-  { id: '7', slug: 'scout',    name: 'Scout',    role: 'Research Specialist',   tier: 3, status: 'idle',   business_unit: null },
-  { id: '8', slug: 'maverick', name: 'Maverick', role: 'DevOps Specialist',     tier: 3, status: 'idle',   business_unit: null },
-  { id: '9', slug: 'barnes',   name: 'Barnes',   role: 'Documentation Agent',   tier: 4, status: 'idle',   business_unit: null },
-  { id: '10', slug: 'pax',     name: 'Pax',      role: 'Communications Agent',  tier: 4, status: 'idle',   business_unit: null },
-  { id: '11', slug: 'otis',    name: 'Otis',     role: 'Data Agent',            tier: 4, status: 'idle',   business_unit: null },
-  { id: '12', slug: 'otto',    name: 'Otto',     role: 'Quality Agent',         tier: 4, status: 'idle',   business_unit: null },
+  { id: '2', slug: 'nova',     name: 'Nova',     role: 'From Inception Lead',   tier: 2, status: 'active', business_unit: 'from-inception' },
+  { id: '3', slug: 'vera',     name: 'Vera',     role: 'Lone Star Lead',        tier: 2, status: 'active', business_unit: 'lone-star' },
+  { id: '4', slug: 'iris',     name: 'Iris',     role: 'RedFox Lead',           tier: 2, status: 'active', business_unit: 'redfox' },
+  { id: '5', slug: 'scarlett', name: 'Scarlett', role: 'Heroes Lead',           tier: 2, status: 'active', business_unit: 'heroes' },
+  { id: '6', slug: 'ruby',     name: 'Ruby',     role: 'Sales Specialist',      tier: 3, status: 'idle',   business_unit: null },
+  { id: '7', slug: 'sierra',   name: 'Sierra',   role: 'Marketing Specialist',  tier: 3, status: 'idle',   business_unit: null },
+  { id: '8', slug: 'scout',    name: 'Scout',    role: 'Research Specialist',   tier: 3, status: 'idle',   business_unit: null },
+  { id: '9', slug: 'maverick', name: 'Maverick', role: 'DevOps Specialist',     tier: 3, status: 'idle',   business_unit: null },
+  { id: '10', slug: 'barnes',  name: 'Barnes',   role: 'Documentation Agent',   tier: 4, status: 'idle',   business_unit: null },
+  { id: '11', slug: 'pax',     name: 'Pax',      role: 'Communications Agent',  tier: 4, status: 'idle',   business_unit: null },
+  { id: '12', slug: 'otis',    name: 'Otis',     role: 'Data Agent',            tier: 4, status: 'idle',   business_unit: null },
+  { id: '13', slug: 'otto',    name: 'Otto',     role: 'Quality Agent',         tier: 4, status: 'idle',   business_unit: null },
 ]
 
 type AgentsView = "network" | "map" | "skills"

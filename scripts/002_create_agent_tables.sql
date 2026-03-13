@@ -45,7 +45,8 @@ CREATE POLICY IF NOT EXISTS "service_role_agent_tasks"
 
 -- Seed initial agent roster
 INSERT INTO agents (slug, name, role, tier, status, business_unit) VALUES
-  ('atlas',    'Atlas',    'Executive Coordinator',  1, 'active', NULL),
+  ('atlas',    'Atlas',    'Executive Coordinator',   1, 'active', NULL),
+  ('nova',     'Nova',     'From Inception Lead',     2, 'active', 'from-inception'),
   ('vera',     'Vera',     'Lone Star Lead',          2, 'active', 'lone-star'),
   ('iris',     'Iris',     'RedFox Lead',             2, 'active', 'redfox'),
   ('scarlett', 'Scarlett', 'Heroes Lead',             2, 'active', 'heroes'),
