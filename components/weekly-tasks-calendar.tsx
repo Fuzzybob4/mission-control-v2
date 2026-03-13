@@ -189,7 +189,7 @@ export function WeeklyTasksCalendar() {
           setUsingFallback(false)
         }
       })
-      .finally(() => setLoading(false))
+      .then(() => setLoading(false), () => setLoading(false))
   }, [weekOffset])
 
   const filtered = useMemo(() => (

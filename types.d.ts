@@ -44,3 +44,25 @@ export type PendingSkillRecord = {
 }
 
 export type PendingSkillAction = "approve" | "deny"
+
+export type ColdOutreachRecord = {
+  id: string
+  business_name: string
+  contact_email: string | null
+  website: string | null
+  draft_subject: string
+  draft_body: string
+  brand: "from_inception" | "lone_star_lighting"
+  sender_email: string
+  status: "pending" | "approved" | "denied" | "sent" | string
+  source_file: string | null
+  source_generated_at: string | null
+  notes: string | null
+  approved_at: string | null
+  denied_at: string | null
+  sent_at: string | null
+  send_status: "not_sent" | "ready" | "stubbed" | "sent" | "failed" | string
+  send_error: string | null
+  created_at: string | null
+  updated_at: string | null
+}
