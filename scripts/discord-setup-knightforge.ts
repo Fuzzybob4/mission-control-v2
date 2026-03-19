@@ -39,6 +39,7 @@ const channels: ChannelSpec[] = [
   { name: 'kpis-dashboard', type: 0, parentName: 'EXECUTIVE / STRATEGY', topic: 'Revenue targets, weekly numbers, and company breakdowns.', private: true },
   { name: 'active-projects', type: 0, parentName: 'EXECUTIVE / STRATEGY', topic: 'What is being built right now and status updates.', private: true },
   { name: 'ideas-pipeline', type: 0, parentName: 'EXECUTIVE / STRATEGY', topic: 'Raw ideas, future acquisitions, monetization plays.', private: true },
+  { name: 'potential-acquisitions', type: 0, parentName: 'EXECUTIVE / STRATEGY', topic: 'Targets, diligence notes, and acquisition opportunities.', private: true },
 
   { name: 'KNIGHTFORGE | LONE STAR LIGHTING', type: 4 },
   { name: 'overview', type: 0, parentName: 'KNIGHTFORGE | LONE STAR LIGHTING', topic: 'Lone Star Lighting overview.' },
