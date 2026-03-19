@@ -61,11 +61,12 @@ const channels: ChannelSpec[] = [
   { name: 'website-builds', type: 0, parentName: 'KNIGHTFORGE | FROMINCEPTION', topic: 'Website builds and launch work.' },
   { name: 'templates-systems', type: 0, parentName: 'KNIGHTFORGE | FROMINCEPTION', topic: 'Reusable templates and systems.' },
 
-  { name: 'KNIGHTFORGE | RENTALS (VRBO/AIRBNB)', type: 4 },
-  { name: 'bookings', type: 0, parentName: 'KNIGHTFORGE | RENTALS (VRBO/AIRBNB)', topic: 'Bookings and occupancy flow.' },
-  { name: 'guest-comms', type: 0, parentName: 'KNIGHTFORGE | RENTALS (VRBO/AIRBNB)', topic: 'Guest communications.' },
-  { name: 'cleaning-turnover', type: 0, parentName: 'KNIGHTFORGE | RENTALS (VRBO/AIRBNB)', topic: 'Cleaning, turnover, and prep.' },
-  { name: 'property-improvements', type: 0, parentName: 'KNIGHTFORGE | RENTALS (VRBO/AIRBNB)', topic: 'Property improvements and upgrades.' },
+  { name: 'KNIGHTFORGE | HEROES OF THE META', type: 4 },
+  { name: 'overview', type: 0, parentName: 'KNIGHTFORGE | HEROES OF THE META', topic: 'Business overview, positioning, systems, and operating notes for Heroes of the Meta.' },
+  { name: 'inventory', type: 0, parentName: 'KNIGHTFORGE | HEROES OF THE META', topic: 'Inventory planning, sourcing, and stock status.' },
+  { name: 'sales-orders', type: 0, parentName: 'KNIGHTFORGE | HEROES OF THE META', topic: 'Sales, orders, and fulfillment coordination.' },
+  { name: 'market-watch', type: 0, parentName: 'KNIGHTFORGE | HEROES OF THE META', topic: 'Card trends, pricing, and market intelligence.' },
+  { name: 'marketing-content', type: 0, parentName: 'KNIGHTFORGE | HEROES OF THE META', topic: 'Content, promos, and audience growth ideas.' },
 
   { name: 'AUTOMATION + AI (KAL ZONE)', type: 4 },
   { name: 'kal-control-center', type: 0, parentName: 'AUTOMATION + AI (KAL ZONE)', topic: 'Commands, prompts, and system instructions.' },
