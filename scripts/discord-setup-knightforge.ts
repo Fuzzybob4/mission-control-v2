@@ -49,6 +49,7 @@ const channels: ChannelSpec[] = [
   { name: 'marketing', type: 0, parentName: 'KNIGHTFORGE | LONE STAR LIGHTING', topic: 'Marketing for Lone Star Lighting.' },
 
   { name: 'KNIGHTFORGE | REDFOX CRM', type: 4 },
+  { name: 'overview', type: 0, parentName: 'KNIGHTFORGE | REDFOX CRM', topic: 'Business overview, positioning, systems, and operating notes for RedFox CRM.' },
   { name: 'product-dev', type: 0, parentName: 'KNIGHTFORGE | REDFOX CRM', topic: 'Product development for RedFox CRM.' },
   { name: 'bugs-issues', type: 0, parentName: 'KNIGHTFORGE | REDFOX CRM', topic: 'Bug reports and issue triage.' },
   { name: 'feature-requests', type: 0, parentName: 'KNIGHTFORGE | REDFOX CRM', topic: 'Feature requests and customer asks.' },
@@ -56,6 +57,7 @@ const channels: ChannelSpec[] = [
   { name: 'stripe-billing', type: 0, parentName: 'KNIGHTFORGE | REDFOX CRM', topic: 'Stripe billing, subscriptions, and payment events.' },
 
   { name: 'KNIGHTFORGE | FROMINCEPTION', type: 4 },
+  { name: 'overview', type: 0, parentName: 'KNIGHTFORGE | FROMINCEPTION', topic: 'Business overview, positioning, systems, and operating notes for FromInception.' },
   { name: 'client-projects', type: 0, parentName: 'KNIGHTFORGE | FROMINCEPTION', topic: 'Client projects and status.' },
   { name: 'design-assets', type: 0, parentName: 'KNIGHTFORGE | FROMINCEPTION', topic: 'Design assets and creative files.' },
   { name: 'website-builds', type: 0, parentName: 'KNIGHTFORGE | FROMINCEPTION', topic: 'Website builds and launch work.' },
