@@ -27,6 +27,7 @@ const BUSINESS_UNITS = [
   { id: "redfox",         label: "RedFox CRM",         color: "#f87171", abbr: "RF" },
   { id: "heroes",         label: "Heroes of the Meta", color: "#a78bfa", abbr: "HM" },
   { id: "from-inception", label: "From Inception",     color: "#34d399", abbr: "FI" },
+  { id: "knightforge",    label: "KnightForge Holdings", color: "#8b5cf6", abbr: "KF" },
   { id: "agents",         label: "Agent Network",      color: "#60a5fa", abbr: "AN" },
 ]
 
