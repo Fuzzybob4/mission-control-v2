@@ -19,9 +19,16 @@ interface ServiceEntry {
   account: string
 }
 
+interface BusinessUnit {
+  id: string
+  label: string
+  color: string
+  abbr: string
+}
+
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const BUSINESS_UNITS = [
+const DEFAULT_BUSINESS_UNITS: BusinessUnit[] = [
   { id: "general",        label: "General / Shared",   color: "#94a3b8", abbr: "GS" },
   { id: "lone-star",      label: "Lone Star Lighting", color: "#fbbf24", abbr: "LS" },
   { id: "redfox",         label: "RedFox CRM",         color: "#f87171", abbr: "RF" },
@@ -30,6 +37,49 @@ const BUSINESS_UNITS = [
   { id: "knightforge",    label: "KnightForge Holdings", color: "#8b5cf6", abbr: "KF" },
   { id: "agents",         label: "Agent Network",      color: "#60a5fa", abbr: "AN" },
 ]
+
+const BUSINESS_STORAGE_KEY = "mission-control-vault-businesses-v1"
+const BUSINESS_COLORS = ["#60a5fa", "#34d399", "#fbbf24", "#f87171", "#a78bfa", "#f472b6", "#22d3ee", "#fb923c"]
+
+function slugifyBusinessName(value: string) {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+}
+
+function getBusinessAbbr(value: string) {
+  const words = value.trim().split(/\s+/).filter(Boolean)
+  if (words.length === 0) return "BU"
+  if (words.length === 1) return words[0].slice(0, 2).toUpperCase()
+  return words.slice(0, 2).map(word => word[0]).join("").toUpperCase()
+}
+
+function loadBusinessUnits(): BusinessUnit[] {
+  if (typeof window === "undefined") return DEFAULT_BUSINESS_UNITS
+
+  try {
+    const raw = window.localStorage.getItem(BUSINESS_STORAGE_KEY)
+    if (!raw) return DEFAULT_BUSINESS_UNITS
+    const parsed = JSON.parse(raw) as BusinessUnit[]
+    if (!Array.isArray(parsed) || parsed.length === 0) return DEFAULT_BUSINESS_UNITS
+
+    const merged = [...DEFAULT_BUSINESS_UNITS]
+    for (const business of parsed) {
+      if (!business?.id || merged.some(existing => existing.id === business.id)) continue
+      merged.push(business)
+    }
+    return merged
+  } catch {
+    return DEFAULT_BUSINESS_UNITS
+  }
+}
+
+function saveBusinessUnits(units: BusinessUnit[]) {
+  if (typeof window === "undefined") return
+  window.localStorage.setItem(BUSINESS_STORAGE_KEY, JSON.stringify(units))
+}
 
 // Known service icons (text-based to avoid emoji rendering issues)
 const SERVICE_ICONS: Record<string, string> = {
@@ -480,7 +530,7 @@ const ServiceDetail: React.FC<{
 // ─── Business Vault View ───────────────────────────────────────────────────────
 
 const BusinessVault: React.FC<{
-  business: typeof BUSINESS_UNITS[0]
+  business: BusinessUnit
   onBack: () => void
 }> = ({ business, onBack }) => {
   const [services, setServices] = useState<ServiceEntry[]>([])
@@ -597,11 +647,72 @@ const BusinessVault: React.FC<{
 
 // ─── Main Browser ──────────────────────────────────────────────────────────────
 
+const AddBusinessForm: React.FC<{
+  existingBusinesses: BusinessUnit[]
+  onSaved: (business: BusinessUnit) => void
+  onCancel: () => void
+}> = ({ existingBusinesses, onSaved, onCancel }) => {
+  const [businessName, setBusinessName] = useState("")
+  const [error, setError] = useState("")
+
+  const handleSave = () => {
+    const trimmed = businessName.trim()
+    if (!trimmed) {
+      setError("Enter a business name")
+      return
+    }
+
+    const id = slugifyBusinessName(trimmed)
+    if (!id) {
+      setError("Enter a valid business name")
+      return
+    }
+
+    if (existingBusinesses.some(business => business.id === id || business.label.toLowerCase() === trimmed.toLowerCase())) {
+      setError("That business already exists")
+      return
+    }
+
+    const business: BusinessUnit = {
+      id,
+      label: trimmed,
+      abbr: getBusinessAbbr(trimmed),
+      color: BUSINESS_COLORS[existingBusinesses.length % BUSINESS_COLORS.length],
+    }
+
+    onSaved(business)
+  }
+
+  return (
+    <div className="add-key-form">
+      <h4>Add New Business</h4>
+      <div className="form-group">
+        <label>Business Name</label>
+        <input
+          type="text"
+          value={businessName}
+          onChange={e => setBusinessName(e.target.value)}
+          placeholder="e.g. KnightForge Holdings"
+          autoFocus
+        />
+      </div>
+      {error && <div className="message error">{error}</div>}
+      <div className="form-actions">
+        <button className="btn-save" onClick={handleSave}>Add Business</button>
+        <button className="btn-cancel" onClick={onCancel}>Cancel</button>
+      </div>
+    </div>
+  )
+}
+
 const CredentialBrowser: React.FC = () => {
-  const [selectedBusiness, setSelectedBusiness] = useState<typeof BUSINESS_UNITS[0] | null>(null)
+  const [businessUnits, setBusinessUnits] = useState<BusinessUnit[]>(DEFAULT_BUSINESS_UNITS)
+  const [selectedBusiness, setSelectedBusiness] = useState<BusinessUnit | null>(null)
   const [sessionExpiry, setSessionExpiry] = useState<Date | null>(null)
+  const [showAddBusiness, setShowAddBusiness] = useState(false)
 
   useEffect(() => {
+    setBusinessUnits(loadBusinessUnits())
     setSessionExpiry(vaultClient.getSessionExpiry())
     const unsub = vaultClient.subscribe(() => setSessionExpiry(vaultClient.getSessionExpiry()))
     return () => { unsub() }
@@ -609,6 +720,16 @@ const CredentialBrowser: React.FC = () => {
 
   const handleLock = async () => {
     await vaultClient.lock()
+  }
+
+  const handleAddBusiness = (business: BusinessUnit) => {
+    setBusinessUnits(prev => {
+      const next = [...prev, business]
+      saveBusinessUnits(next)
+      return next
+    })
+    setSelectedBusiness(business)
+    setShowAddBusiness(false)
   }
 
   if (selectedBusiness) {
@@ -645,8 +766,22 @@ const CredentialBrowser: React.FC = () => {
         <p>Click a business to manage its credentials</p>
       </div>
 
+      {showAddBusiness && (
+        <AddBusinessForm
+          existingBusinesses={businessUnits}
+          onSaved={handleAddBusiness}
+          onCancel={() => setShowAddBusiness(false)}
+        />
+      )}
+
+      <div className="services-grid" style={{ marginBottom: "1rem" }}>
+        <button className="btn-add-service-empty" onClick={() => setShowAddBusiness(true)}>
+          Add New Business
+        </button>
+      </div>
+
       <div className="biz-grid">
-        {BUSINESS_UNITS.map(biz => (
+        {businessUnits.map(biz => (
           <button
             key={biz.id}
             className="biz-card"
