@@ -32,6 +32,7 @@ const channels: ChannelSpec[] = [
   { name: 'CORE FOUNDATION', type: 4 },
   { name: 'welcome', type: 0, parentName: 'CORE FOUNDATION', topic: 'Brand intro, KnightForge vision, and mission.' },
   { name: 'rules', type: 0, parentName: 'CORE FOUNDATION', topic: 'Operator-room rules: tight, professional, no fluff, no spam.' },
+  { name: 'skills', type: 0, parentName: 'CORE FOUNDATION', topic: 'Registry of KnightForge operating skills, automations, and reusable playbooks.' },
   { name: 'announcements', type: 0, parentName: 'CORE FOUNDATION', topic: 'Big moves only: new ventures, revenue milestones, launches.' },
 
   { name: 'EXECUTIVE / STRATEGY', type: 4, private: true },
