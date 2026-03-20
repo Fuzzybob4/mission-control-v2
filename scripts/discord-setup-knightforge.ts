@@ -43,6 +43,8 @@ const channels: ChannelSpec[] = [
 
   { name: 'KNIGHTFORGE | LONE STAR LIGHTING', type: 4 },
   { name: 'overview', type: 0, parentName: 'KNIGHTFORGE | LONE STAR LIGHTING', topic: 'Lone Star Lighting overview.' },
+  { name: 'branding-admin', type: 0, parentName: 'KNIGHTFORGE | LONE STAR LIGHTING', topic: 'Admin-only brand vault: logo, favicon, colors, fonts, themes, and brand rules.', private: true },
+  { name: 'vendors-suppliers', type: 0, parentName: 'KNIGHTFORGE | LONE STAR LIGHTING', topic: 'Vendor, supplier, and sourcing relationships for Lone Star Lighting.' },
   { name: 'leads-sales', type: 0, parentName: 'KNIGHTFORGE | LONE STAR LIGHTING', topic: 'Leads and sales activity for Lone Star Lighting.' },
   { name: 'projects-installations', type: 0, parentName: 'KNIGHTFORGE | LONE STAR LIGHTING', topic: 'Project execution and installation updates.' },
   { name: 'customer-communication', type: 0, parentName: 'KNIGHTFORGE | LONE STAR LIGHTING', topic: 'Customer communication and support.' },
@@ -50,6 +52,8 @@ const channels: ChannelSpec[] = [
 
   { name: 'KNIGHTFORGE | REDFOX CRM', type: 4 },
   { name: 'overview', type: 0, parentName: 'KNIGHTFORGE | REDFOX CRM', topic: 'Business overview, positioning, systems, and operating notes for RedFox CRM.' },
+  { name: 'branding-admin', type: 0, parentName: 'KNIGHTFORGE | REDFOX CRM', topic: 'Admin-only brand vault: logo, favicon, colors, fonts, themes, and brand rules.', private: true },
+  { name: 'vendors-suppliers', type: 0, parentName: 'KNIGHTFORGE | REDFOX CRM', topic: 'Vendors, partners, software providers, and supporting suppliers for RedFox CRM.' },
   { name: 'product-dev', type: 0, parentName: 'KNIGHTFORGE | REDFOX CRM', topic: 'Product development for RedFox CRM.' },
   { name: 'bugs-issues', type: 0, parentName: 'KNIGHTFORGE | REDFOX CRM', topic: 'Bug reports and issue triage.' },
   { name: 'feature-requests', type: 0, parentName: 'KNIGHTFORGE | REDFOX CRM', topic: 'Feature requests and customer asks.' },
@@ -58,6 +62,8 @@ const channels: ChannelSpec[] = [
 
   { name: 'KNIGHTFORGE | FROMINCEPTION', type: 4 },
   { name: 'overview', type: 0, parentName: 'KNIGHTFORGE | FROMINCEPTION', topic: 'Business overview, positioning, systems, and operating notes for FromInception.' },
+  { name: 'branding-admin', type: 0, parentName: 'KNIGHTFORGE | FROMINCEPTION', topic: 'Admin-only brand vault: logo, favicon, colors, fonts, themes, and brand rules.', private: true },
+  { name: 'vendors-suppliers', type: 0, parentName: 'KNIGHTFORGE | FROMINCEPTION', topic: 'Vendors, contractors, and supplier relationships for From Inception.' },
   { name: 'client-projects', type: 0, parentName: 'KNIGHTFORGE | FROMINCEPTION', topic: 'Client projects and status.' },
   { name: 'design-assets', type: 0, parentName: 'KNIGHTFORGE | FROMINCEPTION', topic: 'Design assets and creative files.' },
   { name: 'website-builds', type: 0, parentName: 'KNIGHTFORGE | FROMINCEPTION', topic: 'Website builds and launch work.' },
@@ -65,6 +71,8 @@ const channels: ChannelSpec[] = [
 
   { name: 'KNIGHTFORGE | HEROES OF THE META', type: 4 },
   { name: 'overview', type: 0, parentName: 'KNIGHTFORGE | HEROES OF THE META', topic: 'Business overview, positioning, systems, and operating notes for Heroes of the Meta.' },
+  { name: 'branding-admin', type: 0, parentName: 'KNIGHTFORGE | HEROES OF THE META', topic: 'Admin-only brand vault: logo, favicon, colors, fonts, themes, and brand rules.', private: true },
+  { name: 'vendors-suppliers', type: 0, parentName: 'KNIGHTFORGE | HEROES OF THE META', topic: 'Vendors, distributors, and supplier relationships for Heroes of the Meta.' },
   { name: 'inventory', type: 0, parentName: 'KNIGHTFORGE | HEROES OF THE META', topic: 'Inventory planning, sourcing, and stock status.' },
   { name: 'sales-orders', type: 0, parentName: 'KNIGHTFORGE | HEROES OF THE META', topic: 'Sales, orders, and fulfillment coordination.' },
   { name: 'market-watch', type: 0, parentName: 'KNIGHTFORGE | HEROES OF THE META', topic: 'Card trends, pricing, and market intelligence.' },
