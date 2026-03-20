@@ -115,6 +115,7 @@ async function main() {
   console.log(`[discord-bridge] online as ${me.username} (${botUserId})`)
 
   const state = loadState()
+  const inFlightChannels = new Set<string>()
 
   while (true) {
     try {
@@ -136,47 +137,61 @@ async function main() {
       }
 
       for (const channel of watched) {
+        if (inFlightChannels.has(channel.id)) continue
+
         const after = state.lastSeenByChannel[channel.id]
         const query = after ? `?limit=20&after=${after}` : '?limit=5'
         const msgs = await api('GET', `/channels/${channel.id}/messages${query}`, token)
         const ordered = [...msgs].reverse()
+        const nextMsg = ordered.find((msg: any) => {
+          if (!msg.author || msg.author.id === botUserId || msg.author.bot) return false
+          if (typeof msg.content !== 'string' || !msg.content.trim()) return false
+          const cleaned = msg.content.replace(new RegExp(`<@!?${botUserId}>`, 'g'), '').trim()
+          return Boolean(cleaned)
+        })
 
-        for (const msg of ordered) {
-          state.lastSeenByChannel[channel.id] = msg.id
+        if (!nextMsg) {
+          for (const msg of ordered) {
+            state.lastSeenByChannel[channel.id] = msg.id
+          }
+          if (ordered.length) saveState(state)
+          continue
+        }
+
+        inFlightChannels.add(channel.id)
+        try {
+          state.lastSeenByChannel[channel.id] = nextMsg.id
           saveState(state)
 
-          if (!msg.author || msg.author.id === botUserId || msg.author.bot) continue
-          if (typeof msg.content !== 'string' || !msg.content.trim()) continue
-
-          const cleaned = msg.content.replace(new RegExp(`<@!?${botUserId}>`, 'g'), '').trim()
-          if (!cleaned) continue
-
+          const cleaned = nextMsg.content.replace(new RegExp(`<@!?${botUserId}>`, 'g'), '').trim()
           const prompt = buildPrompt({
             categoryName: channel.parentName,
             channelName: channel.name,
-            authorName: msg.author.global_name || msg.author.username || 'User',
+            authorName: nextMsg.author.global_name || nextMsg.author.username || 'User',
             content: cleaned,
           })
 
-          console.log(`[discord-bridge] ${channel.parentName}/#${channel.name} <${msg.author.username}> ${cleaned}`)
+          console.log(`[discord-bridge] ${channel.parentName}/#${channel.name} <${nextMsg.author.username}> ${cleaned}`)
 
           let reply = ''
           try {
             reply = await runAgent(`discord-${channel.id}`, prompt)
           } catch (err: any) {
             console.error('[discord-bridge] agent error:', err?.message || err)
-            reply = 'I hit turbulence routing that through the forge. Try me again in a moment.'
+            reply = 'The Discord bridge hit a session lock and dropped this turn. I am patching the relay now — send that once more and I should catch it cleanly.'
           }
 
           await api('POST', `/channels/${channel.id}/messages`, token, {
             content: reply.slice(0, 1900),
             message_reference: {
-              message_id: msg.id,
+              message_id: nextMsg.id,
               channel_id: channel.id,
               guild_id: GUILD_ID,
             },
             allowed_mentions: { parse: [] },
           })
+        } finally {
+          inFlightChannels.delete(channel.id)
         }
       }
     } catch (err: any) {
