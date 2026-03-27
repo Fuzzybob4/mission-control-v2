@@ -5,6 +5,7 @@ import Link from "next/link"
 import dynamic from "next/dynamic"
 import { Sidebar } from "@/components/sidebar"
 import { OverviewTab } from "@/components/tabs/overview-tab"
+import { RevenueCommandTab } from "@/components/tabs/revenue-command-tab"
 import { LoneStarTab } from "@/components/tabs/lone-star-tab"
 import { RedFoxTab } from "@/components/tabs/redfox-tab"
 import { HeroesTab } from "@/components/tabs/heroes-tab"
@@ -31,10 +32,11 @@ const VaultUI = dynamic(
   { ssr: false }
 )
 
-type TabId = "overview" | "lone-star" | "redfox" | "heroes" | "analytics" | "systems" | "vault" | "from-inception"
+type TabId = "overview" | "revenue-command" | "lone-star" | "redfox" | "heroes" | "analytics" | "systems" | "vault" | "from-inception"
 
 const TAB_TITLES: Record<TabId, string> = {
   overview: "Overview",
+  "revenue-command": "Revenue Command",
   "lone-star": "Lone Star Lighting",
   redfox: "RedFox CRM",
   heroes: "Heroes of the Meta",
@@ -44,10 +46,10 @@ const TAB_TITLES: Record<TabId, string> = {
   "from-inception": "From Inception",
 }
 
-const TABS: TabId[] = ["overview", "lone-star", "redfox", "heroes", "analytics", "systems", "vault", "from-inception"]
+const TABS: TabId[] = ["overview", "revenue-command", "lone-star", "redfox", "heroes", "analytics", "systems", "vault", "from-inception"]
 
 // Only show the quote, heartbeat, and notifications on top-level dashboard tabs
-const DASHBOARD_TABS: TabId[] = ["overview", "analytics", "systems"]
+const DASHBOARD_TABS: TabId[] = ["overview", "revenue-command", "analytics", "systems"]
 
 export default function MissionControl() {
   const [activeTab, setActiveTab] = useState<TabId>("overview")
@@ -63,13 +65,14 @@ export default function MissionControl() {
   // Keyboard shortcuts configuration
   const shortcuts: ShortcutConfig[] = [
     { key: "1", description: "Overview", action: () => switchTab("overview") },
-    { key: "2", description: "Lone Star", action: () => switchTab("lone-star") },
-    { key: "3", description: "RedFox", action: () => switchTab("redfox") },
-    { key: "4", description: "Heroes",    action: () => switchTab("heroes") },
-    { key: "5", description: "Analytics", action: () => switchTab("analytics") },
-    { key: "6", description: "Systems",   action: () => switchTab("systems") },
-    { key: "7", description: "Vault",     action: () => switchTab("vault") },
-    { key: "8", description: "From Inception", action: () => switchTab("from-inception") },
+    { key: "2", description: "Revenue Command", action: () => switchTab("revenue-command") },
+    { key: "3", description: "Lone Star", action: () => switchTab("lone-star") },
+    { key: "4", description: "RedFox", action: () => switchTab("redfox") },
+    { key: "5", description: "Heroes", action: () => switchTab("heroes") },
+    { key: "6", description: "Analytics", action: () => switchTab("analytics") },
+    { key: "7", description: "Systems", action: () => switchTab("systems") },
+    { key: "8", description: "Vault", action: () => switchTab("vault") },
+    { key: "9", description: "From Inception", action: () => switchTab("from-inception") },
     { key: "?", description: "Toggle help", action: () => setShowShortcutsHelp(prev => !prev) },
     { key: "n", description: "New lead", action: () => success("New Lead", "Opening lead creation form...") },
     { key: "t", description: "New task", action: () => success("New Task", "Opening task creation dialog...") },
@@ -130,6 +133,7 @@ export default function MissionControl() {
 
           {/* Tab Content */}
           {activeTab === "overview" && <OverviewTab onNavigate={(tab) => setActiveTab(tab as TabId)} />}
+          {activeTab === "revenue-command" && <RevenueCommandTab />}
           {activeTab === "lone-star" && <LoneStarTab />}
           {activeTab === "redfox" && <RedFoxTab />}
           {activeTab === "heroes" && <HeroesTab />}
