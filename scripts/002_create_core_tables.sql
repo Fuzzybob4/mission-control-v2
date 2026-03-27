@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS mc_leads (
   source TEXT,
   notes TEXT,
   follow_up_date DATE,
-  business_unit TEXT DEFAULT 'lone_star' CHECK (business_unit IN ('lone_star', 'redfox', 'heroes', 'shared')),
+  business_unit TEXT DEFAULT 'lone_star' CHECK (business_unit IN ('lone_star', 'redfox', 'from_inception', 'heroes', 'shared')),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS mc_events (
   source TEXT NOT NULL CHECK (source IN ('atlas', 'agent', 'system', 'user')),
   agent_id TEXT REFERENCES mc_agents(id),
   message TEXT NOT NULL,
-  business_unit TEXT CHECK (business_unit IN ('lone_star', 'redfox', 'heroes', 'shared')),
+  business_unit TEXT CHECK (business_unit IN ('lone_star', 'redfox', 'from_inception', 'heroes', 'shared')),
   timestamp TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS mc_tasks (
   status TEXT DEFAULT 'queued' CHECK (status IN ('queued', 'in_progress', 'completed', 'blocked')),
   priority TEXT DEFAULT 'medium' CHECK (priority IN ('low', 'medium', 'high', 'urgent')),
   assigned_agent_id TEXT REFERENCES mc_agents(id),
-  business_unit TEXT CHECK (business_unit IN ('lone_star', 'redfox', 'heroes', 'shared')),
+  business_unit TEXT CHECK (business_unit IN ('lone_star', 'redfox', 'from_inception', 'heroes', 'shared')),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   due_date TIMESTAMP WITH TIME ZONE
 );
@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS mc_api_costs (
   tokens_in INTEGER DEFAULT 0,
   tokens_out INTEGER DEFAULT 0,
   cost_usd DECIMAL(10,6) DEFAULT 0,
-  business_unit TEXT CHECK (business_unit IN ('lone_star', 'redfox', 'heroes', 'shared')),
+  business_unit TEXT CHECK (business_unit IN ('lone_star', 'redfox', 'from_inception', 'heroes', 'shared')),
   agent_id TEXT REFERENCES mc_agents(id),
   timestamp TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
