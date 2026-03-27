@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Bell, X, CheckCircle, AlertCircle, Info } from "lucide-react"
+import { Bell, CheckCircle, AlertCircle, Info } from "lucide-react"
 import { GlassCard } from "@/components/ui/glass-card"
 import { cn } from "@/lib/utils"
 
@@ -19,38 +19,10 @@ export function NotificationCenter() {
   const [notifications, setNotifications] = useState<Notification[]>([])
   const dropdownRef = useRef<HTMLDivElement>(null)
 
-  // Mock notifications - in production this would come from Supabase
   useEffect(() => {
-    const mockNotifications: Notification[] = [
-      {
-        id: "1",
-        title: "New Lead",
-        message: "Alora Hess sent a follow-up email",
-        type: "info",
-        timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 min ago
-        read: false
-      },
-      {
-        id: "2",
-        title: "Task Completed",
-        message: "Maverick finished v0 deployment fix",
-        type: "success",
-        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
-        read: false
-      },
-      {
-        id: "3",
-        title: "Reminder",
-        message: "Follow up with Alora Hess due in 6 days",
-        type: "warning",
-        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 4), // 4 hours ago
-        read: true
-      }
-    ]
-    setNotifications(mockNotifications)
+    setNotifications([])
   }, [])
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -96,7 +68,6 @@ export function NotificationCenter() {
 
   return (
     <div className="relative" ref={dropdownRef}>
-      {/* Bell Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="relative p-2 rounded-lg hover:bg-white/10 transition-colors"
@@ -109,7 +80,6 @@ export function NotificationCenter() {
         )}
       </button>
 
-      {/* Dropdown */}
       {isOpen && (
         <GlassCard className="absolute right-0 top-full mt-2 w-80 z-50">
           <div className="p-3 border-b border-white/10 flex items-center justify-between">
@@ -127,7 +97,7 @@ export function NotificationCenter() {
           <div className="max-h-80 overflow-y-auto">
             {notifications.length === 0 ? (
               <div className="p-4 text-center text-gray-400 text-sm">
-                No notifications
+                No live notifications yet
               </div>
             ) : (
               notifications.map((notification) => (

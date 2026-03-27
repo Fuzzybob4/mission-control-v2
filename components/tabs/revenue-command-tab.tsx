@@ -7,7 +7,6 @@ import {
   Circle,
   Clock3,
   Crosshair,
-  DollarSign,
   Flame,
   MessageSquare,
   Phone,
@@ -36,53 +35,53 @@ type OfferLane = {
   name: string
   target: number
   committed: number
-  odds: number
+  odds: number | null
   nextMove: string
   color: string
 }
 
 const DAILY_TARGET = 300
 const STRETCH_TARGET = 500
-const BASE_REVENUE = 120
-const LOCKED_REVENUE = 80
-const PIPELINE_REVENUE = 520
+const BASE_REVENUE = 0
+const LOCKED_REVENUE = 0
+const PIPELINE_REVENUE = 0
 
 const EXECUTION_TASKS: ExecutionTask[] = [
   {
     id: "task-1",
-    title: "Text Alora with same-day close window",
-    owner: "Lone Star",
-    value: 180,
+    title: "Text top warm lead",
+    owner: "N/A",
+    value: 0,
     time: "8:15 AM",
     type: "text",
-    note: "Give a tight install slot + soft scarcity. Ask for yes/no, not maybe.",
+    note: "No live pricing data yet — replace once pipeline records are wired.",
   },
   {
     id: "task-2",
-    title: "Call 3 warm lighting leads before 9:00",
-    owner: "Lone Star",
-    value: 240,
+    title: "Call warm leads",
+    owner: "N/A",
+    value: 0,
     time: "8:30 AM",
     type: "call",
-    note: "Target people who already requested pricing. Push deposit collection live on call.",
+    note: "No live lead values yet.",
   },
   {
     id: "task-3",
-    title: "Send 2-page RedFox quick-close offer",
-    owner: "RedFox",
-    value: 125,
+    title: "Send current proposal",
+    owner: "N/A",
+    value: 0,
     time: "9:40 AM",
     type: "proposal",
-    note: "Frame as founding-user pricing that disappears Friday.",
+    note: "Awaiting live proposal/deal records.",
   },
   {
     id: "task-4",
-    title: "Re-open yesterday's silent replies",
-    owner: "From Inception",
-    value: 90,
+    title: "Follow up yesterday's silent replies",
+    owner: "N/A",
+    value: 0,
     time: "10:15 AM",
     type: "follow-up",
-    note: "Use the bump: 'Still want me to reserve this slot for you?'",
+    note: "Awaiting live outreach queue.",
   },
 ]
 
@@ -90,44 +89,44 @@ const OFFER_LANES: OfferLane[] = [
   {
     id: "lane-1",
     name: "Fast Cash Offers",
-    target: 180,
-    committed: 110,
-    odds: 78,
-    nextMove: "Push deposit + booking text to warm install leads.",
+    target: 0,
+    committed: 0,
+    odds: null,
+    nextMove: "N/A until live opportunity records are wired.",
     color: "from-emerald-500/30 to-emerald-400/5",
   },
   {
     id: "lane-2",
     name: "CRM Founding Seats",
-    target: 75,
-    committed: 20,
-    odds: 42,
-    nextMove: "Pitch one annual prepay deal with implementation bonus.",
+    target: 0,
+    committed: 0,
+    odds: null,
+    nextMove: "N/A until live opportunity records are wired.",
     color: "from-sky-500/30 to-sky-400/5",
   },
   {
     id: "lane-3",
     name: "Studio Retainers",
-    target: 45,
-    committed: 10,
-    odds: 35,
-    nextMove: "Offer a 48-hour launch sprint with fixed scope.",
+    target: 0,
+    committed: 0,
+    odds: null,
+    nextMove: "N/A until live opportunity records are wired.",
     color: "from-violet-500/30 to-violet-400/5",
   },
 ]
 
 const HOUR_BLOCKS = [
-  { label: "8A", focus: "Warm lead texts", intensity: 92 },
-  { label: "9A", focus: "Phone closes", intensity: 100 },
-  { label: "10A", focus: "Proposal sends", intensity: 74 },
-  { label: "11A", focus: "Follow-up sweep", intensity: 68 },
-  { label: "12P", focus: "Invoice / collect", intensity: 88 },
+  { label: "8A", focus: "N/A", intensity: 0 },
+  { label: "9A", focus: "N/A", intensity: 0 },
+  { label: "10A", focus: "N/A", intensity: 0 },
+  { label: "11A", focus: "N/A", intensity: 0 },
+  { label: "12P", focus: "N/A", intensity: 0 },
 ]
 
 const SCRIPT_LINES = [
-  "I've got a same-day slot open and can lock your install with a small deposit.",
-  "If we wrap this tonight, I can keep pricing clean and avoid next week's backlog.",
-  "Want me to reserve the spot and send the payment link right now?",
+  "No live script data yet.",
+  "Wire live leads and opportunities to replace this placeholder.",
+  "Use this space for proven close lines once data is flowing.",
 ]
 
 function currency(value: number) {
@@ -165,7 +164,7 @@ export function RevenueCommandTab() {
   const pressure = DAILY_TARGET - projectedRevenue
   const unlockedPipeline = Math.max(0, PIPELINE_REVENUE - completedValue)
 
-  const momentumLabel = pressure <= 0 ? "Target cleared" : pressure <= 60 ? "Within striking distance" : "Hunt mode"
+  const momentumLabel = pressure <= 0 ? "Target cleared" : projectedRevenue === 0 ? "No live revenue data yet" : "Hunt mode"
 
   const toggleTask = (taskId: string) => {
     setCompletedTaskIds((current) =>
@@ -187,7 +186,7 @@ export function RevenueCommandTab() {
               Build {currency(DAILY_TARGET)} before lunch.
             </h2>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-300 md:text-base">
-              This surface is tuned for one thing: converting warm intent into cash tomorrow morning. It turns the board into a revenue ritual — what to hit, in what order, and how close you are to the line.
+              This board is ready for live wiring. Until then, revenue values default to zero instead of fake numbers.
             </p>
 
             <div className="mt-6 grid gap-3 sm:grid-cols-3">
@@ -253,7 +252,7 @@ export function RevenueCommandTab() {
           <div className="flex items-center justify-between gap-3">
             <div>
               <h3 className="text-lg font-semibold text-white">Tomorrow morning kill list</h3>
-              <p className="mt-1 text-sm text-gray-400">Check the box as cash moves closer. The totals above update instantly.</p>
+              <p className="mt-1 text-sm text-gray-400">Non-live revenue items show $0 until wired.</p>
             </div>
             <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-300">
               <Clock3 className="h-3.5 w-3.5" />
@@ -265,34 +264,44 @@ export function RevenueCommandTab() {
             {EXECUTION_TASKS.map((task) => {
               const done = completedTaskIds.includes(task.id)
               const Icon = typeIcon(task.type)
+
               return (
                 <button
                   key={task.id}
+                  type="button"
                   onClick={() => toggleTask(task.id)}
                   className={cn(
-                    "group w-full rounded-2xl border p-4 text-left transition-all",
+                    "w-full rounded-2xl border p-4 text-left transition-all",
                     done
                       ? "border-emerald-400/30 bg-emerald-400/10"
                       : "border-white/10 bg-white/[0.03] hover:border-white/20 hover:bg-white/[0.05]",
                   )}
                 >
                   <div className="flex items-start gap-4">
-                    <div className="mt-0.5 text-white">
-                      {done ? <CheckCircle2 className="h-5 w-5 text-emerald-300" /> : <Circle className="h-5 w-5 text-gray-500" />}
+                    <div className="mt-0.5 text-gray-300">
+                      {done ? <CheckCircle2 className="h-5 w-5 text-emerald-300" /> : <Circle className="h-5 w-5" />}
                     </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-sm font-semibold text-white">{task.title}</span>
-                        <span className="rounded-full border border-white/10 bg-black/20 px-2 py-0.5 text-[10px] uppercase tracking-[0.16em] text-gray-400">{task.owner}</span>
+
+                    <div className="flex-1">
+                      <div className="flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-gray-400">
+                            <Icon className="h-3.5 w-3.5" />
+                            {task.type}
+                            <span className="text-gray-600">•</span>
+                            {task.time}
+                          </div>
+                          <h4 className="mt-2 text-base font-medium text-white">{task.title}</h4>
+                        </div>
+
+                        <div className="text-right">
+                          <p className="text-lg font-semibold text-emerald-300">{currency(task.value)}</p>
+                          <p className="text-xs text-gray-500">Owner: {task.owner}</p>
+                        </div>
                       </div>
-                      <p className="mt-2 text-sm text-gray-400">{task.note}</p>
-                      <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-gray-400">
-                        <span className="inline-flex items-center gap-1.5"><Clock3 className="h-3.5 w-3.5" />{task.time}</span>
-                        <span className="inline-flex items-center gap-1.5"><Icon className="h-3.5 w-3.5" />{task.type}</span>
-                        <span className="inline-flex items-center gap-1.5 text-emerald-300"><DollarSign className="h-3.5 w-3.5" />{currency(task.value)} impact</span>
-                      </div>
+
+                      <p className="mt-3 text-sm text-gray-400">{task.note}</p>
                     </div>
-                    <ArrowRight className="mt-1 h-4 w-4 flex-shrink-0 text-gray-600 transition-transform group-hover:translate-x-1 group-hover:text-gray-300" />
                   </div>
                 </button>
               )
@@ -301,46 +310,58 @@ export function RevenueCommandTab() {
         </GlassCard>
 
         <div className="space-y-4">
-          <GlassCard className="rounded-3xl p-5">
+          <GlassCard className="rounded-3xl p-5 md:p-6">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-white">Offer lanes</h3>
-              <Crosshair className="h-4 w-4 text-amber-300" />
+              <div>
+                <h3 className="text-lg font-semibold text-white">Offer lanes</h3>
+                <p className="mt-1 text-sm text-gray-400">Live deal numbers not wired yet.</p>
+              </div>
+              <Crosshair className="h-5 w-5 text-gray-400" />
             </div>
-            <div className="mt-4 space-y-3">
+
+            <div className="mt-5 space-y-3">
               {OFFER_LANES.map((lane) => (
-                <div key={lane.id} className={cn("rounded-2xl border border-white/10 bg-gradient-to-br p-4", lane.color)}>
-                  <div className="flex items-center justify-between gap-3">
+                <div key={lane.id} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+                  <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="text-sm font-semibold text-white">{lane.name}</p>
-                      <p className="mt-1 text-xs text-gray-300">{lane.nextMove}</p>
+                      <h4 className="text-base font-medium text-white">{lane.name}</h4>
+                      <p className="mt-1 text-sm text-gray-400">{lane.nextMove}</p>
                     </div>
-                    <div className="text-right">
-                      <p className="text-lg font-semibold text-white">{currency(lane.committed)}</p>
-                      <p className="text-[11px] text-gray-400">of {currency(lane.target)}</p>
-                    </div>
+                    <Star className="h-5 w-5 text-amber-300" />
                   </div>
-                  <div className="mt-3">
-                    <div className="mb-2 flex items-center justify-between text-[11px] text-gray-300">
-                      <span>Close odds</span>
-                      <span>{lane.odds}%</span>
+
+                  <div className="mt-4 grid grid-cols-3 gap-3 text-sm">
+                    <div>
+                      <p className="text-[11px] uppercase tracking-[0.18em] text-gray-500">Target</p>
+                      <p className="mt-1 font-semibold text-white">{currency(lane.target)}</p>
                     </div>
-                    <Progress value={lane.committed} max={lane.target} className="h-2.5 bg-black/20 [&>div]:bg-white" />
+                    <div>
+                      <p className="text-[11px] uppercase tracking-[0.18em] text-gray-500">Committed</p>
+                      <p className="mt-1 font-semibold text-white">{currency(lane.committed)}</p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] uppercase tracking-[0.18em] text-gray-500">Odds</p>
+                      <p className="mt-1 font-semibold text-white">{lane.odds === null ? 'N/A' : `${lane.odds}%`}</p>
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
           </GlassCard>
 
-          <GlassCard className="rounded-3xl p-5">
+          <GlassCard className="rounded-3xl p-5 md:p-6">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-white">Closer script</h3>
-              <Star className="h-4 w-4 text-blue-300" />
+              <div>
+                <h3 className="text-lg font-semibold text-white">Closer script cards</h3>
+                <p className="mt-1 text-sm text-gray-400">Use placeholders until live conversation data exists.</p>
+              </div>
+              <Trophy className="h-5 w-5 text-emerald-300" />
             </div>
-            <div className="mt-4 space-y-3">
-              {SCRIPT_LINES.map((line, index) => (
-                <div key={line} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-                  <p className="text-[11px] uppercase tracking-[0.18em] text-gray-500">Line {index + 1}</p>
-                  <p className="mt-2 text-sm leading-6 text-gray-200">“{line}”</p>
+
+            <div className="mt-5 space-y-3">
+              {SCRIPT_LINES.map((line) => (
+                <div key={line} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-sm leading-6 text-gray-300">
+                  “{line}”
                 </div>
               ))}
             </div>
@@ -350,72 +371,71 @@ export function RevenueCommandTab() {
 
       <section className="grid gap-4 lg:grid-cols-[0.95fr_1.05fr]">
         <GlassCard className="rounded-3xl p-5 md:p-6">
-          <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center justify-between">
             <div>
               <h3 className="text-lg font-semibold text-white">Power hours</h3>
-              <p className="mt-1 text-sm text-gray-400">A visual read on where to spend the morning spellbook.</p>
+              <p className="mt-1 text-sm text-gray-400">No live focus scoring yet.</p>
             </div>
-            <Trophy className="h-5 w-5 text-amber-300" />
+            <ArrowRight className="h-5 w-5 text-gray-500" />
           </div>
-          <div className="mt-5 flex items-end gap-3 overflow-x-auto pb-2">
+
+          <div className="mt-6 space-y-4">
             {HOUR_BLOCKS.map((block) => (
-              <div key={block.label} className="min-w-[88px] flex-1">
-                <div className="flex h-44 items-end rounded-3xl border border-white/10 bg-white/[0.03] p-2">
-                  <div
-                    className="w-full rounded-2xl bg-gradient-to-t from-emerald-500 via-emerald-400 to-blue-400 transition-all"
-                    style={{ height: `${block.intensity}%` }}
-                  />
+              <div key={block.label}>
+                <div className="mb-2 flex items-center justify-between text-sm">
+                  <div>
+                    <p className="font-medium text-white">{block.label}</p>
+                    <p className="text-xs text-gray-500">{block.focus}</p>
+                  </div>
+                  <span className="text-xs text-gray-400">{block.intensity}%</span>
                 </div>
-                <p className="mt-3 text-sm font-medium text-white">{block.label}</p>
-                <p className="mt-1 text-xs leading-5 text-gray-400">{block.focus}</p>
+                <Progress value={block.intensity} max={100} className="h-2.5 bg-white/10 [&>div]:bg-white/60" />
               </div>
             ))}
           </div>
         </GlassCard>
 
         <GlassCard className="rounded-3xl p-5 md:p-6">
-          <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center justify-between">
             <div>
               <h3 className="text-lg font-semibold text-white">Command notes</h3>
-              <p className="mt-1 text-sm text-gray-400">Small strategic nudges that keep the day pointed at revenue, not noise.</p>
+              <p className="mt-1 text-sm text-gray-400">Revenue placeholders stay honest until live data is wired.</p>
             </div>
-            <Rocket className="h-5 w-5 text-emerald-300" />
+            <Flame className="h-5 w-5 text-amber-300" />
           </div>
 
-          <div className="mt-5 grid gap-3 md:grid-cols-2">
+          <div className="mt-5 grid gap-3 sm:grid-cols-2">
             {[
               {
-                title: "Collect before you create",
-                body: "Tomorrow morning should bias toward deposits, invoices, and closes — not drafting, building, or polishing.",
+                title: "Do not fake confidence",
+                body: "Use $0 and N/A until real records arrive. A blank board is better than a lying board.",
               },
               {
-                title: "Use narrow asks",
-                body: "Every touch should end with a binary next step: reserve slot, pay deposit, approve quote, or book a call.",
+                title: "Wire deal records first",
+                body: "The next real unlock is a live opportunities table with value, stage, owner, and expected close date.",
               },
               {
-                title: "Protect the noon scoreboard",
-                body: "By 12 PM, either the board says target hit or you immediately pivot into the highest-odds lane still open.",
+                title: "Tasks should unlock cash",
+                body: `You only need ${pressure > 0 ? currency(pressure) : currency(0)} more from live actions to clear the daily line once data is connected.`,
               },
               {
-                title: "Cash creates calm",
-                body: `You only need ${pressure > 0 ? currency(pressure) : currency(0)} more from this board to clear the daily line. Stay ruthless.`,
+                title: "Replace N/A with proof",
+                body: "As soon as lead and proposal data exists, swap placeholders with actual outreach, deposits, and close signals.",
               },
-            ].map((item) => (
-              <div key={item.title} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-                <p className="text-sm font-semibold text-white">{item.title}</p>
-                <p className="mt-2 text-sm leading-6 text-gray-400">{item.body}</p>
+            ].map((note) => (
+              <div key={note.title} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+                <h4 className="text-sm font-semibold text-white">{note.title}</h4>
+                <p className="mt-2 text-sm leading-6 text-gray-400">{note.body}</p>
               </div>
             ))}
           </div>
 
-          <div className="mt-5 rounded-2xl border border-amber-400/20 bg-amber-400/10 p-4">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-amber-200">Current board read</p>
-            <p className="mt-2 text-sm leading-6 text-amber-50">
-              {pressure <= 0
-                ? "The line is already covered. Tomorrow becomes margin expansion: raise average close size and collect early."
-                : `The board only needs ${currency(pressure)} more. Fastest path: hit the warm install texts first, then move straight into phone closes while urgency is hot.`}
-            </p>
-            <p className="mt-3 text-xs text-amber-100/80">Unworked pipeline remaining: {currency(unlockedPipeline)}</p>
+          <div className="mt-5 rounded-2xl border border-amber-400/20 bg-amber-400/10 p-4 text-sm text-amber-100">
+            <div className="flex items-center gap-2 font-medium">
+              <CheckCircle2 className="h-4 w-4" />
+              Honesty mode enabled
+            </div>
+            <p className="mt-2 text-xs text-amber-100/80">Unworked pipeline remaining: {currency(unlockedPipeline)}</p>
           </div>
         </GlassCard>
       </section>
