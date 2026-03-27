@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { GlassCard } from "@/components/ui/glass-card"
 import { Activity, Mail, CheckCircle, AlertCircle, Clock, Zap } from "lucide-react"
 import { formatDistanceToNow } from "date-fns"
+import { supabase } from "@/lib/supabase"
 
 interface HeartbeatEvent {
   id: string
@@ -18,52 +19,51 @@ export function HeartbeatSection() {
   const [lastCheck, setLastCheck] = useState<Date>(new Date())
 
   useEffect(() => {
-    // Simulated heartbeat data - in production this would come from Supabase realtime
-    const mockEvents: HeartbeatEvent[] = [
-      {
-        id: "1",
-        type: "agent",
-        message: "Atlas completed task: Updated Alora Hess quote to $18K",
-        timestamp: new Date(Date.now() - 1000 * 60 * 5).toISOString(), // 5 min ago
-        status: "success"
-      },
-      {
-        id: "2",
-        type: "email",
-        message: "New email from Alora Hess (CBRE) - RFQ response",
-        timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(), // 30 min ago
-        status: "info"
-      },
-      {
-        id: "3",
-        type: "system",
-        message: "Mission Control v2 deployed successfully",
-        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(), // 2 hours ago
-        status: "success"
-      },
-      {
-        id: "4",
-        type: "task",
-        message: "Maverick started: Fix v0 Root Directory setting",
-        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 4).toISOString(), // 4 hours ago
-        status: "info"
-      },
-      {
-        id: "5",
-        type: "lead",
-        message: "New lead detected: Commercial property inquiry",
-        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(), // 6 hours ago
-        status: "success"
+    let active = true
+
+    async function load() {
+      try {
+        if (!supabase) return
+        const { data, error } = await supabase
+          .from("mc_events")
+          .select("id,level,source,message,timestamp")
+          .order("timestamp", { ascending: false })
+          .limit(8)
+
+        if (error) throw error
+
+        const mapped: HeartbeatEvent[] = (data || []).map((row: any) => ({
+          id: row.id,
+          type:
+            row.source === "agent" ? "agent" :
+            row.source === "system" ? "system" :
+            row.message?.toLowerCase().includes("lead") ? "lead" :
+            row.message?.toLowerCase().includes("email") ? "email" :
+            "task",
+          message: row.message,
+          timestamp: row.timestamp,
+          status:
+            row.level === "error" || row.level === "critical" ? "error" :
+            row.level === "warn" ? "warning" :
+            row.source === "system" ? "success" :
+            "info",
+        }))
+
+        if (active) {
+          setEvents(mapped)
+          setLastCheck(new Date())
+        }
+      } catch (err) {
+        console.error("[mission-control] heartbeat load failed", err)
       }
-    ]
-    setEvents(mockEvents)
+    }
 
-    // Update last check every minute
-    const interval = setInterval(() => {
-      setLastCheck(new Date())
-    }, 60000)
-
-    return () => clearInterval(interval)
+    load()
+    const interval = setInterval(load, 15000)
+    return () => {
+      active = false
+      clearInterval(interval)
+    }
   }, [])
 
   const getIcon = (type: string) => {
@@ -103,6 +103,9 @@ export function HeartbeatSection() {
       </div>
       
       <div className="max-h-64 overflow-y-auto">
+        {events.length === 0 && (
+          <div className="p-4 text-sm text-gray-400">No live heartbeat events yet.</div>
+        )}
         {events.map((event) => (
           <div 
             key={event.id} 
