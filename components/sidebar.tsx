@@ -161,7 +161,7 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
               className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-sm font-medium border border-white/10 text-gray-200 hover:text-white hover:bg-white/5 transition-colors"
             >
               <Mail className="w-5 h-5 text-emerald-300" />
-              <span className="truncate">Pending Cold Outreach</span>
+              <span className="truncate">Lead Flow Queue</span>
               <span className="text-[11px] uppercase tracking-wide text-gray-400 ml-auto">/cold-outreach</span>
             </Link>
           </div>

@@ -6,7 +6,7 @@ import { Mail, RefreshCcw, CheckCircle2, Ban, Filter, Save, ExternalLink } from 
 import { Button } from "@/components/ui/button"
 import { GlassCard } from "@/components/ui/glass-card"
 import { StatusBadge } from "@/components/ui/status-badge"
-import type { ColdOutreachBrand, ColdOutreachRecord, ColdOutreachStatus } from "@/lib/cold-outreach-config"
+import type { ColdOutreachBrand, ColdOutreachRecord, ColdOutreachStatus, LeadClass } from "@/lib/cold-outreach-config"
 import { BRAND_CONFIG } from "@/lib/cold-outreach-config"
 
 type FilterStatus = ColdOutreachStatus | "all"
@@ -27,9 +27,21 @@ const statusOptions: Array<{ value: FilterStatus; label: string }> = [
   { value: "all", label: "All statuses" },
 ]
 
+const leadClassOptions: Array<{ value: LeadClass; label: string }> = [
+  { value: "direct_buyer", label: "Direct Buyer" },
+  { value: "channel_partner", label: "Channel Partner" },
+  { value: "vendor", label: "Vendor" },
+  { value: "competitor", label: "Competitor" },
+]
+
 export function ColdOutreachBoard() {
   const [items, setItems] = useState<ColdOutreachRecord[]>([])
-  const [brand, setBrand] = useState<ColdOutreachBrand | "all">("all")
+  const [brand, setBrand] = useState<ColdOutreachBrand | "all">(() => {
+    if (typeof window === "undefined") return "all"
+    const params = new URLSearchParams(window.location.search)
+    const initialBrand = params.get("brand")
+    return initialBrand === "from_inception" || initialBrand === "lone_star_lighting" ? initialBrand : "all"
+  })
   const [status, setStatus] = useState<FilterStatus>("pending")
   const [editable, setEditable] = useState<EditableState>({})
   const [loading, setLoading] = useState(true)
@@ -166,8 +178,8 @@ export function ColdOutreachBoard() {
                 <Mail className="w-5 h-5 text-blue-400" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white">Pending Cold Outreach</h2>
-                <p className="text-sm text-gray-400 mt-1">Import lead-gen markdown, fill missing emails, then approve or deny each queued draft.</p>
+                <h2 className="text-2xl font-bold text-white">Lead Flow Queue</h2>
+                <p className="text-sm text-gray-400 mt-1">Import lead-gen markdown, fill missing emails, then approve or deny each queued draft before delivery.</p>
               </div>
             </div>
           </div>
@@ -230,7 +242,7 @@ export function ColdOutreachBoard() {
         </div>
 
         <div className="rounded-xl border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
-          Approve is wired as a clean V1 status flow. Actual outbound email delivery is intentionally stubbed until a send provider path is confirmed in Mission Control.
+          Lone Star lead flow is now staged inside Mission Control. Approve / deny is live. Actual outbound email delivery is still stubbed until the provider send path is wired.
         </div>
 
         {message && (
@@ -266,6 +278,9 @@ export function ColdOutreachBoard() {
                     </div>
                     <div className="flex flex-wrap items-center gap-3 text-sm text-gray-400">
                       <span>Sender: {item.sender_email}</span>
+                      <span>Lead Class: {item.lead_class.replace(/_/g, " ")}</span>
+                      {item.company_type && <span>Type: {item.company_type}</span>}
+                      {item.territory && <span>Territory: {item.territory}</span>}
                       {item.website && (
                         <a href={item.website} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 hover:text-white">
                           Website <ExternalLink className="w-3.5 h-3.5" />
@@ -289,6 +304,15 @@ export function ColdOutreachBoard() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                   <label className="space-y-2 text-sm">
+                    <span className="text-gray-400">Contact Name</span>
+                    <input
+                      value={String(getDraftValue(item, "contact_name"))}
+                      onChange={(event) => updateDraft(item.id, "contact_name", event.target.value)}
+                      placeholder="Owner or decision-maker"
+                      className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-white placeholder:text-gray-500"
+                    />
+                  </label>
+                  <label className="space-y-2 text-sm">
                     <span className="text-gray-400">Contact Email</span>
                     <input
                       value={String(getDraftValue(item, "contact_email"))}
@@ -305,6 +329,38 @@ export function ColdOutreachBoard() {
                       placeholder="https://example.com"
                       className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-white placeholder:text-gray-500"
                     />
+                  </label>
+                  <label className="space-y-2 text-sm">
+                    <span className="text-gray-400">Company Type</span>
+                    <input
+                      value={String(getDraftValue(item, "company_type"))}
+                      onChange={(event) => updateDraft(item.id, "company_type", event.target.value)}
+                      placeholder="Realtor, landscaper, pool builder..."
+                      className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-white placeholder:text-gray-500"
+                    />
+                  </label>
+                  <label className="space-y-2 text-sm">
+                    <span className="text-gray-400">Territory</span>
+                    <input
+                      value={String(getDraftValue(item, "territory"))}
+                      onChange={(event) => updateDraft(item.id, "territory", event.target.value)}
+                      placeholder="Buda / Kyle / Driftwood"
+                      className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-white placeholder:text-gray-500"
+                    />
+                  </label>
+                  <label className="space-y-2 text-sm">
+                    <span className="text-gray-400">Lead Class</span>
+                    <select
+                      value={String(getDraftValue(item, "lead_class"))}
+                      onChange={(event) => updateDraft(item.id, "lead_class", event.target.value)}
+                      className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-white"
+                    >
+                      {leadClassOptions.map((option) => (
+                        <option key={option.value} value={option.value} className="bg-slate-950 text-white">
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
                   </label>
                 </div>
 
