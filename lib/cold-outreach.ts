@@ -92,6 +92,7 @@ export async function importLatestColdOutreachMarkdown() {
         const prospect = prospects.get(item.businessName)
         imports.push({
           business_name: item.businessName,
+          contact_name: null,
           contact_email: null,
           website: prospect?.website ?? null,
           draft_subject: item.subject,
@@ -101,7 +102,12 @@ export async function importLatestColdOutreachMarkdown() {
           status: "pending",
           source_file: outreachPath,
           source_generated_at: generatedAt,
+          source_kind: "ruby_research",
+          company_type: null,
+          territory: null,
+          lead_class: brand === "lone_star_lighting" ? "channel_partner" : "direct_buyer",
           notes: null,
+          archived_at: null,
           send_status: "not_sent",
         })
       }

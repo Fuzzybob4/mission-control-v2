@@ -5,12 +5,16 @@ import { getSupabaseAdminClient } from "@/lib/supabaseAdmin"
 
 const bodySchema = z.object({
   business_name: z.string().min(1).optional(),
+  contact_name: z.string().min(1).nullable().optional().or(z.literal("")),
   contact_email: z.string().email().nullable().optional().or(z.literal("")),
   website: z.string().url().nullable().optional().or(z.literal("")),
   draft_subject: z.string().min(1).optional(),
   draft_body: z.string().min(1).optional(),
   brand: z.enum(["from_inception", "lone_star_lighting"]).optional(),
   status: z.enum(["pending", "approved", "denied", "sent"]).optional(),
+  company_type: z.string().min(1).nullable().optional().or(z.literal("")),
+  territory: z.string().min(1).nullable().optional().or(z.literal("")),
+  lead_class: z.enum(["direct_buyer", "channel_partner", "vendor", "competitor"]).optional(),
   notes: z.string().nullable().optional(),
 })
 
@@ -27,8 +31,11 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
 
     const update = {
       ...payload,
+      contact_name: normalizeEmpty(payload.contact_name as string | null | undefined),
       contact_email: normalizeEmpty(payload.contact_email as string | null | undefined),
       website: normalizeEmpty(payload.website as string | null | undefined),
+      company_type: normalizeEmpty(payload.company_type as string | null | undefined),
+      territory: normalizeEmpty(payload.territory as string | null | undefined),
     }
 
     const supabase = getSupabaseAdminClient()
