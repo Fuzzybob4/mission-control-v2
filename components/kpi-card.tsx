@@ -75,7 +75,7 @@ interface KPICardProps {
 
 export function KPICard({ title, value, change, changeType = "neutral", sparklineData, icon }: KPICardProps) {
   return (
-    <GlassCard className="p-4">
+    <GlassCard className="p-4" data-component="kpi-card">
       <div className="flex items-start justify-between">
         <div>
           <p className="text-xs text-gray-400 uppercase tracking-wider">{title}</p>

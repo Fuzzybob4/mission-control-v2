@@ -135,6 +135,122 @@
   animation: progress linear;
 }
 
+/* ─── COMMANDER THEME ─────────────────────────────────────────── */
+
+/* Nebula animated background */
+@keyframes nebula-shift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes particle-float {
+  0%   { transform: translateY(0px) translateX(0px); opacity: 0.4; }
+  33%  { transform: translateY(-18px) translateX(8px); opacity: 0.8; }
+  66%  { transform: translateY(-8px) translateX(-6px); opacity: 0.5; }
+  100% { transform: translateY(0px) translateX(0px); opacity: 0.4; }
+}
+
+@keyframes border-glow-pulse {
+  0%, 100% { box-shadow: 0 0 15px rgba(0, 229, 255, 0.1), 0 0 30px rgba(0, 229, 255, 0.05); }
+  50%       { box-shadow: 0 0 25px rgba(0, 229, 255, 0.2), 0 0 50px rgba(0, 229, 255, 0.1); }
+}
+
+.nebula-bg {
+  position: relative;
+  background: linear-gradient(135deg, #0a0e1a 0%, #0d0720 30%, #0a0e1a 50%, #140a20 70%, #0a0e1a 100%);
+  background-size: 400% 400%;
+  animation: nebula-shift 20s ease infinite;
+}
+
+.nebula-bg::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(26, 10, 46, 0.6) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(10, 14, 26, 0.8) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 10%, rgba(0, 229, 255, 0.03) 0%, transparent 40%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Floating particles layer */
+.nebula-bg::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(0,229,255,0.5) 1px, transparent 1px),
+    radial-gradient(circle, rgba(255,0,110,0.3) 1px, transparent 1px),
+    radial-gradient(circle, rgba(255,215,0,0.3) 1px, transparent 1px);
+  background-size: 350px 350px, 250px 250px, 450px 450px;
+  background-position: 0 0, 125px 80px, 220px 160px;
+  animation: particle-float 8s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* Commander card */
+.commander-card {
+  background: rgba(8, 12, 24, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  animation: border-glow-pulse 4s ease-in-out infinite;
+}
+
+/* Grid overlay pattern */
+.grid-overlay {
+  background-image:
+    linear-gradient(rgba(0, 229, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.04) 1px, transparent 1px);
+  background-size: 30px 30px;
+  width: 100%;
+  height: 100%;
+}
+
+/* Cyan glow card */
+.hud-card {
+  background: rgba(10, 14, 26, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.1);
+}
+
+/* HUD status indicator */
+.status-online {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-family: monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #00ff88;
+  text-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
+}
+
+.status-online::before {
+  content: "";
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00ff88;
+  box-shadow: 0 0 6px rgba(0, 255, 136, 0.8);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

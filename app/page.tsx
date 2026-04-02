@@ -21,6 +21,9 @@ import { ConnectionStatus } from "@/components/connection-status"
 import { ScrollToTop } from "@/components/scroll-to-top"
 import { useKeyboardShortcuts, ShortcutConfig } from "@/hooks/use-keyboard-shortcuts"
 import { useToast } from "@/hooks/use-toast"
+import { CommanderCard } from "@/components/commander-card"
+import { ActiveMissions } from "@/components/active-missions"
+import { ShipTimeClock } from "@/components/ship-time-clock"
 
 const ClockWidget = dynamic(
   () => import("@/components/clock-widget").then(m => m.ClockWidget),
@@ -94,29 +97,48 @@ export default function MissionControl() {
   useKeyboardShortcuts(shortcuts)
 
   return (
-    <div className="flex h-screen bg-background overflow-hidden">
+    <div className="flex h-screen bg-background overflow-hidden nebula-bg">
       <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
-      
-      <main className="flex-1 overflow-y-auto pt-16 lg:pt-0">
+
+      <main className="flex-1 overflow-y-auto pt-16 lg:pt-0 relative z-10">
         <div className="p-4 lg:p-6">
-          {/* Page Header with Notifications */}
+          {/* HUD Header */}
           <div className="flex items-start justify-between mb-4 lg:mb-6">
             <div>
-              <h1 className="text-xl lg:text-2xl font-bold text-white">{TAB_TITLES[activeTab]}</h1>
-              <p className="text-xs lg:text-sm text-gray-400 mt-1">Kal Mission Control</p>
+              <h1
+                className="text-xl lg:text-2xl font-bold tracking-wider uppercase"
+                style={{ color: "#00e5ff", textShadow: "0 0 15px rgba(0,229,255,0.4)", fontFamily: "var(--font-orbitron), monospace" }}
+              >
+                {TAB_TITLES[activeTab]}
+              </h1>
+              <p className="text-xs tracking-widest uppercase mt-1 font-mono" style={{ color: "rgba(0,229,255,0.4)" }}>
+                Kal Mission Control
+              </p>
             </div>
             <div className="flex items-center gap-2 lg:gap-3 flex-shrink-0">
-              <ClockWidget />
+              {/* STATUS indicator */}
+              <span className="status-online hidden lg:inline-flex">Status: Online</span>
+              {/* Ship Time Clock */}
+              <ShipTimeClock />
               <ConnectionStatus onRefresh={() => info("Refreshing", "Syncing latest data...")} />
               <Link
                 href="/skills"
-                className="hidden lg:inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-white/10 text-xs text-gray-300 hover:text-white hover:border-white/30 transition-colors"
+                className="hidden lg:inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-mono tracking-wider transition-colors"
+                style={{
+                  border: "1px solid rgba(0,229,255,0.2)",
+                  color: "rgba(0,229,255,0.6)",
+                }}
               >
-                Skill Inventory
+                SKILL INV
               </Link>
               <button
                 onClick={() => setShowShortcutsHelp(true)}
-                className="hidden lg:flex items-center gap-1.5 px-2 py-1.5 text-xs text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg transition-colors"
+                className="hidden lg:flex items-center gap-1.5 px-2 py-1.5 text-xs font-mono rounded-lg transition-colors"
+                style={{
+                  background: "rgba(0,229,255,0.05)",
+                  border: "1px solid rgba(0,229,255,0.15)",
+                  color: "rgba(0,229,255,0.5)",
+                }}
                 title="Keyboard shortcuts (?)"
               >
                 <span>?</span>
@@ -124,6 +146,14 @@ export default function MissionControl() {
               {DASHBOARD_TABS.includes(activeTab) && <NotificationCenter />}
             </div>
           </div>
+
+          {/* Commander Card + Active Missions (overview only) */}
+          {activeTab === "overview" && (
+            <>
+              <CommanderCard />
+              <ActiveMissions />
+            </>
+          )}
 
           {/* Daily Motivation Quote */}
           {DASHBOARD_TABS.includes(activeTab) && <DailyMotivationWidget />}
