@@ -7,6 +7,7 @@ import { TimeFilter } from "@/components/time-filter"
 import { FileUploadWidget } from "@/components/file-upload-widget"
 import { KPICard } from "@/components/kpi-card"
 import { LoneStarLeadFlowPanel } from "@/components/lone-star-lead-flow-panel"
+import { LoneStarOpsBoard } from "@/components/lone-star-ops-board"
 import Link from "next/link"
 import { Lightbulb, DollarSign, Users, Calendar, TrendingUp, Mail } from "lucide-react"
 import { supabase } from "@/lib/supabase"
@@ -152,6 +153,8 @@ export function LoneStarTab() {
           icon={<Calendar className="w-4 h-4 text-gray-400" />}
         />
       </div>
+
+      <LoneStarOpsBoard />
 
       <LoneStarLeadFlowPanel />
 
