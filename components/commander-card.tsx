@@ -6,13 +6,13 @@ export function CommanderCard() {
   const xpPercent = Math.round((xpCurrent / xpTotal) * 100)
 
   return (
-    <div className="commander-card relative overflow-hidden rounded-xl p-5 mb-6 group" data-component="commander-card">
+    <div className="commander-card relative overflow-hidden rounded-[28px] p-5 mb-6 group" data-component="commander-card">
       {/* Grid overlay */}
       <div className="absolute inset-0 grid-overlay pointer-events-none opacity-20" />
 
       {/* Animated border glow */}
       <div
-        className="absolute inset-0 rounded-xl pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+        className="absolute inset-0 rounded-[28px] pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
         style={{ boxShadow: "inset 0 0 30px rgba(0, 229, 255, 0.15)" }}
       />
 
@@ -47,7 +47,11 @@ export function CommanderCard() {
             className="text-xs tracking-[0.3em] uppercase mt-0.5"
             style={{ color: "rgba(0, 229, 255, 0.6)", fontFamily: "monospace" }}
           >
-            MISSION COMMANDER
+            TYCOON COMMANDER
+          </p>
+
+          <p className="mt-2 max-w-2xl text-sm text-cyan-50/65">
+            The empire layer is online. Rooms now represent active businesses, and the board is ready to become a living city of agents, leads, and revenue flow.
           </p>
 
           {/* Level badge */}
@@ -89,7 +93,7 @@ export function CommanderCard() {
               />
             </div>
             <p className="text-[10px] mt-1 font-mono" style={{ color: "rgba(0,229,255,0.4)" }}>
-              {xpPercent}% to Level 8 — {(xpTotal - xpCurrent).toLocaleString()} XP remaining
+              {xpPercent}% to Level 8, {(xpTotal - xpCurrent).toLocaleString()} XP until the next expansion
             </p>
           </div>
         </div>

@@ -24,7 +24,7 @@ import {
 type TabId = "overview" | "revenue-command" | "lone-star" | "redfox" | "heroes" | "analytics" | "systems" | "vault" | "from-inception"
 
 const tabs: { id: TabId; label: string; icon: React.ElementType }[] = [
-  { id: "overview",        label: "Overview",            icon: LayoutDashboard },
+  { id: "overview",        label: "Tycoon HQ",           icon: LayoutDashboard },
   { id: "revenue-command", label: "Revenue Command",     icon: Crosshair },
   { id: "lone-star",       label: "Lone Star Lighting",  icon: Lightbulb },
   { id: "redfox",          label: "RedFox CRM",          icon: Code2 },
@@ -56,7 +56,7 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
             </div>
             <div>
               <h1 className="text-base font-bold text-white">Kal Mission Control</h1>
-              <p className="text-[10px] text-gray-400">Operations Hub</p>
+              <p className="text-[10px] text-gray-400">Cyberpunk Tycoon Grid</p>
             </div>
           </div>
           <button
@@ -91,7 +91,7 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
             </div>
             <div>
               <h1 className="text-lg font-bold text-white">Kal Mission Control</h1>
-              <p className="text-xs text-gray-400">Operations Hub</p>
+              <p className="text-xs text-gray-400">Cyberpunk Tycoon Grid</p>
             </div>
           </div>
         </div>
@@ -169,7 +169,7 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
 
         {/* Business Status */}
         <div className="p-4 border-t border-white/10">
-          <p className="text-xs text-gray-500 uppercase mb-3">Business Status</p>
+          <p className="text-xs text-gray-500 uppercase mb-3">District Status</p>
           
           <div className="space-y-2">
             <div className="flex items-center justify-between text-xs">

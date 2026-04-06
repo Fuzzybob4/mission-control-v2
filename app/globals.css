@@ -151,6 +151,23 @@
   100% { transform: translateY(0px) translateX(0px); opacity: 0.4; }
 }
 
+@keyframes tycoon-agent-drift {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  25% { transform: translate3d(3px, -5px, 0); }
+  50% { transform: translate3d(-2px, -9px, 0); }
+  75% { transform: translate3d(-4px, -2px, 0); }
+}
+
+@keyframes tycoon-agent-pulse {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+@keyframes hologram-scan {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 120px; }
+}
+
 @keyframes border-glow-pulse {
   0%, 100% { box-shadow: 0 0 15px rgba(0, 229, 255, 0.1), 0 0 30px rgba(0, 229, 255, 0.05); }
   50%       { box-shadow: 0 0 25px rgba(0, 229, 255, 0.2), 0 0 50px rgba(0, 229, 255, 0.1); }
@@ -247,6 +264,51 @@
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50%       { opacity: 0.4; }
+}
+
+.tycoon-agent {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  animation: tycoon-agent-drift 4.2s ease-in-out infinite;
+}
+
+.tycoon-agent::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255,255,255,0.08);
+  opacity: 0.45;
+  animation: tycoon-agent-pulse 1.8s ease-in-out infinite;
+}
+
+.tycoon-agent-core {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  display: block;
+}
+
+.tycoon-scanlines {
+  position: relative;
+  overflow: hidden;
+}
+
+.tycoon-scanlines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent, rgba(0, 229, 255, 0.08), transparent);
+  background-size: 100% 120px;
+  animation: hologram-scan 5s linear infinite;
+  pointer-events: none;
 }
 
 /* ─────────────────────────────────────────────────────────────── */
