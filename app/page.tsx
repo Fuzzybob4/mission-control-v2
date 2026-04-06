@@ -24,7 +24,7 @@ import { useToast } from "@/hooks/use-toast"
 import { CommanderCard } from "@/components/commander-card"
 import { ActiveMissions } from "@/components/active-missions"
 import { ShipTimeClock } from "@/components/ship-time-clock"
-import { TycoonHQ } from "@/components/tycoon-hq"
+import { ObsidianTycoonMap } from "@/components/obsidian-tycoon-map"
 
 const ClockWidget = dynamic(
   () => import("@/components/clock-widget").then(m => m.ClockWidget),
@@ -152,7 +152,13 @@ export default function MissionControl() {
           {activeTab === "overview" && (
             <>
               <CommanderCard />
-              <TycoonHQ onEnterRoom={(tab) => setActiveTab(tab as TabId)} />
+              <ObsidianTycoonMap onEnterDistrict={(tab) => {
+                if (tab === "agents") {
+                  window.location.href = "/agents"
+                  return
+                }
+                setActiveTab(tab as TabId)
+              }} />
               <ActiveMissions />
             </>
           )}

@@ -51,7 +51,7 @@ export function CommanderCard() {
           </p>
 
           <p className="mt-2 max-w-2xl text-sm text-cyan-50/65">
-            The empire layer is online. Rooms now represent active businesses, and the board is ready to become a living city of agents, leads, and revenue flow.
+            The empire layer is online. Floating districts now represent business lanes, support towers, and agent guilds inside Obsidian Mission Control.
           </p>
 
           {/* Level badge */}

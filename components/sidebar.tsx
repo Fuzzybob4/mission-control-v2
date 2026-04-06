@@ -127,6 +127,10 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
               )
             })}
           </div>
+          <div className="mt-6 rounded-2xl border border-fuchsia-400/20 bg-fuchsia-500/5 p-3">
+            <p className="text-[10px] uppercase tracking-[0.25em] text-fuchsia-100/50">Empire districts</p>
+            <p className="mt-1 text-xs text-zinc-400">Mission Control now runs as a floating city map with district drilldowns.</p>
+          </div>
           <div className="mt-6 space-y-2">
             <Link
               href="/cron-jobs"
@@ -174,15 +178,15 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
           <div className="space-y-2">
             <div className="flex items-center justify-between text-xs">
               <span className="text-gray-400">Lone Star</span>
-              <span className="text-emerald-400">$18K Pipeline</span>
+              <span className="text-emerald-400">Thriving</span>
             </div>
             <div className="flex items-center justify-between text-xs">
               <span className="text-gray-400">RedFox</span>
-              <span className="text-amber-400">In Dev</span>
+              <span className="text-sky-400">Building</span>
             </div>
             <div className="flex items-center justify-between text-xs">
-              <span className="text-gray-400">Heroes</span>
-              <span className="text-gray-500">On Hold</span>
+              <span className="text-gray-400">OpenClaw Core</span>
+              <span className="text-cyan-400">Stable</span>
             </div>
           </div>
         </div>
