@@ -1,5 +1,6 @@
 "use client"
 
+import { useMemo, useState } from "react"
 import { motion } from "framer-motion"
 import { AlertTriangle, ArrowRight, BookOpen, Bot, Briefcase, Building2, Coins, Cpu, FlaskConical, Gem, Lightbulb, Rocket, ShieldCheck, Sparkles, TrendingUp, Zap } from "lucide-react"
 
@@ -182,7 +183,6 @@ const districts: District[] = [
   },
   {
     id: "agent-quarters",
-    tab: "agents",
     name: "Agent Quarters",
     subtitle: "Guild Hall",
     owner: "Kal",
@@ -263,9 +263,9 @@ function getDistrict(id: string) {
 }
 
 function districtSizeClasses(size: District["size"]) {
-  if (size === "hub") return "h-44 w-44 md:h-52 md:w-52"
-  if (size === "large") return "h-32 w-32 md:h-36 md:w-36"
-  return "h-28 w-28 md:h-32 md:w-32"
+  if (size === "hub") return "h-40 w-40 md:h-52 md:w-52"
+  if (size === "large") return "h-28 w-28 md:h-36 md:w-36"
+  return "h-24 w-24 md:h-32 md:w-32"
 }
 
 function bridgeStyle(from: District, to: District) {
@@ -284,12 +284,23 @@ function bridgeStyle(from: District, to: District) {
 }
 
 export function ObsidianTycoonMap({ onEnterDistrict }: ObsidianTycoonMapProps) {
-  const selectedDistrict = districts.find((district) => district.id !== "mission-control" && district.status === "thriving") ?? districts[1]
+  const [selectedDistrictId, setSelectedDistrictId] = useState("lone-star")
+
+  const selectedDistrict = useMemo(
+    () => districts.find((district) => district.id === selectedDistrictId) ?? districts[1],
+    [selectedDistrictId]
+  )
+
+  const selectedAgents = agents.filter((agent) => agent.district === selectedDistrict.name)
+
+  const handleDistrictSelect = (district: District) => {
+    setSelectedDistrictId(district.id)
+  }
 
   return (
     <section className="space-y-4">
       <div className="grid gap-4 xl:grid-cols-[280px_minmax(0,1fr)_320px]">
-        <aside className="rounded-[28px] border border-cyan-400/15 bg-[#08101d]/80 p-4 shadow-[0_0_30px_rgba(20,241,255,0.08)] backdrop-blur-xl">
+        <aside className="order-2 rounded-[28px] border border-cyan-400/15 bg-[#08101d]/80 p-4 shadow-[0_0_30px_rgba(20,241,255,0.08)] backdrop-blur-xl xl:order-1">
           <div className="mb-4 flex items-center justify-between">
             <div>
               <p className="text-[11px] uppercase tracking-[0.3em] text-cyan-100/45">Agent roster</p>
@@ -298,7 +309,7 @@ export function ObsidianTycoonMap({ onEnterDistrict }: ObsidianTycoonMapProps) {
             <ShieldCheck className="h-5 w-5 text-cyan-300" />
           </div>
 
-          <div className="space-y-2">
+          <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-1">
             {agents.map((agent) => (
               <div key={agent.name} className="rounded-2xl border border-white/8 bg-white/[0.03] px-3 py-2.5">
                 <div className="flex items-center gap-3">
@@ -314,14 +325,14 @@ export function ObsidianTycoonMap({ onEnterDistrict }: ObsidianTycoonMapProps) {
           </div>
         </aside>
 
-        <div className="rounded-[32px] border border-white/10 bg-[radial-gradient(circle_at_top,rgba(168,85,247,0.18),transparent_28%),radial-gradient(circle_at_bottom,rgba(20,241,255,0.14),transparent_30%),linear-gradient(180deg,#0b1020,#120a24)] p-4 shadow-[0_0_80px_rgba(0,0,0,0.35)]">
+        <div className="order-1 rounded-[32px] border border-white/10 bg-[radial-gradient(circle_at_top,rgba(168,85,247,0.18),transparent_28%),radial-gradient(circle_at_bottom,rgba(20,241,255,0.14),transparent_30%),linear-gradient(180deg,#0b1020,#120a24)] p-4 shadow-[0_0_80px_rgba(0,0,0,0.35)] xl:order-2">
           <div className="mb-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/25 bg-cyan-500/10 px-3 py-1 text-[11px] uppercase tracking-[0.3em] text-cyan-100/70">
                 <Building2 className="h-3.5 w-3.5" />
                 Obsidian Mission Control
               </div>
-              <h2 className="mt-3 text-2xl font-bold uppercase tracking-[0.2em] text-white" style={{ fontFamily: "var(--font-orbitron), monospace" }}>
+              <h2 className="mt-3 text-xl font-bold uppercase tracking-[0.2em] text-white md:text-2xl" style={{ fontFamily: "var(--font-orbitron), monospace" }}>
                 Floating empire map
               </h2>
               <p className="mt-2 max-w-2xl text-sm text-cyan-50/70">
@@ -329,7 +340,7 @@ export function ObsidianTycoonMap({ onEnterDistrict }: ObsidianTycoonMapProps) {
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
               {resources.map((resource) => {
                 const Icon = resource.icon
                 return (
@@ -349,63 +360,71 @@ export function ObsidianTycoonMap({ onEnterDistrict }: ObsidianTycoonMapProps) {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(20,241,255,0.12),transparent_18%),radial-gradient(circle_at_20%_20%,rgba(168,85,247,0.14),transparent_18%),radial-gradient(circle_at_80%_80%,rgba(34,197,94,0.12),transparent_18%)]" />
             <div className="absolute inset-0 opacity-25 [background-image:linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:36px_36px]" />
 
-            <div className="relative h-[720px] w-full overflow-hidden rounded-[26px]">
-              {bridgePairs.map(([fromId, toId]) => {
-                const from = getDistrict(fromId)
-                const to = getDistrict(toId)
-                if (!from || !to) return null
-                const style = bridgeStyle(from, to)
-                return (
-                  <div key={`${fromId}-${toId}`} className="obsidian-bridge" style={style}>
-                    <span className="obsidian-bridge-flow" />
-                  </div>
-                )
-              })}
+            <div className="relative h-[520px] overflow-x-auto overflow-y-hidden rounded-[26px] md:h-[620px] lg:h-[720px]">
+              <div className="relative h-full min-w-[780px] rounded-[26px] md:min-w-0">
+                {bridgePairs.map(([fromId, toId]) => {
+                  const from = getDistrict(fromId)
+                  const to = getDistrict(toId)
+                  if (!from || !to) return null
+                  const style = bridgeStyle(from, to)
+                  return (
+                    <div key={`${fromId}-${toId}`} className="obsidian-bridge" style={style}>
+                      <span className="obsidian-bridge-flow" />
+                    </div>
+                  )
+                })}
 
-              {districts.map((district, index) => {
-                const Icon = district.icon
-                const status = statusMeta[district.status]
-                return (
-                  <motion.button
-                    key={district.id}
-                    initial={{ opacity: 0, scale: 0.9, y: 12 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    transition={{ delay: index * 0.04, duration: 0.35 }}
-                    onClick={() => district.tab && onEnterDistrict?.(district.tab)}
-                    className={`group absolute -translate-x-1/2 -translate-y-1/2 ${districtSizeClasses(district.size)}`}
-                    style={{ left: district.x, top: district.y }}
-                  >
-                    <div className="obsidian-island h-full w-full rounded-[32px] border border-white/12 bg-[#0c1325]/88 p-3 text-left shadow-[0_0_30px_rgba(0,0,0,0.35)]">
-                      <div className="absolute inset-0 rounded-[32px] opacity-80" style={{ background: `radial-gradient(circle at 50% 0%, ${district.color}22, transparent 55%), linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01))` }} />
-                      <div className="relative flex h-full flex-col justify-between">
-                        <div className="flex items-start justify-between gap-2">
-                          <div className="rounded-2xl border border-white/10 bg-black/20 p-2">
-                            <Icon className="h-5 w-5" style={{ color: district.color }} />
+                {districts.map((district, index) => {
+                  const Icon = district.icon
+                  const status = statusMeta[district.status]
+                  const isSelected = selectedDistrict.id === district.id
+                  return (
+                    <motion.button
+                      key={district.id}
+                      initial={{ opacity: 0, scale: 0.9, y: 12 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      transition={{ delay: index * 0.04, duration: 0.35 }}
+                      onClick={() => handleDistrictSelect(district)}
+                      className={`group absolute -translate-x-1/2 -translate-y-1/2 ${districtSizeClasses(district.size)}`}
+                      style={{ left: district.x, top: district.y }}
+                    >
+                      <div className={`obsidian-island h-full w-full rounded-[32px] border bg-[#0c1325]/88 p-3 text-left shadow-[0_0_30px_rgba(0,0,0,0.35)] ${isSelected ? "border-cyan-300/40 shadow-[0_0_32px_rgba(20,241,255,0.18)]" : "border-white/12"}`}>
+                        <div className="absolute inset-0 rounded-[32px] opacity-80" style={{ background: `radial-gradient(circle at 50% 0%, ${district.color}22, transparent 55%), linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01))` }} />
+                        <div className="relative flex h-full flex-col justify-between">
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="rounded-2xl border border-white/10 bg-black/20 p-2">
+                              <Icon className="h-5 w-5" style={{ color: district.color }} />
+                            </div>
+                            <span className={`rounded-full border px-2 py-1 text-[9px] uppercase tracking-[0.18em] md:text-[10px] md:tracking-[0.22em] ${status.className}`}>
+                              {status.label}
+                            </span>
                           </div>
-                          <span className={`rounded-full border px-2 py-1 text-[10px] uppercase tracking-[0.22em] ${status.className}`}>
-                            {status.label}
-                          </span>
-                        </div>
 
-                        <div>
-                          <div className="text-sm font-semibold text-white md:text-base">{district.name}</div>
-                          <div className="text-[10px] uppercase tracking-[0.24em] text-zinc-400 md:text-[11px]">{district.subtitle}</div>
-                        </div>
+                          <div>
+                            <div className="text-xs font-semibold text-white md:text-base">{district.name}</div>
+                            <div className="text-[9px] uppercase tracking-[0.18em] text-zinc-400 md:text-[11px] md:tracking-[0.24em]">{district.subtitle}</div>
+                          </div>
 
-                        <div className="space-y-1">
-                          <div className="text-[11px] text-zinc-300">{district.metric}</div>
-                          <div className="text-[10px] uppercase tracking-[0.22em] text-zinc-500">Owner {district.owner}</div>
+                          <div className="space-y-1">
+                            <div className="text-[10px] text-zinc-300 md:text-[11px]">{district.metric}</div>
+                            <div className="text-[9px] uppercase tracking-[0.18em] text-zinc-500 md:text-[10px] md:tracking-[0.22em]">Owner {district.owner}</div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </motion.button>
-                )
-              })}
+                    </motion.button>
+                  )
+                })}
+              </div>
+            </div>
+
+            <div className="mt-3 flex items-center justify-between rounded-2xl border border-white/10 bg-black/20 px-3 py-2 text-xs text-zinc-400 md:hidden">
+              <span>Swipe sideways to explore the city map</span>
+              <ArrowRight className="h-4 w-4 text-cyan-300" />
             </div>
           </div>
         </div>
 
-        <aside className="rounded-[28px] border border-fuchsia-400/15 bg-[#08101d]/80 p-4 shadow-[0_0_30px_rgba(168,85,247,0.08)] backdrop-blur-xl">
+        <aside className="order-3 rounded-[28px] border border-fuchsia-400/15 bg-[#08101d]/80 p-4 shadow-[0_0_30px_rgba(168,85,247,0.08)] backdrop-blur-xl xl:order-3">
           <div className="mb-4 flex items-start justify-between gap-3">
             <div>
               <p className="text-[11px] uppercase tracking-[0.3em] text-fuchsia-100/45">District detail</p>
@@ -421,6 +440,15 @@ export function ObsidianTycoonMap({ onEnterDistrict }: ObsidianTycoonMapProps) {
             <div className="text-[11px] uppercase tracking-[0.22em] text-zinc-500">District owner</div>
             <div className="mt-1 text-xl font-semibold text-white">{selectedDistrict.owner}</div>
             <p className="mt-3 text-sm text-zinc-300">{selectedDistrict.detail}</p>
+            {selectedDistrict.tab && (
+              <button
+                onClick={() => onEnterDistrict?.(selectedDistrict.tab as string)}
+                className="mt-4 inline-flex items-center gap-2 rounded-2xl border border-cyan-400/30 bg-cyan-500/10 px-3 py-2 text-sm font-medium text-cyan-100 transition hover:bg-cyan-500/15"
+              >
+                Open district panel
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            )}
           </div>
 
           <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
@@ -440,19 +468,17 @@ export function ObsidianTycoonMap({ onEnterDistrict }: ObsidianTycoonMapProps) {
           <div className="mt-4 rounded-[24px] border border-white/10 bg-black/20 p-4">
             <div className="mb-3 flex items-center gap-2 text-sm font-medium text-white">
               <AlertTriangle className="h-4 w-4 text-amber-300" />
-              Actions
+              Assigned agents
             </div>
             <div className="space-y-2">
-              {[
-                "Open district control panel",
-                "Assign additional agent",
-                "Inspect active work queue",
-                "Review upgrade path",
-              ].map((action) => (
-                <button key={action} className="flex w-full items-center justify-between rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-2.5 text-left text-sm text-zinc-200 transition hover:bg-white/[0.06]">
-                  {action}
-                  <ArrowRight className="h-4 w-4 text-zinc-500" />
-                </button>
+              {(selectedAgents.length ? selectedAgents : agents.slice(0, 2)).map((agent) => (
+                <div key={agent.name} className="rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-2.5 text-sm text-zinc-200">
+                  <div className="flex items-center gap-2">
+                    <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: agent.color }} />
+                    <span className="font-medium text-white">{agent.name}</span>
+                  </div>
+                  <div className="mt-1 text-xs text-zinc-400">{agent.role}</div>
+                </div>
               ))}
             </div>
           </div>
@@ -494,7 +520,7 @@ export function ObsidianTycoonMap({ onEnterDistrict }: ObsidianTycoonMapProps) {
             <BookOpen className="h-4 w-4 text-emerald-300" />
             Empire pulse
           </div>
-          <div className="space-y-3">
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
             {[
               ["Booked revenue", "$20,021"],
               ["Tasks completed", "142"],
