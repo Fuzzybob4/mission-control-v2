@@ -367,9 +367,9 @@ export function ObsidianTycoonMap({ onEnterDistrict }: ObsidianTycoonMapProps) {
 
   return (
     <section className="space-y-4">
-      <div className="obsidian-stage relative overflow-hidden rounded-[34px] border border-cyan-400/15 p-4 md:p-6">
-        <div className="relative z-10 h-[980px] overflow-x-auto overflow-y-hidden rounded-[28px] md:h-[1180px] lg:h-[1220px]">
-          <div className="relative h-full min-w-[1180px] md:min-w-[1320px]">
+      <div className="obsidian-stage relative overflow-hidden rounded-[34px] border border-cyan-400/15 p-3 md:p-6">
+        <div className="relative z-10 rounded-[28px] overflow-hidden">
+          <div className="relative h-[1220px] min-w-[1320px] scale-[0.44] origin-top-left sm:scale-[0.56] md:scale-[0.72] lg:scale-[0.88] xl:scale-100" style={{ width: "1320px" }}>
             <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
               <defs>
                 <linearGradient id="bridgeGlow" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -485,6 +485,9 @@ export function ObsidianTycoonMap({ onEnterDistrict }: ObsidianTycoonMapProps) {
               </div>
             </div>
           </div>
+        </div>
+        <div className="relative z-10 mt-3 flex items-center justify-between rounded-2xl border border-white/10 bg-black/25 px-3 py-2 text-xs text-zinc-300 md:hidden">
+          <span>Tap districts below to inspect them. The world view is scaled for mobile preview.</span>
         </div>
       </div>
 
