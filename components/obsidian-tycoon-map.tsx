@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react"
 import { motion } from "framer-motion"
-import { AlertTriangle, ArrowRight, BookOpen, Bot, Briefcase, Building2, Coins, Cpu, FlaskConical, Gem, Lightbulb, Rocket, ShieldCheck, Sparkles, TrendingUp, Zap } from "lucide-react"
+import { ArrowRight, BookOpen, Bot, Briefcase, Coins, Cpu, FlaskConical, Gem, Lightbulb, Rocket, Sparkles, TrendingUp, Zap } from "lucide-react"
 
 interface ObsidianTycoonMapProps {
   onEnterDistrict?: (tab: string) => void
@@ -19,11 +19,13 @@ type District = {
   status: DistrictStatus
   x: string
   y: string
-  size: "hub" | "large" | "medium"
+  size: "hub" | "large" | "medium" | "small"
   color: string
   metric: string
   detail: string
+  level: string
   icon: React.ElementType
+  labelPosition: "top" | "top-left" | "top-right" | "left" | "right" | "bottom-left" | "bottom-right"
 }
 
 type Agent = {
@@ -37,31 +39,178 @@ const districts: District[] = [
   {
     id: "mission-control",
     name: "Mission Control",
-    subtitle: "Plan • Direct • Scale",
+    subtitle: "Plan · Manage · Dominate",
     owner: "Kal",
     status: "thriving",
     x: "50%",
-    y: "50%",
+    y: "40%",
     size: "hub",
-    color: "#14F1FF",
+    color: "#2ee7ff",
     metric: "10 agents online",
-    detail: "Empire brain routing tasks, decisions, and active automations.",
+    detail: "The central command dais routing businesses, agents, automations, and escalations.",
+    level: "HQ",
     icon: Sparkles,
+    labelPosition: "top",
   },
   {
-    id: "redfox-crm",
-    tab: "redfox",
-    name: "RedFox CRM",
-    subtitle: "SaaS Citadel",
-    owner: "Iris",
-    status: "building",
-    x: "48%",
-    y: "17%",
+    id: "agent-quarters",
+    name: "Agent Quarters",
+    subtitle: "Train, Upgrade, Rest",
+    owner: "Kal",
+    status: "thriving",
+    x: "20%",
+    y: "18%",
     size: "large",
-    color: "#FF5A5F",
-    metric: "3 features queued",
-    detail: "Pipeline maps, onboarding, billing, and launch readiness.",
+    color: "#d27bff",
+    metric: "2 idle slots",
+    detail: "Guild hall for readiness, deployment, specialization, and leveling your crew.",
+    level: "Level 3",
+    icon: Bot,
+    labelPosition: "left",
+  },
+  {
+    id: "foundry",
+    name: "The Foundry",
+    subtitle: "Build, Craft, Create",
+    owner: "Otis",
+    status: "building",
+    x: "50%",
+    y: "12%",
+    size: "medium",
+    color: "#ff9f43",
+    metric: "4 prototypes running",
+    detail: "Ship features, forge systems, and test upgrades before they enter the grid.",
+    level: "Level 4",
+    icon: Cpu,
+    labelPosition: "top-right",
+  },
+  {
+    id: "market-district",
+    name: "Market District",
+    subtitle: "Trade · Invest · Profit",
+    owner: "Scarlett",
+    status: "watch",
+    x: "79%",
+    y: "18%",
+    size: "large",
+    color: "#ff66d9",
+    metric: "12 listings pending",
+    detail: "Commercial skyline for marketplaces, deal flow, and offer movement.",
+    level: "Level 3",
+    icon: Gem,
+    labelPosition: "top-right",
+  },
+  {
+    id: "research-lab",
+    name: "Research Lab",
+    subtitle: "Innovate the Future",
+    owner: "Otis",
+    status: "building",
+    x: "11%",
+    y: "44%",
+    size: "medium",
+    color: "#4dffb8",
+    metric: "4 tests running",
+    detail: "Experiments, API validation, model trials, and future-casting systems work.",
+    level: "Level 3",
+    icon: FlaskConical,
+    labelPosition: "left",
+  },
+  {
+    id: "finance-tower",
+    name: "Finance Tower",
+    subtitle: "Wealth Drives Power",
+    owner: "Pax",
+    status: "watch",
+    x: "88%",
+    y: "42%",
+    size: "medium",
+    color: "#ffd84d",
+    metric: "$20,021 booked",
+    detail: "Treasury, cashflow, revenue command, and the empire's economic pulse.",
+    level: "Level 4",
+    icon: Coins,
+    labelPosition: "right",
+  },
+  {
+    id: "archives",
+    name: "The Archives",
+    subtitle: "Knowledge is Power",
+    owner: "Sierra",
+    status: "thriving",
+    x: "17%",
+    y: "70%",
+    size: "medium",
+    color: "#53d9ff",
+    metric: "118 docs indexed",
+    detail: "Memory vault, SOPs, research notes, playbooks, and long-range strategy lore.",
+    level: "Level 5",
+    icon: BookOpen,
+    labelPosition: "left",
+  },
+  {
+    id: "command-bridge",
+    name: "Command Bridge",
+    subtitle: "Oversee Operations",
+    owner: "Otto",
+    status: "watch",
+    x: "37%",
+    y: "87%",
+    size: "small",
+    color: "#5bbcff",
+    metric: "26 jobs queued",
+    detail: "Execution rails, dispatching, and active task visibility.",
+    level: "Level 4",
     icon: Briefcase,
+    labelPosition: "bottom-left",
+  },
+  {
+    id: "the-core",
+    name: "The Core",
+    subtitle: "Your Empire's Heart",
+    owner: "Kal",
+    status: "thriving",
+    x: "55%",
+    y: "83%",
+    size: "small",
+    color: "#8f7dff",
+    metric: "Automation 74%",
+    detail: "The crystal engine beneath the city, feeding power into every active district.",
+    level: "Level 6",
+    icon: Zap,
+    labelPosition: "bottom-right",
+  },
+  {
+    id: "operations-deck",
+    name: "Operations Deck",
+    subtitle: "Execute & Optimize",
+    owner: "Otto",
+    status: "watch",
+    x: "82%",
+    y: "68%",
+    size: "medium",
+    color: "#45d6ff",
+    metric: "Workflows stable",
+    detail: "Automation, reminders, glue systems, recurring jobs, and process tuning.",
+    level: "Level 4",
+    icon: Cpu,
+    labelPosition: "right",
+  },
+  {
+    id: "innovation-hub",
+    name: "Innovation Hub",
+    subtitle: "Shape Tomorrow",
+    owner: "Maverick",
+    status: "building",
+    x: "80%",
+    y: "88%",
+    size: "small",
+    color: "#4cc9ff",
+    metric: "3 experiments staged",
+    detail: "Concept lab for future products, offers, and weird profitable magic.",
+    level: "Level 3",
+    icon: Rocket,
+    labelPosition: "bottom-right",
   },
   {
     id: "lone-star",
@@ -70,28 +219,32 @@ const districts: District[] = [
     subtitle: "Field Ops Ridge",
     owner: "Marshal",
     status: "thriving",
-    x: "72%",
-    y: "26%",
-    size: "large",
-    color: "#F59E0B",
+    x: "65%",
+    y: "27%",
+    size: "small",
+    color: "#f59e0b",
     metric: "$20,021 booked",
-    detail: "Quotes, installs, HOA outreach, crews, and seasonal cashflow.",
+    detail: "Sales, installs, HOA opportunities, crews, quotes, and the current revenue engine.",
+    level: "Business",
     icon: Lightbulb,
+    labelPosition: "top-left",
   },
   {
-    id: "heroes",
-    tab: "heroes",
-    name: "Heroes of the Meta",
-    subtitle: "Marketplace Forge",
-    owner: "Scarlett",
-    status: "watch",
-    x: "74%",
-    y: "72%",
-    size: "large",
-    color: "#10B981",
-    metric: "12 listings pending",
-    detail: "Inventory, sellers, orders, artist ops, and payout rails.",
-    icon: Gem,
+    id: "redfox-crm",
+    tab: "redfox",
+    name: "RedFox CRM",
+    subtitle: "SaaS Citadel",
+    owner: "Iris",
+    status: "building",
+    x: "59%",
+    y: "55%",
+    size: "small",
+    color: "#ff5a5f",
+    metric: "3 features queued",
+    detail: "Product, onboarding, billing, roadmap, and launch pressure.",
+    level: "Business",
+    icon: Briefcase,
+    labelPosition: "right",
   },
   {
     id: "from-inception",
@@ -100,100 +253,15 @@ const districts: District[] = [
     subtitle: "Studio District",
     owner: "Maverick",
     status: "building",
-    x: "27%",
-    y: "24%",
-    size: "medium",
-    color: "#8B5CF6",
+    x: "44%",
+    y: "58%",
+    size: "small",
+    color: "#9c6bff",
     metric: "5 prospects warming",
-    detail: "Rapid builds, proposals, retainers, templates, and launches.",
+    detail: "Rapid builds, proposals, retainers, and client delivery lanes.",
+    level: "Business",
     icon: Rocket,
-  },
-  {
-    id: "openclaw-core",
-    tab: "systems",
-    name: "OpenClaw Core",
-    subtitle: "The Core",
-    owner: "Kal",
-    status: "thriving",
-    x: "49%",
-    y: "82%",
-    size: "large",
-    color: "#14F1FF",
-    metric: "Automation 74%",
-    detail: "Heartbeat, memory, agent routing, prompt library, and logs.",
-    icon: Cpu,
-  },
-  {
-    id: "archives",
-    name: "The Archives",
-    subtitle: "Knowledge Vault",
-    owner: "Sierra",
-    status: "thriving",
-    x: "24%",
-    y: "72%",
-    size: "medium",
-    color: "#22D3EE",
-    metric: "118 docs indexed",
-    detail: "Memory crystals, SOPs, research notes, and decision support.",
-    icon: BookOpen,
-  },
-  {
-    id: "research-lab",
-    name: "Research Lab",
-    subtitle: "Experimentarium",
-    owner: "Otis",
-    status: "building",
-    x: "10%",
-    y: "50%",
-    size: "medium",
-    color: "#34D399",
-    metric: "4 tests running",
-    detail: "Model experiments, API tests, feature validation, and prototypes.",
-    icon: FlaskConical,
-  },
-  {
-    id: "operations-deck",
-    tab: "revenue-command",
-    name: "Operations Deck",
-    subtitle: "Execution Layer",
-    owner: "Otto",
-    status: "watch",
-    x: "89%",
-    y: "50%",
-    size: "medium",
-    color: "#60A5FA",
-    metric: "26 jobs queued",
-    detail: "Workflow engine, recurring jobs, and system glue.",
-    icon: Zap,
-  },
-  {
-    id: "finance-tower",
-    tab: "analytics",
-    name: "Finance Tower",
-    subtitle: "Treasury Spire",
-    owner: "Pax",
-    status: "watch",
-    x: "82%",
-    y: "10%",
-    size: "medium",
-    color: "#EAB308",
-    metric: "$18K pipeline",
-    detail: "Cashflow, runway, AR, unit economics, and treasury vision.",
-    icon: Coins,
-  },
-  {
-    id: "agent-quarters",
-    name: "Agent Quarters",
-    subtitle: "Guild Hall",
-    owner: "Kal",
-    status: "thriving",
-    x: "16%",
-    y: "14%",
-    size: "medium",
-    color: "#C084FC",
-    metric: "2 idle slots",
-    detail: "Roster, specialization, readiness, and deployment staging.",
-    icon: Bot,
+    labelPosition: "left",
   },
 ]
 
@@ -202,338 +270,279 @@ const agents: Agent[] = [
   { name: "Otis", role: "DevOps Director", district: "Research Lab", color: "#34D399" },
   { name: "Marshal", role: "Sales Director", district: "Lone Star Lighting", color: "#F59E0B" },
   { name: "Iris", role: "RedFox Director", district: "RedFox CRM", color: "#FF5A5F" },
-  { name: "Scarlett", role: "Marketplace Director", district: "Heroes of the Meta", color: "#10B981" },
+  { name: "Scarlett", role: "Marketplace Director", district: "Market District", color: "#10B981" },
   { name: "Sierra", role: "Research Director", district: "The Archives", color: "#22D3EE" },
-  { name: "Scout", role: "Outreach Operator", district: "Operations Deck", color: "#60A5FA" },
   { name: "Maverick", role: "Design Director", district: "From Inception", color: "#8B5CF6" },
-  { name: "Barnes", role: "Backend Operator", district: "Research Lab", color: "#06B6D4" },
-  { name: "Ruby", role: "Content Operator", district: "From Inception", color: "#EC4899" },
   { name: "Pax", role: "Analytics Operator", district: "Finance Tower", color: "#EAB308" },
   { name: "Otto", role: "Automation Operator", district: "Operations Deck", color: "#3B82F6" },
 ]
 
 const resources = [
-  { label: "Capital", value: "$20,021", icon: Coins },
-  { label: "Influence", value: "87", icon: TrendingUp },
-  { label: "Automation", value: "74%", icon: Cpu },
-  { label: "Knowledge", value: "118", icon: BookOpen },
-  { label: "Momentum", value: "High", icon: Zap },
+  ["Agents", "24/50"],
+  ["Funds", "$98.4M"],
+  ["Influence", "72,540"],
+  ["Projects", "8 Active"],
 ]
 
 const objectives = [
-  "Launch RedFox MVP lane",
-  "Increase Lone Star booked revenue",
-  "Expand From Inception retainers",
-  "Grow Heroes GMV",
+  "Expand your influence",
+  "Complete special projects",
+  "Dominate the market",
 ]
 
 const events = [
-  "Lead surge detected in Lone Star Grid",
-  "Finance Tower flagged one follow-up risk",
-  "OpenClaw Core heartbeat stable",
-  "Research Lab testing new workflow chain",
+  ["Double Research Speed", "13:47:22"],
+  ["Market Shift", "05:21:10"],
 ]
 
-const bridgePairs = [
-  ["mission-control", "redfox-crm"],
-  ["mission-control", "lone-star"],
-  ["mission-control", "heroes"],
-  ["mission-control", "from-inception"],
-  ["mission-control", "openclaw-core"],
-  ["mission-control", "archives"],
-  ["mission-control", "research-lab"],
-  ["mission-control", "operations-deck"],
-  ["mission-control", "finance-tower"],
-  ["mission-control", "agent-quarters"],
-  ["openclaw-core", "operations-deck"],
-  ["archives", "research-lab"],
-  ["finance-tower", "redfox-crm"],
-  ["finance-tower", "heroes"],
-] as const
-
-const statusMeta: Record<DistrictStatus, { label: string; className: string }> = {
-  thriving: { label: "Thriving", className: "text-emerald-300 border-emerald-400/30 bg-emerald-500/15" },
-  building: { label: "Building", className: "text-sky-300 border-sky-400/30 bg-sky-500/15" },
-  watch: { label: "Watch", className: "text-amber-300 border-amber-400/30 bg-amber-500/15" },
-  critical: { label: "Critical", className: "text-rose-300 border-rose-400/30 bg-rose-500/15" },
+const statusMeta: Record<DistrictStatus, string> = {
+  thriving: "Thriving",
+  building: "Building",
+  watch: "Watch",
+  critical: "Critical",
 }
+
+const bridges = [
+  ["mission-control", "agent-quarters"],
+  ["mission-control", "foundry"],
+  ["mission-control", "market-district"],
+  ["mission-control", "research-lab"],
+  ["mission-control", "finance-tower"],
+  ["mission-control", "archives"],
+  ["mission-control", "operations-deck"],
+  ["mission-control", "the-core"],
+  ["the-core", "command-bridge"],
+  ["the-core", "innovation-hub"],
+] as const
 
 function getDistrict(id: string) {
   return districts.find((district) => district.id === id)
 }
 
-function districtSizeClasses(size: District["size"]) {
-  if (size === "hub") return "h-40 w-40 md:h-52 md:w-52"
-  if (size === "large") return "h-28 w-28 md:h-36 md:w-36"
-  return "h-24 w-24 md:h-32 md:w-32"
+function islandSize(size: District["size"]) {
+  if (size === "hub") return "h-52 w-52 md:h-64 md:w-64"
+  if (size === "large") return "h-36 w-36 md:h-44 md:w-44"
+  if (size === "medium") return "h-32 w-32 md:h-40 md:w-40"
+  return "h-24 w-24 md:h-28 md:w-28"
 }
 
-function bridgeStyle(from: District, to: District) {
-  const dx = parseFloat(to.x) - parseFloat(from.x)
-  const dy = parseFloat(to.y) - parseFloat(from.y)
-  const length = Math.sqrt(dx * dx + dy * dy)
-  const angle = Math.atan2(dy, dx) * (180 / Math.PI)
+function bridgePath(from: District, to: District) {
+  const x1 = parseFloat(from.x)
+  const y1 = parseFloat(from.y)
+  const x2 = parseFloat(to.x)
+  const y2 = parseFloat(to.y)
+  const mx = (x1 + x2) / 2
+  const my = Math.min(y1, y2) - 8
+  return `M ${x1} ${y1} Q ${mx} ${my} ${x2} ${y2}`
+}
 
-  return {
-    left: from.x,
-    top: from.y,
-    width: `${length}%`,
-    transform: `translateY(-50%) rotate(${angle}deg)`,
-    transformOrigin: "0 50%",
+function labelPlacement(position: District["labelPosition"]) {
+  switch (position) {
+    case "top-left":
+      return "-top-14 left-0 -translate-x-1/2"
+    case "top-right":
+      return "-top-14 right-0 translate-x-1/2"
+    case "left":
+      return "left-0 top-1/2 -translate-x-[92%] -translate-y-1/2"
+    case "right":
+      return "right-0 top-1/2 translate-x-[92%] -translate-y-1/2"
+    case "bottom-left":
+      return "bottom-0 left-0 -translate-x-1/2 translate-y-[118%]"
+    case "bottom-right":
+      return "bottom-0 right-0 translate-x-1/2 translate-y-[118%]"
+    default:
+      return "left-1/2 top-0 -translate-x-1/2 -translate-y-[118%]"
   }
 }
 
 export function ObsidianTycoonMap({ onEnterDistrict }: ObsidianTycoonMapProps) {
-  const [selectedDistrictId, setSelectedDistrictId] = useState("lone-star")
+  const [selectedDistrictId, setSelectedDistrictId] = useState("mission-control")
 
   const selectedDistrict = useMemo(
-    () => districts.find((district) => district.id === selectedDistrictId) ?? districts[1],
+    () => districts.find((district) => district.id === selectedDistrictId) ?? districts[0],
     [selectedDistrictId]
   )
 
   const selectedAgents = agents.filter((agent) => agent.district === selectedDistrict.name)
 
-  const handleDistrictSelect = (district: District) => {
-    setSelectedDistrictId(district.id)
-  }
-
   return (
     <section className="space-y-4">
-      <div className="grid gap-4 xl:grid-cols-[280px_minmax(0,1fr)_320px]">
-        <aside className="order-2 rounded-[28px] border border-cyan-400/15 bg-[#08101d]/80 p-4 shadow-[0_0_30px_rgba(20,241,255,0.08)] backdrop-blur-xl xl:order-1">
-          <div className="mb-4 flex items-center justify-between">
-            <div>
-              <p className="text-[11px] uppercase tracking-[0.3em] text-cyan-100/45">Agent roster</p>
-              <h3 className="mt-1 text-lg font-semibold text-white">Guild network</h3>
-            </div>
-            <ShieldCheck className="h-5 w-5 text-cyan-300" />
-          </div>
-
-          <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-1">
-            {agents.map((agent) => (
-              <div key={agent.name} className="rounded-2xl border border-white/8 bg-white/[0.03] px-3 py-2.5">
-                <div className="flex items-center gap-3">
-                  <span className="h-3 w-3 rounded-full" style={{ backgroundColor: agent.color, boxShadow: `0 0 14px ${agent.color}` }} />
-                  <div className="min-w-0 flex-1">
-                    <div className="text-sm font-medium text-white">{agent.name}</div>
-                    <div className="truncate text-[11px] text-zinc-400">{agent.role}</div>
-                  </div>
-                </div>
-                <div className="mt-2 text-[11px] uppercase tracking-[0.22em] text-zinc-500">{agent.district}</div>
-              </div>
-            ))}
-          </div>
-        </aside>
-
-        <div className="order-1 rounded-[32px] border border-white/10 bg-[radial-gradient(circle_at_top,rgba(168,85,247,0.18),transparent_28%),radial-gradient(circle_at_bottom,rgba(20,241,255,0.14),transparent_30%),linear-gradient(180deg,#0b1020,#120a24)] p-4 shadow-[0_0_80px_rgba(0,0,0,0.35)] xl:order-2">
-          <div className="mb-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/25 bg-cyan-500/10 px-3 py-1 text-[11px] uppercase tracking-[0.3em] text-cyan-100/70">
-                <Building2 className="h-3.5 w-3.5" />
-                Obsidian Mission Control
-              </div>
-              <h2 className="mt-3 text-xl font-bold uppercase tracking-[0.2em] text-white md:text-2xl" style={{ fontFamily: "var(--font-orbitron), monospace" }}>
-                Floating empire map
-              </h2>
-              <p className="mt-2 max-w-2xl text-sm text-cyan-50/70">
-                A living headquarters map with district islands, bridge energy, named agents, and room-level drilldown into the real business tabs.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
-              {resources.map((resource) => {
-                const Icon = resource.icon
+      <div className="obsidian-stage relative overflow-hidden rounded-[34px] border border-cyan-400/15 p-4 md:p-6">
+        <div className="relative z-10 h-[980px] overflow-x-auto overflow-y-hidden rounded-[28px] md:h-[1180px] lg:h-[1220px]">
+          <div className="relative h-full min-w-[1180px] md:min-w-[1320px]">
+            <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="bridgeGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#2ee7ff" stopOpacity="0.75" />
+                  <stop offset="100%" stopColor="#c26bff" stopOpacity="0.55" />
+                </linearGradient>
+                <filter id="bridgeBlur">
+                  <feGaussianBlur stdDeviation="0.35" />
+                </filter>
+              </defs>
+              {bridges.map(([fromId, toId]) => {
+                const from = getDistrict(fromId)
+                const to = getDistrict(toId)
+                if (!from || !to) return null
+                const d = bridgePath(from, to)
                 return (
-                  <div key={resource.label} className="rounded-2xl border border-white/10 bg-black/20 px-3 py-2.5">
-                    <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.24em] text-zinc-400">
-                      <Icon className="h-3.5 w-3.5 text-cyan-300" />
-                      {resource.label}
-                    </div>
-                    <div className="mt-2 text-lg font-semibold text-white">{resource.value}</div>
-                  </div>
+                  <g key={`${fromId}-${toId}`}>
+                    <path d={d} stroke="url(#bridgeGlow)" strokeWidth="1.45" fill="none" opacity="0.24" filter="url(#bridgeBlur)" />
+                    <path d={d} className="obsidian-bridge-path" stroke="url(#bridgeGlow)" strokeWidth="0.42" fill="none" />
+                  </g>
                 )
               })}
-            </div>
-          </div>
+            </svg>
 
-          <div className="obsidian-map-shell relative overflow-hidden rounded-[30px] border border-white/10 bg-[#070b17]/75 p-3">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(20,241,255,0.12),transparent_18%),radial-gradient(circle_at_20%_20%,rgba(168,85,247,0.14),transparent_18%),radial-gradient(circle_at_80%_80%,rgba(34,197,94,0.12),transparent_18%)]" />
-            <div className="absolute inset-0 opacity-25 [background-image:linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:36px_36px]" />
-
-            <div className="relative h-[520px] overflow-x-auto overflow-y-hidden rounded-[26px] md:h-[620px] lg:h-[720px]">
-              <div className="relative h-full min-w-[780px] rounded-[26px] md:min-w-0">
-                {bridgePairs.map(([fromId, toId]) => {
-                  const from = getDistrict(fromId)
-                  const to = getDistrict(toId)
-                  if (!from || !to) return null
-                  const style = bridgeStyle(from, to)
-                  return (
-                    <div key={`${fromId}-${toId}`} className="obsidian-bridge" style={style}>
-                      <span className="obsidian-bridge-flow" />
-                    </div>
-                  )
-                })}
-
-                {districts.map((district, index) => {
-                  const Icon = district.icon
-                  const status = statusMeta[district.status]
-                  const isSelected = selectedDistrict.id === district.id
-                  return (
-                    <motion.button
-                      key={district.id}
-                      initial={{ opacity: 0, scale: 0.9, y: 12 }}
-                      animate={{ opacity: 1, scale: 1, y: 0 }}
-                      transition={{ delay: index * 0.04, duration: 0.35 }}
-                      onClick={() => handleDistrictSelect(district)}
-                      className={`group absolute -translate-x-1/2 -translate-y-1/2 ${districtSizeClasses(district.size)}`}
-                      style={{ left: district.x, top: district.y }}
-                    >
-                      <div className={`obsidian-island h-full w-full rounded-[32px] border bg-[#0c1325]/88 p-3 text-left shadow-[0_0_30px_rgba(0,0,0,0.35)] ${isSelected ? "border-cyan-300/40 shadow-[0_0_32px_rgba(20,241,255,0.18)]" : "border-white/12"}`}>
-                        <div className="absolute inset-0 rounded-[32px] opacity-80" style={{ background: `radial-gradient(circle at 50% 0%, ${district.color}22, transparent 55%), linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01))` }} />
-                        <div className="relative flex h-full flex-col justify-between">
-                          <div className="flex items-start justify-between gap-2">
-                            <div className="rounded-2xl border border-white/10 bg-black/20 p-2">
-                              <Icon className="h-5 w-5" style={{ color: district.color }} />
-                            </div>
-                            <span className={`rounded-full border px-2 py-1 text-[9px] uppercase tracking-[0.18em] md:text-[10px] md:tracking-[0.22em] ${status.className}`}>
-                              {status.label}
-                            </span>
-                          </div>
-
-                          <div>
-                            <div className="text-xs font-semibold text-white md:text-base">{district.name}</div>
-                            <div className="text-[9px] uppercase tracking-[0.18em] text-zinc-400 md:text-[11px] md:tracking-[0.24em]">{district.subtitle}</div>
-                          </div>
-
-                          <div className="space-y-1">
-                            <div className="text-[10px] text-zinc-300 md:text-[11px]">{district.metric}</div>
-                            <div className="text-[9px] uppercase tracking-[0.18em] text-zinc-500 md:text-[10px] md:tracking-[0.22em]">Owner {district.owner}</div>
-                          </div>
+            {districts.map((district, index) => {
+              const Icon = district.icon
+              const isSelected = selectedDistrict.id === district.id
+              return (
+                <motion.button
+                  key={district.id}
+                  initial={{ opacity: 0, scale: 0.96, y: 8 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{ delay: index * 0.03, duration: 0.28 }}
+                  onClick={() => setSelectedDistrictId(district.id)}
+                  className={`absolute -translate-x-1/2 -translate-y-1/2 ${islandSize(district.size)}`}
+                  style={{ left: district.x, top: district.y }}
+                >
+                  <div className={`obsidian-island group relative h-full w-full ${isSelected ? "ring-2 ring-cyan-300/35" : ""}`}>
+                    <div className="obsidian-island-base" style={{ boxShadow: `0 18px 50px ${district.color}26` }} />
+                    <div className="obsidian-island-top" style={{ background: `radial-gradient(circle at 50% 35%, ${district.color}33, rgba(14,19,36,0.95) 55%, rgba(10,14,26,0.98) 100%)` }}>
+                      <div className="obsidian-waterfall" style={{ background: `linear-gradient(180deg, ${district.color}aa, transparent)` }} />
+                      <div className="obsidian-core-glow" style={{ background: `radial-gradient(circle, ${district.color}aa, transparent 68%)` }} />
+                      <div className="relative z-10 flex h-full flex-col items-center justify-center gap-2 p-3 text-center">
+                        <div className="rounded-full border border-white/15 bg-black/20 p-2 backdrop-blur-sm">
+                          <Icon className="h-5 w-5 md:h-6 md:w-6" style={{ color: district.color }} />
+                        </div>
+                        <div className="max-w-[90%] text-[11px] font-semibold uppercase tracking-[0.18em] text-white md:text-[13px] md:tracking-[0.22em]">
+                          {district.name}
+                        </div>
+                        <div className="text-[9px] uppercase tracking-[0.16em] text-cyan-100/70 md:text-[10px]">
+                          {district.level}
                         </div>
                       </div>
-                    </motion.button>
-                  )
-                })}
-              </div>
-            </div>
+                    </div>
 
-            <div className="mt-3 flex items-center justify-between rounded-2xl border border-white/10 bg-black/20 px-3 py-2 text-xs text-zinc-400 md:hidden">
-              <span>Swipe sideways to explore the city map</span>
-              <ArrowRight className="h-4 w-4 text-cyan-300" />
+                    <div className={`obsidian-label ${labelPlacement(district.labelPosition)}`}>
+                      <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-cyan-100 md:text-[12px]">{district.name}</div>
+                      <div className="mt-1 text-[10px] uppercase tracking-[0.14em] text-zinc-400">{district.level}</div>
+                      <div className="mt-1 text-[10px] text-zinc-300 md:text-[11px]">{district.subtitle}</div>
+                    </div>
+                  </div>
+                </motion.button>
+              )
+            })}
+
+            <div className="absolute inset-x-0 bottom-0 z-20 px-3 pb-3 md:px-6 md:pb-6">
+              <div className="grid gap-3 lg:grid-cols-[1.1fr_1fr_1fr_220px]">
+                <div className="obsidian-hud-card">
+                  <div className="obsidian-hud-title">Empire Stats</div>
+                  <div className="mt-3 grid grid-cols-2 gap-3">
+                    {resources.map(([label, value]) => (
+                      <div key={label} className="border-r border-white/6 pr-2 last:border-r-0">
+                        <div className="text-[10px] uppercase tracking-[0.18em] text-cyan-100/55">{label}</div>
+                        <div className="mt-1 text-lg font-semibold text-white">{value}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="obsidian-hud-card">
+                  <div className="obsidian-hud-title">Objectives</div>
+                  <div className="mt-3 space-y-2">
+                    {objectives.map((objective) => (
+                      <div key={objective} className="flex items-start gap-2 text-sm text-zinc-200">
+                        <span className="mt-1 h-2 w-2 rounded-full bg-cyan-300" />
+                        <span>{objective}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="obsidian-hud-card">
+                  <div className="obsidian-hud-title">Global Events</div>
+                  <div className="mt-3 space-y-2">
+                    {events.map(([label, timer]) => (
+                      <div key={label} className="flex items-center justify-between gap-3 text-sm">
+                        <span className="text-zinc-200">{label}</span>
+                        <span className="font-mono text-cyan-100/70">{timer}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="obsidian-hud-card flex items-center justify-center">
+                  <div className="obsidian-mini-map">
+                    <span />
+                    <span />
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <aside className="order-3 rounded-[28px] border border-fuchsia-400/15 bg-[#08101d]/80 p-4 shadow-[0_0_30px_rgba(168,85,247,0.08)] backdrop-blur-xl xl:order-3">
-          <div className="mb-4 flex items-start justify-between gap-3">
-            <div>
-              <p className="text-[11px] uppercase tracking-[0.3em] text-fuchsia-100/45">District detail</p>
-              <h3 className="mt-1 text-lg font-semibold text-white">{selectedDistrict.name}</h3>
-              <p className="mt-1 text-sm text-zinc-400">{selectedDistrict.subtitle}</p>
-            </div>
-            <span className={`rounded-full border px-2.5 py-1 text-[10px] uppercase tracking-[0.22em] ${statusMeta[selectedDistrict.status].className}`}>
-              {statusMeta[selectedDistrict.status].label}
-            </span>
+      <div className="grid gap-4 lg:grid-cols-[1.2fr_320px]">
+        <div className="rounded-[28px] border border-white/10 bg-[#08101d]/75 p-4 backdrop-blur-xl">
+          <div className="mb-3 flex items-center gap-2 text-sm font-medium text-white">
+            <TrendingUp className="h-4 w-4 text-cyan-300" />
+            District status board
           </div>
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+            {districts.map((district) => (
+              <button
+                key={district.id}
+                onClick={() => setSelectedDistrictId(district.id)}
+                className={`rounded-2xl border px-4 py-3 text-left transition ${selectedDistrict.id === district.id ? "border-cyan-300/35 bg-cyan-500/8" : "border-white/10 bg-black/20 hover:bg-white/[0.04]"}`}
+              >
+                <div className="text-xs uppercase tracking-[0.18em] text-zinc-500">{district.level}</div>
+                <div className="mt-1 text-sm font-semibold text-white">{district.name}</div>
+                <div className="mt-1 text-xs text-zinc-400">{district.metric}</div>
+                <div className="mt-2 text-[10px] uppercase tracking-[0.16em] text-cyan-100/55">{statusMeta[district.status]}</div>
+              </button>
+            ))}
+          </div>
+        </div>
 
-          <div className="rounded-[24px] border border-white/10 bg-black/20 p-4">
-            <div className="text-[11px] uppercase tracking-[0.22em] text-zinc-500">District owner</div>
-            <div className="mt-1 text-xl font-semibold text-white">{selectedDistrict.owner}</div>
-            <p className="mt-3 text-sm text-zinc-300">{selectedDistrict.detail}</p>
+        <aside className="rounded-[28px] border border-fuchsia-400/15 bg-[#08101d]/80 p-4 shadow-[0_0_30px_rgba(168,85,247,0.08)] backdrop-blur-xl">
+          <div className="text-[11px] uppercase tracking-[0.3em] text-fuchsia-100/45">Selected district</div>
+          <h3 className="mt-2 text-xl font-semibold text-white">{selectedDistrict.name}</h3>
+          <p className="mt-1 text-sm text-zinc-400">{selectedDistrict.subtitle}</p>
+          <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4">
+            <div className="text-[10px] uppercase tracking-[0.16em] text-zinc-500">Owner</div>
+            <div className="mt-1 text-sm font-medium text-white">{selectedDistrict.owner}</div>
+            <div className="mt-3 text-[10px] uppercase tracking-[0.16em] text-zinc-500">Primary metric</div>
+            <div className="mt-1 text-sm font-medium text-white">{selectedDistrict.metric}</div>
+            <p className="mt-4 text-sm text-zinc-300">{selectedDistrict.detail}</p>
             {selectedDistrict.tab && (
               <button
                 onClick={() => onEnterDistrict?.(selectedDistrict.tab as string)}
                 className="mt-4 inline-flex items-center gap-2 rounded-2xl border border-cyan-400/30 bg-cyan-500/10 px-3 py-2 text-sm font-medium text-cyan-100 transition hover:bg-cyan-500/15"
               >
-                Open district panel
+                Open business panel
                 <ArrowRight className="h-4 w-4" />
               </button>
             )}
           </div>
 
-          <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
-            {[
-              ["Primary metric", selectedDistrict.metric],
-              ["Health", statusMeta[selectedDistrict.status].label],
-              ["Power lane", selectedDistrict.name === "Lone Star Lighting" ? "Revenue" : "Build"],
-              ["Empire effect", "Feeds the central hub"],
-            ].map(([label, value]) => (
-              <div key={label} className="rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-3">
-                <div className="text-[10px] uppercase tracking-[0.22em] text-zinc-500">{label}</div>
-                <div className="mt-1 text-sm font-medium text-white">{value}</div>
+          <div className="mt-4 space-y-2">
+            {(selectedAgents.length ? selectedAgents : agents.slice(0, 2)).map((agent) => (
+              <div key={agent.name} className="rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-3">
+                <div className="flex items-center gap-2">
+                  <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: agent.color }} />
+                  <span className="font-medium text-white">{agent.name}</span>
+                </div>
+                <div className="mt-1 text-xs text-zinc-400">{agent.role}</div>
               </div>
             ))}
-          </div>
-
-          <div className="mt-4 rounded-[24px] border border-white/10 bg-black/20 p-4">
-            <div className="mb-3 flex items-center gap-2 text-sm font-medium text-white">
-              <AlertTriangle className="h-4 w-4 text-amber-300" />
-              Assigned agents
-            </div>
-            <div className="space-y-2">
-              {(selectedAgents.length ? selectedAgents : agents.slice(0, 2)).map((agent) => (
-                <div key={agent.name} className="rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-2.5 text-sm text-zinc-200">
-                  <div className="flex items-center gap-2">
-                    <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: agent.color }} />
-                    <span className="font-medium text-white">{agent.name}</span>
-                  </div>
-                  <div className="mt-1 text-xs text-zinc-400">{agent.role}</div>
-                </div>
-              ))}
-            </div>
           </div>
         </aside>
-      </div>
-
-      <div className="grid gap-4 xl:grid-cols-[1.2fr_1fr_300px]">
-        <div className="rounded-[28px] border border-white/10 bg-[#08101d]/80 p-4 backdrop-blur-xl">
-          <div className="mb-3 flex items-center gap-2 text-sm font-medium text-white">
-            <TrendingUp className="h-4 w-4 text-cyan-300" />
-            Global objectives
-          </div>
-          <div className="grid gap-3 md:grid-cols-2">
-            {objectives.map((objective, index) => (
-              <div key={objective} className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3">
-                <div className="text-[10px] uppercase tracking-[0.22em] text-zinc-500">Objective {index + 1}</div>
-                <div className="mt-1 text-sm text-white">{objective}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="rounded-[28px] border border-white/10 bg-[#08101d]/80 p-4 backdrop-blur-xl">
-          <div className="mb-3 flex items-center gap-2 text-sm font-medium text-white">
-            <Zap className="h-4 w-4 text-amber-300" />
-            Event log
-          </div>
-          <div className="space-y-2">
-            {events.map((event) => (
-              <div key={event} className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-zinc-200">
-                {event}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="rounded-[28px] border border-white/10 bg-[#08101d]/80 p-4 backdrop-blur-xl">
-          <div className="mb-3 flex items-center gap-2 text-sm font-medium text-white">
-            <BookOpen className="h-4 w-4 text-emerald-300" />
-            Empire pulse
-          </div>
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
-            {[
-              ["Booked revenue", "$20,021"],
-              ["Tasks completed", "142"],
-              ["Active automations", "26"],
-              ["Districts healthy", "8 / 10"],
-            ].map(([label, value]) => (
-              <div key={label} className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3">
-                <div className="text-[10px] uppercase tracking-[0.22em] text-zinc-500">{label}</div>
-                <div className="mt-1 text-lg font-semibold text-white">{value}</div>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
     </section>
   )
