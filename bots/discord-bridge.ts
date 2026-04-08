@@ -2,7 +2,7 @@ import { execFile } from 'node:child_process'
 import { promisify } from 'node:util'
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
-import { vault } from '../skills/credential-vault/lib/encryption'
+import { vault } from '../skills/credential-vault/lib/encryption.ts'
 
 const execFileAsync = promisify(execFile)
 const GUILD_ID = '1483959225708183605'
