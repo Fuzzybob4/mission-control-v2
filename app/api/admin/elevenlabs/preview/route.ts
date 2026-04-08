@@ -1,16 +1,17 @@
 import { NextRequest, NextResponse } from "next/server"
+import { getElevenLabsApiKey } from "../lib"
 
 export const runtime = "nodejs"
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => ({}))
-    const apiKey = body?.apiKey as string | undefined
+    const apiKey = getElevenLabsApiKey()
     const voiceId = body?.voiceId as string | undefined
     const text = body?.text as string | undefined
 
-    if (!apiKey || !voiceId || !text) {
-      return NextResponse.json({ error: "Missing apiKey, voiceId, or text" }, { status: 400 })
+    if (!voiceId || !text) {
+      return NextResponse.json({ error: "Missing voiceId or text" }, { status: 400 })
     }
 
     const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {

@@ -1,15 +1,11 @@
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
+import { getElevenLabsApiKey } from "../lib"
 
 export const runtime = "nodejs"
 
-export async function POST(req: NextRequest) {
+export async function GET() {
   try {
-    const body = await req.json().catch(() => ({}))
-    const apiKey = body?.apiKey as string | undefined
-
-    if (!apiKey) {
-      return NextResponse.json({ error: "Missing apiKey" }, { status: 400 })
-    }
+    const apiKey = getElevenLabsApiKey()
 
     const response = await fetch("https://api.elevenlabs.io/v1/voices", {
       method: "GET",
