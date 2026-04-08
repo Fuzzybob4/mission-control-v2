@@ -5,7 +5,7 @@ export const runtime = "nodejs"
 
 export async function GET() {
   try {
-    const apiKey = getElevenLabsApiKey()
+    const apiKey = await getElevenLabsApiKey()
 
     const response = await fetch("https://api.elevenlabs.io/v1/voices", {
       method: "GET",

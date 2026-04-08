@@ -6,7 +6,7 @@ export const runtime = "nodejs"
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => ({}))
-    const apiKey = getElevenLabsApiKey()
+    const apiKey = await getElevenLabsApiKey()
     const voiceId = body?.voiceId as string | undefined
     const text = body?.text as string | undefined
 
