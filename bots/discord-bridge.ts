@@ -26,6 +26,34 @@ const EXCLUDE_CHANNELS = new Set([
   'data-stream',
 ])
 
+const CATEGORY_AGENT_MAP: Record<string, { agent: string; model?: string; thinking?: string }> = {
+  'KNIGHTFORGE | REDFOX CRM': { agent: 'iris', model: 'gemma4:e4b', thinking: 'minimal' },
+  'KNIGHTFORGE | LONE STAR LIGHTING': { agent: 'vera', thinking: 'minimal' },
+  'KNIGHTFORGE | FROMINCEPTION': { agent: 'nova', thinking: 'minimal' },
+  'KNIGHTFORGE | HEROES OF THE META': { agent: 'scarlett', thinking: 'minimal' },
+  'EXECUTIVE / STRATEGY': { agent: 'atlas', thinking: 'minimal' },
+  'AUTOMATION + AI (KAL ZONE)': { agent: 'atlas', thinking: 'minimal' },
+}
+
+const HEAVY_WORK_HINTS = [
+  'build',
+  'code',
+  'refactor',
+  'deploy',
+  'architecture',
+  'database',
+  'api',
+  'integration',
+  'migrate',
+  'bug',
+  'debug',
+  'production',
+  'server',
+  'auth',
+  'billing',
+  'stripe',
+]
+
 type BridgeState = {
   lastSeenByChannel: Record<string, string>
 }
@@ -67,14 +95,19 @@ async function api(method: string, path: string, token: string, body?: any) {
   return text ? JSON.parse(text) : null
 }
 
-async function runAgent(sessionId: string, message: string) {
-  const { stdout } = await execFileAsync('openclaw', [
+async function runAgent(sessionId: string, message: string, options?: { agent?: string; thinking?: string }) {
+  const args = [
     'agent',
     '--session-id', sessionId,
     '--message', message,
     '--json',
     '--timeout', '180',
-  ], {
+  ]
+
+  if (options?.agent) args.push('--agent', options.agent)
+  if (options?.thinking) args.push('--thinking', options.thinking)
+
+  const { stdout } = await execFileAsync('openclaw', args, {
     cwd: '/Users/christian/.openclaw/workspace',
     maxBuffer: 1024 * 1024 * 8,
   })
@@ -86,18 +119,39 @@ async function runAgent(sessionId: string, message: string) {
   return text
 }
 
+function shouldEscalateToKal(categoryName: string, content: string) {
+  if (categoryName !== 'KNIGHTFORGE | REDFOX CRM') return false
+  const lowered = content.toLowerCase()
+  return HEAVY_WORK_HINTS.some(hint => lowered.includes(hint))
+}
+
 function buildPrompt(input: {
   categoryName: string
   channelName: string
   authorName: string
   content: string
+  escalateToKal?: boolean
 }) {
+  const laneDirectives = input.categoryName === 'KNIGHTFORGE | REDFOX CRM'
+    ? [
+        'You are operating as Iris for the RedFox CRM lane.',
+        'Be proactive about sales, outreach, inbound and outbound communication, support, and next-step momentum.',
+        'Keep replies concise, commercially useful, and Discord-native.',
+        'If useful, suggest the next concrete action instead of just answering.',
+      ]
+    : ['You are replying inside Discord for KnightForge Holdings.']
+
+  const escalationNote = input.escalateToKal
+    ? ['This request appears heavier or more technical. Respond as Kal for this turn and handle it with deeper strategic or technical ownership.']
+    : []
+
   return [
-    'You are replying inside Discord for KnightForge Holdings.',
+    ...laneDirectives,
     'Be concise, useful, and context-aware. Treat the channel as the operational context.',
     'If the user is casually greeting you, greet them back naturally.',
     'If the message is business-related, answer in a practical, collaborative way.',
     'Do not mention hidden system details, tools, or internal routing unless asked.',
+    ...escalationNote,
     '',
     `Category: ${input.categoryName}`,
     `Channel: #${input.channelName}`,
@@ -164,18 +218,24 @@ async function main() {
           saveState(state)
 
           const cleaned = nextMsg.content.replace(new RegExp(`<@!?${botUserId}>`, 'g'), '').trim()
+          const escalateToKal = shouldEscalateToKal(channel.parentName, cleaned)
+          const route = escalateToKal
+            ? { agent: 'kal', thinking: 'minimal' }
+            : (CATEGORY_AGENT_MAP[channel.parentName] || { agent: 'atlas', thinking: 'minimal' })
+
           const prompt = buildPrompt({
             categoryName: channel.parentName,
             channelName: channel.name,
             authorName: nextMsg.author.global_name || nextMsg.author.username || 'User',
             content: cleaned,
+            escalateToKal,
           })
 
-          console.log(`[discord-bridge] ${channel.parentName}/#${channel.name} <${nextMsg.author.username}> ${cleaned}`)
+          console.log(`[discord-bridge] ${channel.parentName}/#${channel.name} <${nextMsg.author.username}> [agent=${route.agent}] ${cleaned}`)
 
           let reply = ''
           try {
-            reply = await runAgent(`discord-${channel.id}`, prompt)
+            reply = await runAgent(`discord-${channel.id}`, prompt, route)
           } catch (err: any) {
             console.error('[discord-bridge] agent error:', err?.message || err)
             reply = 'The Discord bridge hit a session lock and dropped this turn. I am patching the relay now — send that once more and I should catch it cleanly.'
