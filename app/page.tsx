@@ -25,6 +25,7 @@ import { CommanderCard } from "@/components/commander-card"
 import { ActiveMissions } from "@/components/active-missions"
 import { ShipTimeClock } from "@/components/ship-time-clock"
 import { ObsidianTycoonMap } from "@/components/obsidian-tycoon-map"
+import { ElevenLabsVoiceLab } from "@/components/elevenlabs-voice-lab"
 
 const ClockWidget = dynamic(
   () => import("@/components/clock-widget").then(m => m.ClockWidget),
@@ -36,7 +37,7 @@ const VaultUI = dynamic(
   { ssr: false }
 )
 
-type TabId = "overview" | "revenue-command" | "lone-star" | "redfox" | "heroes" | "analytics" | "systems" | "vault" | "from-inception"
+type TabId = "overview" | "revenue-command" | "lone-star" | "redfox" | "heroes" | "analytics" | "systems" | "vault" | "voice-lab" | "from-inception"
 
 const TAB_TITLES: Record<TabId, string> = {
   overview: "Overview",
@@ -47,10 +48,11 @@ const TAB_TITLES: Record<TabId, string> = {
   analytics: "Analytics",
   systems: "Systems",
   vault: "Credential Vault",
+  "voice-lab": "Voice Lab",
   "from-inception": "From Inception",
 }
 
-const TABS: TabId[] = ["overview", "revenue-command", "lone-star", "redfox", "heroes", "analytics", "systems", "vault", "from-inception"]
+const TABS: TabId[] = ["overview", "revenue-command", "lone-star", "redfox", "heroes", "analytics", "systems", "vault", "voice-lab", "from-inception"]
 
 // Only show the quote, heartbeat, and notifications on top-level dashboard tabs
 const DASHBOARD_TABS: TabId[] = ["overview", "revenue-command", "analytics", "systems"]
@@ -76,7 +78,7 @@ export default function MissionControl() {
     { key: "6", description: "Analytics", action: () => switchTab("analytics") },
     { key: "7", description: "Systems", action: () => switchTab("systems") },
     { key: "8", description: "Vault", action: () => switchTab("vault") },
-    { key: "9", description: "From Inception", action: () => switchTab("from-inception") },
+    { key: "9", description: "Voice Lab", action: () => switchTab("voice-lab") },
     { key: "?", description: "Toggle help", action: () => setShowShortcutsHelp(prev => !prev) },
     { key: "n", description: "New lead", action: () => success("New Lead", "Opening lead creation form...") },
     { key: "t", description: "New task", action: () => success("New Task", "Opening task creation dialog...") },
@@ -178,6 +180,7 @@ export default function MissionControl() {
           {activeTab === "analytics" && <AnalyticsTab />}
           {activeTab === "systems" && <SystemsTab />}
           {activeTab === "vault" && <VaultUI />}
+          {activeTab === "voice-lab" && <ElevenLabsVoiceLab />}
           {activeTab === "from-inception" && <FromInceptionTab />}
         </div>
       </main>

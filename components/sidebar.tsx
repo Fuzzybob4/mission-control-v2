@@ -18,10 +18,11 @@ import {
   X,
   Sparkles,
   Mail,
-  Crosshair
+  Crosshair,
+  Mic
 } from "lucide-react"
 
-type TabId = "overview" | "revenue-command" | "lone-star" | "redfox" | "heroes" | "analytics" | "systems" | "vault" | "from-inception"
+type TabId = "overview" | "revenue-command" | "lone-star" | "redfox" | "heroes" | "analytics" | "systems" | "vault" | "voice-lab" | "from-inception"
 
 const tabs: { id: TabId; label: string; icon: React.ElementType }[] = [
   { id: "overview",        label: "Tycoon HQ",           icon: LayoutDashboard },
@@ -33,6 +34,7 @@ const tabs: { id: TabId; label: string; icon: React.ElementType }[] = [
   { id: "analytics",       label: "Analytics",           icon: BarChart3 },
   { id: "systems",         label: "Systems",             icon: Settings },
   { id: "vault",           label: "Credential Vault",    icon: ShieldCheck },
+  { id: "voice-lab",       label: "Voice Lab",           icon: Mic },
 ]
 
 interface SidebarProps {
