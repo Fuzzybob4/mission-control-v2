@@ -8,6 +8,7 @@ const execFileAsync = promisify(execFile)
 const GUILD_ID = '1483959225708183605'
 const API = 'https://discord.com/api/v10'
 const POLL_MS = 8000
+const CHANNEL_REFRESH_MS = 60_000
 const STATE_PATH = resolve(process.cwd(), 'memory/iris-discord-bridge-state.json')
 const WATCH_PARENT_CATEGORIES = new Set(['KNIGHTFORGE | REDFOX CRM'])
 const EXCLUDE_CHANNELS = new Set(['announcements', 'rules', 'welcome', 'branding-admin'])
@@ -135,24 +136,30 @@ async function main() {
 
   const state = loadState()
   const inFlightChannels = new Set<string>()
+  let watched: any[] = []
+  let lastChannelRefresh = 0
 
   while (true) {
     try {
-      const channels = await api('GET', `/guilds/${GUILD_ID}/channels`, token)
-      const categories = new Map<string, string>()
-      const watched = [] as any[]
+      if (!watched.length || Date.now() - lastChannelRefresh > CHANNEL_REFRESH_MS) {
+        const channels = await api('GET', `/guilds/${GUILD_ID}/channels`, token)
+        const categories = new Map<string, string>()
+        watched = []
 
-      for (const ch of channels) {
-        if (ch.type === 4) categories.set(ch.id, ch.name)
-      }
+        for (const ch of channels) {
+          if (ch.type === 4) categories.set(ch.id, ch.name)
+        }
 
-      for (const ch of channels) {
-        if (ch.type !== 0) continue
-        if (EXCLUDE_CHANNELS.has(ch.name)) continue
-        const parentName = categories.get(ch.parent_id)
-        if (!parentName) continue
-        if (!WATCH_PARENT_CATEGORIES.has(parentName)) continue
-        watched.push({ ...ch, parentName })
+        for (const ch of channels) {
+          if (ch.type !== 0) continue
+          if (EXCLUDE_CHANNELS.has(ch.name)) continue
+          const parentName = categories.get(ch.parent_id)
+          if (!parentName) continue
+          if (!WATCH_PARENT_CATEGORIES.has(parentName)) continue
+          watched.push({ ...ch, parentName })
+        }
+
+        lastChannelRefresh = Date.now()
       }
 
       for (const channel of watched) {
