@@ -1,17 +1,17 @@
 "use client"
 
-import { Monitor, Globe, Code2, Layers, Rocket, Users } from "lucide-react"
+import { Monitor, Workflow, Bot, Layers, Rocket, Users } from "lucide-react"
 
 const services = [
   {
-    icon: Globe,
-    title: "Web Design",
-    description: "Custom websites built to reflect your brand and convert visitors into clients.",
+    icon: Workflow,
+    title: "CRM Systems",
+    description: "Custom pipeline systems that keep leads, follow-up, quoting, and jobs moving without leaks.",
   },
   {
-    icon: Code2,
-    title: "Web Development",
-    description: "Full-stack development with modern frameworks — fast, secure, and scalable.",
+    icon: Bot,
+    title: "Automation Builds",
+    description: "Lead routing, reminders, follow-ups, dashboards, and operator workflows wired around how the business actually runs.",
   },
   {
     icon: Layers,
@@ -20,8 +20,8 @@ const services = [
   },
   {
     icon: Rocket,
-    title: "Launch Strategy",
-    description: "Go-to-market planning, SEO setup, and analytics from the very start.",
+    title: "Operational Rollout",
+    description: "Deploy the system, train the team, and tighten reporting so the business feels the gain quickly.",
   },
   {
     icon: Users,
@@ -30,15 +30,15 @@ const services = [
   },
   {
     icon: Monitor,
-    title: "Dashboard & Portals",
-    description: "Client portals and internal dashboards that streamline your operations.",
+    title: "Dashboards & Portals",
+    description: "Client portals and internal dashboards that turn business chaos into one command surface.",
   },
 ]
 
 const projects = [
-  { name: "From Inception — Studio Site", status: "In Dev", url: "#", tech: "Next.js · Vercel" },
-  { name: "Lone Star Lighting (client build)", status: "Live", url: "#", tech: "Next.js · Supabase" },
-  { name: "RedFox CRM (client build)", status: "In Dev", url: "#", tech: "Next.js · PostgreSQL" },
+  { name: "From Inception — Positioning + offer system", status: "In Dev", url: "#", tech: "Next.js · Vercel" },
+  { name: "Lone Star Lighting — outreach + ops pipeline", status: "Live", url: "#", tech: "Mission Control · Supabase" },
+  { name: "RedFox CRM — field-service operating core", status: "In Dev", url: "#", tech: "Next.js · PostgreSQL" },
 ]
 
 const statusColor: Record<string, string> = {
@@ -60,11 +60,10 @@ export function FromInceptionTab() {
           <h2 className="text-2xl font-bold text-white">From Inception</h2>
         </div>
         <p className="text-gray-400 max-w-2xl leading-relaxed">
-          Web development and digital branding studio — we take ideas from concept to launch. 
-          Every project is built with intention, designed to grow, and delivered on time.
+          Custom CRM and business systems studio. We build the machines behind revenue, pipeline visibility, follow-up, and operator control, with websites serving the system instead of pretending to be the system.
         </p>
         <div className="flex flex-wrap gap-2 mt-1">
-          {["Web Design", "Development", "Branding", "SEO", "Hosting"].map(tag => (
+          {["CRM Systems", "Automation", "Dashboards", "Branding", "Web Support"].map(tag => (
             <span
               key={tag}
               className="text-xs px-2.5 py-1 rounded-full border border-white/10 bg-white/5 text-gray-400"

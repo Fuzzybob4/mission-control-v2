@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Plus, Mail, FileText, Zap } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
@@ -12,6 +13,7 @@ interface QuickActionsProps {
 
 export function QuickActions({ onNewLead, onCheckEmail, onNewTask }: QuickActionsProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const router = useRouter()
   const { success, info } = useToast()
 
   const handleAction = (actionId: string, handler?: () => void) => {
@@ -40,21 +42,21 @@ export function QuickActions({ onNewLead, onCheckEmail, onNewTask }: QuickAction
       label: "New Lead", 
       icon: Plus, 
       color: "bg-emerald-500 hover:bg-emerald-600",
-      onClick: onNewLead 
+      onClick: onNewLead ?? (() => router.push("/cold-outreach?status=pending")) 
     },
     { 
       id: "email", 
       label: "Check Email", 
       icon: Mail, 
       color: "bg-blue-500 hover:bg-blue-600",
-      onClick: onCheckEmail 
+      onClick: onCheckEmail ?? (() => router.push("/cold-outreach")) 
     },
     { 
       id: "task", 
       label: "New Task", 
       icon: FileText, 
       color: "bg-violet-500 hover:bg-violet-600",
-      onClick: onNewTask 
+      onClick: onNewTask ?? (() => router.push("/cron-jobs")) 
     },
   ]
 

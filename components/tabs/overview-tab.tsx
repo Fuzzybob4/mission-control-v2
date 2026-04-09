@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { RecentActivity } from "@/components/recent-activity"
+import { LiveBusinessSnapshot } from "@/components/live-business-snapshot"
 import {
   Lightbulb, Code2, Gamepad2, Monitor,
   TrendingUp, AlertCircle, ArrowUpRight, ChevronRight,
@@ -307,6 +308,8 @@ export function OverviewTab({ onNavigate }: { onNavigate?: (tab: string) => void
           </div>
         </div>
       </div>
+
+      <LiveBusinessSnapshot />
 
       {/* ── Row 3: Activity + Urgent Actions ───────────────────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">

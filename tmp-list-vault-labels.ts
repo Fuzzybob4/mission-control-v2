@@ -1,4 +1,4 @@
-import { vault } from './skills/credential-vault/lib/encryption.ts'
+import { vault } from './skills/credential-vault/lib/encryption'
 
 async function main() {
   const url = process.env.SUPABASE_URL
