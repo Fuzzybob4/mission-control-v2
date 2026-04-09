@@ -54,7 +54,7 @@ async function getBotToken() {
   vault.initializeSupabase(url, key)
   const result = await vault.unlock(process.env.VAULT_PIN || '2846')
   if (!result.success) throw new Error(result.message || 'Unlock failed')
-  return vault.get('discord-bot', 'Redfox CRM', 'Token')
+  return vault.get('Iris discord', 'RedFox CRM', 'bot_token')
 }
 
 async function api(method: string, path: string, token: string, body?: any) {
