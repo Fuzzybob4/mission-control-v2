@@ -10,7 +10,7 @@ const API = 'https://discord.com/api/v10'
 const POLL_MS = 8000
 const STATE_PATH = resolve(process.cwd(), 'memory/iris-discord-bridge-state.json')
 const WATCH_PARENT_CATEGORIES = new Set(['KNIGHTFORGE | REDFOX CRM'])
-const EXCLUDE_CHANNELS = new Set(['announcements', 'rules', 'welcome'])
+const EXCLUDE_CHANNELS = new Set(['announcements', 'rules', 'welcome', 'branding-admin'])
 const HEAVY_WORK_HINTS = [
   'build',
   'code',
@@ -160,7 +160,13 @@ async function main() {
 
         const after = state.lastSeenByChannel[channel.id]
         const query = after ? `?limit=20&after=${after}` : '?limit=5'
-        const msgs = await api('GET', `/channels/${channel.id}/messages${query}`, token)
+        let msgs: any[]
+        try {
+          msgs = await api('GET', `/channels/${channel.id}/messages${query}`, token)
+        } catch (err: any) {
+          console.error(`[iris-discord-bridge] channel read skipped for #${channel.name}:`, err?.message || err)
+          continue
+        }
         const ordered = [...msgs].reverse()
         const nextMsg = ordered.find((msg: any) => {
           if (!msg.author || msg.author.id === botUserId || msg.author.bot) return false
