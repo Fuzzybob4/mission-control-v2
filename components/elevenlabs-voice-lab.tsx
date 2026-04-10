@@ -12,9 +12,9 @@ type VoiceProfile = {
   category?: string | null
 }
 
-const ELEVENLABS_PROVIDER_CANDIDATES = ["elevenlabs", "11labs"]
+const ELEVENLABS_PROVIDER_CANDIDATES = ["elevenlabs", "11labs", "eleven_labs"]
 const ELEVENLABS_FIELD_CANDIDATES = ["api_key", "elevenlabs_api_key", "key", "secret_key"]
-const ELEVENLABS_ACCOUNT_CANDIDATES = ["ElevenLabs", "11labs", "Kal Voice", "Kal Obsidian"]
+const ELEVENLABS_ACCOUNT_CANDIDATES = ["ElevenLabs", "Eleven labs", "11labs", "Kal Voice", "Kal Obsidian"]
 
 const defaultPrompt = `You are Kal Obsidian, a sleek digital sorcerer with cyberpunk noir energy. Voice should feel confident, strategic, calm, masculine, and slightly mysterious. Avoid sounding like a cartoon villain. Aim for polished founder-operator energy with clear diction and a subtle edge.`
 

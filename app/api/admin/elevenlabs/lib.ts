@@ -19,7 +19,7 @@ type VaultMetadataRow = {
 }
 
 const BUSINESS_CANDIDATES = ["knightforge", "general"]
-const PROVIDER_CANDIDATES = ["elevenlabs", "11labs"]
+const PROVIDER_CANDIDATES = ["elevenlabs", "11labs", "eleven_labs"]
 const FIELD_CANDIDATES = ["api_key", "elevenlabs_api_key", "key", "secret_key"]
 
 function getSupabaseClient() {
